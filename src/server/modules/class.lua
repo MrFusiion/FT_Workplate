@@ -33,7 +33,7 @@ function class:isInstaceOfMe(instance)
 end
 
 function class:memberFunctionAssert(instance)
-    assert(self:isInstaceOfMe(instance), " member function got called with . istead of :!")
+    assert(instance~=nil and self:isInstaceOfMe(instance), " member function got called with . istead of :!")
     assert(not instance.__Static, string.format(" this member function cannot be called on a static class: %s", self.__ClassName))
 end
 
