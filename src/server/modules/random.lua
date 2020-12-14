@@ -2,6 +2,9 @@ local random = {}
 random.__index = random
 
 function random.new(seed, autoSeed)
+    assert(typeof(seed)=="number" or seed==nil, " `seed` must be a number or nil!")
+    assert(typeof(autoSeed)=="boolean" or autoSeed==nil, " `autoSeed` must be a boolean or nil!")
+
     local self = setmetatable({}, random)
     self.__Seed = seed
     self.__SeedGenInterval = 5*60
