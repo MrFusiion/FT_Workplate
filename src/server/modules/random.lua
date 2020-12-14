@@ -55,6 +55,7 @@ function random:nextInt(min, max)
     assert(typeof(min)=="number" or min==nil, " `min` must be a number or nil!")
     assert(typeof(max)=="number" or max==nil, " `max` must be a number or nil!")
     assert((min or 0)<(max or 1), " `min` cannot be >= then `max`!")
+
     return self.__Random:NextInteger(min or 0, max or 1)
 end
 
@@ -63,6 +64,7 @@ function random:nextNumber(min, max)
     assert(typeof(min)=="number" or min==nil, " `min` must be a number or nil!")
     assert(typeof(max)=="number" or max==nil, " `max` must be a number or nil!")
     assert((min or 0)<(max or 1), " `min` cannot be >= then `max`!")
+        
     return self.__Random:NextNumber(min or 0, max or 1)
 end
 
