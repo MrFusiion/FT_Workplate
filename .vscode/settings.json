@@ -1,0 +1,74 @@
+{
+    "workbench.tree.indent": 20,
+    //"workbench.colorTheme": "RBLXDark",
+    "workbench.iconTheme": "vscode-icons",
+
+    "vsicons.associations.files": [
+        {
+            "icon": "lua_server",
+            "extensions": ["server.lua"],
+            "format": "png"
+        },
+        {
+            "icon": "lua_client",
+            "extensions": ["client.lua"],
+            "format": "png"
+        },
+        {
+            "icon": "lua_module",
+            "extensions": ["lua"],
+            "format": "png"
+        },
+        {
+            "icon": "studio",
+            "extensions": ["rbxlx", "rbxl"],
+            "format": "png"
+        },
+        {
+            "icon": "studiolocked",
+            "extensions": ["rbxlx.lock", "rbxl.lock"],
+            "format": "png"
+        },
+        {
+            "icon": "square",
+            "extensions": ["meta.json"],
+            "format": "png"
+        },
+        {
+            "icon": "gear",
+            "extensions": ["project.json"],
+            "format": "png"
+        },
+        {
+            "icon": "information",
+            "extensions": ["md"],
+            "format": "png"
+        },
+        {
+            "icon": "config_folder",
+            "extensions": ["config"],
+            "format": "png"
+        }
+    ],
+    "vsicons.associations.folders": [
+        {
+            "icon": "game",
+            "extensions": ["src"],
+            "format": "png"
+        },
+        {
+            "icon": "serverscriptservice",
+            "extensions": ["ServerScriptService"],
+            "format": "png"
+        },
+        {
+            "icon": "studio",
+            "extensions": ["client", "server", "shared", "modules"],
+            "format": "png"
+        }
+    ],
+    "vsicons.associations.folderDefault.folder": {
+        "icon": "studio",
+        "format": "png"
+    }
+}
