@@ -1,14 +1,17 @@
-local random = {}
+local settings = require(script.Parent:WaitForChild("settings"))
+local config = settings.new(game:GetService("ServerScriptService"):WaitForChild("config"))
+
+local class = require(script.Parent:WaitForChild("class"))
+local random = class.new("Random")
 random.__index = random
 
 function random.new(seed, autoSeed)
     assert(typeof(seed)=="number" or seed==nil, " `seed` must be a number or nil!")
     assert(typeof(autoSeed)=="boolean" or autoSeed==nil, " `autoSeed` must be a boolean or nil!")
 
-    local self = setmetatable({}, random)
+    local self = random:newInstance()
     self.__Seed = seed
     self.__SeedGenInterval = 5*60
-    self.__ClassName = "Random"
 
     if autoSeed ~= false or autoSeed == nil then
         spawn(function()
@@ -25,30 +28,30 @@ function random.new(seed, autoSeed)
 end
 
 function random:__init()
-    assert(typeof(self)=="table" and self.__ClassName=="Random", " member function got called with . istead of :!")
+    random:memberFunctionAssert(self)
     self.__Random = Random.new(self.__Seed)
 end
 
 function random:__generateSeed()
-    assert(typeof(self)=="table" and self.__ClassName=="Random", " member function got called with . istead of :!")
+    random:memberFunctionAssert(self)
     
     --random Table
     self.__RandTable = {}
     local hex = tostring(self.__RandTable):sub(7, 21)
-    print(hex)
     self.__Seed = tonumber(hex, 16) + os.time()
+    config:ifEnabledPrintf("DebugPrint", "Generated seed: [%d]", self.__Seed)
     self:__init()
 end
 
 function random:setSeedGenInterval(interval)
-    assert(typeof(self)=="table" and self.__ClassName=="Random", " member function got called with . istead of :!")
+    random:memberFunctionAssert(self)
     assert(typeof(interval)=="number" or interval==nil, " `interval` must be a number or nil!")
 
     self.__SeedGenInterval = interval or 5*60
 end
 
 function random:nextInt(min, max)
-    assert(typeof(self)=="table" and self.__ClassName=="Random", " member function got called with . istead of :!")
+    random:memberFunctionAssert(self)
     assert(typeof(min)=="number" or min==nil, " `min` must be a number or nil!")
     assert(typeof(max)=="number" or max==nil, " `max` must be a number or nil!")
     assert((min or 0)<(max or 1), " `min` cannot be >= then `max`!")
@@ -56,7 +59,7 @@ function random:nextInt(min, max)
 end
 
 function random:nextNumber(min, max)
-    assert(typeof(self)=="table" and self.__ClassName=="Random", " member function got called with . istead of :!")
+    random:memberFunctionAssert(self)
     assert(typeof(min)=="number" or min==nil, " `min` must be a number or nil!")
     assert(typeof(max)=="number" or max==nil, " `max` must be a number or nil!")
     assert((min or 0)<(max or 1), " `min` cannot be >= then `max`!")
@@ -64,7 +67,7 @@ function random:nextNumber(min, max)
 end
 
 function random:choice(t)
-    assert(typeof(self)=="table" and self.__ClassName=="Random", " member function got called with . istead of :!")
+    random:memberFunctionAssert(self)
     assert(typeof(t)=="table", " `t` must be a table!")
 
     local tLen = #t

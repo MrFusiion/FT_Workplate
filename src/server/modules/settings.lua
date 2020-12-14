@@ -1,20 +1,19 @@
-local settings = {}
+local class = require(script.Parent:WaitForChild("class"))
+
+local settings = class.new("Settings")
 settings.__index = settings
 settings.__Static = true
 
 function settings.new(folder)
-    assert(typeof(folder)=="Instance" and (folder.ClassName=="Folder" or folder.ClassName=="Configurations"), " `folder must be a Instance of a folder or Configurations!`")
+    assert(typeof(folder)=="Instance" and (folder.ClassName=="Folder" or folder.ClassName=="Configuration"), " `folder must be a Instance of a Folder or Configuration!`")
 
-    local self = setmetatable({}, settings)
+    local self = settings:newInstance()
     self.__Folder = folder
-    self.__ClassName = "Settings"
-    self.__Static = false
     return self
 end
 
 function settings:enabled(name)
-    assert(typeof(self)=="table" and self.__ClassName=="Settings", " member function got called with . istead of :!")
-    assert(not self.__Static, string.format(" this member function cannot be called on ", self.__ClassName))
+    settings:memberFunctionAssert(self)
     assert(typeof(name)=="string", " `name` must be a string!")
     
     local setting = self.__Folder:FindFirstChild(name)
@@ -30,8 +29,7 @@ function settings:enabled(name)
 end
 
 function settings:ifEnabled(name, cb)
-    assert(typeof(self)=="table" and self.__ClassName=="Settings", " member function got called with . istead of :!")
-    assert(not self.__Static, string.format(" this member function cannot be called on ", self.__ClassName))
+    settings:memberFunctionAssert(self)
     assert(typeof(name)=="string", " `name` must be a string!")
     assert(typeof(cb)=="function", " `cb` must be a function!")
 
@@ -40,14 +38,14 @@ function settings:ifEnabled(name, cb)
     end
 end
 
-function setting:ifEnabledPrintf(name, msg, ...)
-    assert(typeof(self)=="table" and self.__ClassName=="Settings", " member function got called with . istead of :!")
-    assert(not self.__Static, string.format(" this member function cannot be called on ", self.__ClassName))
+function settings:ifEnabledPrintf(name, msg, ...)
+    settings:memberFunctionAssert(self)
     assert(typeof(name)=="string", " `name` must be a string!")
     assert(typeof(msg)=="string", " `msg` must be a string!")
-
+    
+    local args = {...}
     self:ifEnabled(name, function()
-        print(string.format(msg, table.unpack({...})))
+        print(string.format(msg, table.unpack(args)))
     end)
 end
 
