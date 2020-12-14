@@ -42,30 +42,30 @@ end
 
 function random:setSeedGenInterval(interval)
     assert(typeof(self)=="table" and self.__ClassName=="Random", " member function got called with . istead of :!")
-        assert(typeof(interval)=="number" or interval==nil, " `interval` must be a number or nil!")
+    assert(typeof(interval)=="number" or interval==nil, " `interval` must be a number or nil!")
 
     self.__SeedGenInterval = interval or 5*60
 end
 
 function random:nextInt(min, max)
     assert(typeof(self)=="table" and self.__ClassName=="Random", " member function got called with . istead of :!")
-        assert(typeof(min)=="number" or min==nil, " `min` must be a number or nil!")
-        assert(typeof(max)=="number" or max==nil, " `max` must be a number or nil!")
-        assert((min or 0)<(max or 1), " `min` cannot be >= then `max`!")
+    assert(typeof(min)=="number" or min==nil, " `min` must be a number or nil!")
+    assert(typeof(max)=="number" or max==nil, " `max` must be a number or nil!")
+    assert((min or 0)<(max or 1), " `min` cannot be >= then `max`!")
     return self.__Random:NextInteger(min or 0, max or 1)
 end
 
 function random:nextNumber(min, max)
     assert(typeof(self)=="table" and self.__ClassName=="Random", " member function got called with . istead of :!")
-        assert(typeof(min)=="number" or min==nil, " `min` must be a number or nil!")
-        assert(typeof(max)=="number" or max==nil, " `max` must be a number or nil!")
-        assert((min or 0)<(max or 1), " `min` cannot be >= then `max`!")
+    assert(typeof(min)=="number" or min==nil, " `min` must be a number or nil!")
+    assert(typeof(max)=="number" or max==nil, " `max` must be a number or nil!")
+    assert((min or 0)<(max or 1), " `min` cannot be >= then `max`!")
     return self.__Random:NextNumber(min or 0, max or 1)
 end
 
 function random:choice(t)
     assert(typeof(self)=="table" and self.__ClassName=="Random", " member function got called with . istead of :!")
-        assert(typeof(t)=="table", " `t` must be a table!")
+    assert(typeof(t)=="table", " `t` must be a table!")
 
     local tLen = #t
     assert(tLen==0, " `t` cannot be a empty table!")
