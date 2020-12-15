@@ -5,6 +5,7 @@ function class.new(className)
     assert(typeof(className)=="string", " `className` must be a string!")
 
     local self = setmetatable({}, class)
+    self.__index = self
     self.__IsClass = true
     self.__Static = true
     self.__ClassName = className

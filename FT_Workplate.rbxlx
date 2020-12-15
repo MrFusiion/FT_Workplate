@@ -373,8 +373,8 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 			<bool name="EnableScriptCollabOnLoad">false</bool>
 			<string name="Name">StudioData</string>
 			<int64 name="SourceAssetId">-1</int64>
-			<int64 name="SrcPlaceId">6087845150</int64>
-			<int64 name="SrcUniverseId">2210966568</int64>
+			<int64 name="SrcPlaceId">5664782530</int64>
+			<int64 name="SrcUniverseId">1995309489</int64>
 			<BinaryString name="Tags"></BinaryString>
 		</Properties>
 	</Item>
@@ -466,7 +466,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 			<int64 name="SourceAssetId">-1</int64>
 			<BinaryString name="Tags"></BinaryString>
 		</Properties>
-		<Item class="Tool" referent="RBXF0AD7D9901714EC0A6146751AFC16620">
+		<Item class="Tool" referent="RBXCCD474D82FF644AEA3BF1175592CC843">
 			<Properties>
 				<BinaryString name="AttributesSerialize"></BinaryString>
 				<bool name="CanBeDropped">true</bool>
@@ -511,8 +511,10 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 				<bool name="Disabled">false</bool>
 				<Content name="LinkedSource"><null></null></Content>
 				<string name="Name">guiManager</string>
-				<string name="ScriptGuid"></string>
-				<ProtectedString name="Source"></ProtectedString>
+				<string name="ScriptGuid">{CA6B9BA3-6E8F-4006-B61B-5D296AA0823E}</string>
+				<ProtectedString name="Source"><![CDATA[local core = require(script:WaitForChild("core"))
+
+print(core.subfix(121e5)) --12 100 000 = 12.1M]]></ProtectedString>
 				<int64 name="SourceAssetId">-1</int64>
 				<BinaryString name="Tags"></BinaryString>
 			</Properties>
@@ -537,13 +539,13 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 					<BinaryString name="AttributesSerialize"></BinaryString>
 					<Content name="LinkedSource"><null></null></Content>
 					<string name="Name">core</string>
-					<string name="ScriptGuid"></string>
+					<string name="ScriptGuid">{B352E587-C54A-4ABB-86B6-A25AEE1D024F}</string>
 					<ProtectedString name="Source"><![CDATA[local core = {}
+core.roact = require(game:GetService("ReplicatedStorage"):WaitForChild("roact"))
 core.color = require(script:WaitForChild("color"))
 core.elements = require(script:WaitForChild("elements"))
-core.gui = require(script:WaitForChild("gui"))
 core.scale = require(script:WaitForChild("scale"))
-core.sound = require(script:WaitForChild("sound"))
+core.sound = require(script:WaitForChild("soundlist"))
 core.subfix = require(script:WaitForChild("subfix"))
 return core]]></ProtectedString>
 					<int64 name="SourceAssetId">-1</int64>
@@ -554,8 +556,38 @@ return core]]></ProtectedString>
 						<BinaryString name="AttributesSerialize"></BinaryString>
 						<Content name="LinkedSource"><null></null></Content>
 						<string name="Name">color</string>
-						<string name="ScriptGuid"></string>
-						<ProtectedString name="Source"></ProtectedString>
+						<string name="ScriptGuid">{E89E4D94-77BC-42BF-9C79-60C76669BA41}</string>
+						<ProtectedString name="Source"><![CDATA[local color = {}
+
+function color.shade(color, factor)
+    assert(typeof(color)=='Color3', " `color` must be a Color3!")
+    assert(typeof(factor)=='number', " `factor` must be a number!")
+    return Color3.new(
+        color.R * (1 - factor),
+        color.G * (1 - factor),
+        color.B * (1 - factor)
+    )
+end
+
+function color.tint(color, factor)
+    assert(typeof(color)=='Color3', " `color` must be a Color3!")
+    assert(typeof(factor)=='number', " `factor` must be a number!")
+    return Color3.new(
+        color.R + (1 - color.R) * factor,
+        color.G + (1 - color.G) * factor,
+        color.B + (1 - color.B) * factor
+    )
+end
+
+--returns a value between (0 - 1)
+--where 0 is darkest and 1 is the lightest
+function  color.getLuma(color)
+    assert(typeof(color)=='Color3', " `color` must be a Color3!")
+    local luma = .2126 * color.R + .7152 * color.G + .0722 * color.B
+    return math.clamp(luma, 0, 1)
+end
+
+return color]]></ProtectedString>
 						<int64 name="SourceAssetId">-1</int64>
 						<BinaryString name="Tags"></BinaryString>
 					</Properties>
@@ -565,19 +597,14 @@ return core]]></ProtectedString>
 						<BinaryString name="AttributesSerialize"></BinaryString>
 						<Content name="LinkedSource"><null></null></Content>
 						<string name="Name">elements</string>
-						<string name="ScriptGuid"></string>
-						<ProtectedString name="Source"></ProtectedString>
-						<int64 name="SourceAssetId">-1</int64>
-						<BinaryString name="Tags"></BinaryString>
-					</Properties>
-				</Item>
-				<Item class="ModuleScript" referent="RBX9E5C02EFD7294DD4881D339A8C55F10A">
-					<Properties>
-						<BinaryString name="AttributesSerialize"></BinaryString>
-						<Content name="LinkedSource"><null></null></Content>
-						<string name="Name">sound</string>
-						<string name="ScriptGuid"></string>
-						<ProtectedString name="Source"></ProtectedString>
+						<string name="ScriptGuid">{C69A6AAF-472B-43A0-A73F-5D204118C82D}</string>
+						<ProtectedString name="Source"><![CDATA[local elements = {}
+
+for _, element in pairs(script.Parent.Parent:WaitForChild("elements"):GetChildren()) do
+    table.insert(elements, require(element))
+end
+
+return elements]]></ProtectedString>
 						<int64 name="SourceAssetId">-1</int64>
 						<BinaryString name="Tags"></BinaryString>
 					</Properties>
@@ -587,8 +614,24 @@ return core]]></ProtectedString>
 						<BinaryString name="AttributesSerialize"></BinaryString>
 						<Content name="LinkedSource"><null></null></Content>
 						<string name="Name">subfix</string>
-						<string name="ScriptGuid"></string>
-						<ProtectedString name="Source"></ProtectedString>
+						<string name="ScriptGuid">{85E876AD-6333-4EE3-A3F0-EB240D84CA50}</string>
+						<ProtectedString name="Source"><![CDATA[local subfix = {}
+subfix.Symbols = { '', 'K', 'M', 'B', 'T', 'qD'}
+subfix.symbolsLen = #subfix.Symbols
+
+function subfix.addSubfix(n)
+    assert(typeof(n)=='number', " 'n' must be a number!")
+    local count = 1
+    while wait() do
+        if count == subfix.symbolsLen or n / 1e3^count < 1 then 
+            break 
+        end
+        count+=1
+    end
+    return string.format('%.3f', n / 1e3^count)..subfix.Symbols[count]
+end
+
+return subfix]]></ProtectedString>
 						<int64 name="SourceAssetId">-1</int64>
 						<BinaryString name="Tags"></BinaryString>
 					</Properties>
@@ -598,7 +641,7 @@ return core]]></ProtectedString>
 						<BinaryString name="AttributesSerialize"></BinaryString>
 						<Content name="LinkedSource"><null></null></Content>
 						<string name="Name">scale</string>
-						<string name="ScriptGuid"></string>
+						<string name="ScriptGuid">{C48E54F9-25BA-4BE3-9DE1-00773011E340}</string>
 						<ProtectedString name="Source"><![CDATA[local DEFAULT_RES = Vector2.new(1920, 1080)
 
 local UIS = game:GetService("UserInputService")
@@ -611,7 +654,7 @@ function scale:get()
     if UIS.TouchEnabled and playerGui.CurrentScreenOrientation
         == Enum.ScreenOrientation.Portrait then
 
-        playerGui.ScreenOrientation = Enum.ScreenOrientation.LandScapeSensor
+        playerGui.ScreenOrientation = Enum.ScreenOrientation.LandscapeSensor
         screenSize = Vector2.new(screenSize.Y, screenSize.X)
     end
     return math.min(screenSize.X / DEFAULT_RES.X, screenSize.Y / DEFAULT_RES.Y)
@@ -633,7 +676,54 @@ function scale:getTextSize(size)
     return math.floor(self:get() * size + .5) * self:getModifier()
 end
 
-local scale]]></ProtectedString>
+return scale]]></ProtectedString>
+						<int64 name="SourceAssetId">-1</int64>
+						<BinaryString name="Tags"></BinaryString>
+					</Properties>
+				</Item>
+				<Item class="ModuleScript" referent="RBX88A18D13B11D41AB95EB4FDD7A5D2554">
+					<Properties>
+						<BinaryString name="AttributesSerialize"></BinaryString>
+						<Content name="LinkedSource"><null></null></Content>
+						<string name="Name">soundlist</string>
+						<string name="ScriptGuid">{9B2E4763-A3D2-4CF2-9ED7-EEE29D58FF6F}</string>
+						<ProtectedString name="Source"><![CDATA[local modules = require(game:GetService("ReplicatedStorage"):WaitForChild("modules"))
+local class = modules.get("class")
+
+local soundlist = class.new("Soundlist")
+
+function soundlist.new()
+    local newSoundlist = setmetatable({}, soundlist)
+    newSoundlist.__List = {}
+    return newSoundlist
+end
+
+function soundlist:add(name, id, overide)
+    soundlist:memberFunctionAssert(self)
+    assert(typeof(name)=='string', " `name` must be a string!")
+    assert(typeof(id)=='number', " `id` must be a number!")
+    assert(typeof(overide)=='boolean', " `id` must be a number!")
+    assert(not self.__List[name] and not overide, string.format(' `%s` allready exist in soundlist pls consider removing it first or set overide to true!'))
+    self.__List[name] = Instance.new("Sound")
+    self.__List[name].SoundId = id
+end
+
+function soundlist:remove(name)
+    soundlist:memberFunctionAssert(self)
+    assert(typeof(name)=='string', " `name` must be a string!")
+    assert(self.__List[name], string.format(' `%s` does not exist in soundlist!'))
+    self.__List[name]:Destroy()
+    self.__List[name] = nil
+end
+
+function soundlist:play(name)
+    soundlist:memberFunctionAssert(self)
+    assert(typeof(name)=='string', " `name` must be a string!")
+    assert(self.__List[name], string.format(' `%s` does not exist in soundlist!'))
+    self.__List[name]:Play()
+end
+
+return soundlist]]></ProtectedString>
 						<int64 name="SourceAssetId">-1</int64>
 						<BinaryString name="Tags"></BinaryString>
 					</Properties>
@@ -788,13 +878,10 @@ local scale]]></ProtectedString>
 				<Content name="LinkedSource"><null></null></Content>
 				<string name="Name">main</string>
 				<string name="ScriptGuid">{A1BB803B-3A9B-4607-9749-1A0D17A29366}</string>
-				<ProtectedString name="Source"><![CDATA[local modules = require(game:GetService("ServerScriptService"):WaitForChild("modules"))
-local random = modules.get("random")
+				<ProtectedString name="Source"><![CDATA[local shared = require(game:GetService("ReplicatedStorage"):WaitForChild("modules"))
+local random = shared.get("random")
 
-local rand = random.new()
-rand:setSeedGenInterval(1)
-
-game:WaitForChild("hello")]]></ProtectedString>
+local rand = random.new()]]></ProtectedString>
 				<int64 name="SourceAssetId">-1</int64>
 				<BinaryString name="Tags"></BinaryString>
 			</Properties>
@@ -806,7 +893,7 @@ game:WaitForChild("hello")]]></ProtectedString>
 				<int64 name="SourceAssetId">-1</int64>
 				<BinaryString name="Tags"></BinaryString>
 			</Properties>
-			<Item class="BoolValue" referent="RBXF3BD01A10A4F49EB8E701B93D2D9F4BE">
+			<Item class="BoolValue" referent="RBXED36BD5719154766B6CEF23F22451360">
 				<Properties>
 					<BinaryString name="AttributesSerialize"></BinaryString>
 					<string name="Name">DebugPrint</string>
@@ -824,40 +911,9 @@ game:WaitForChild("hello")]]></ProtectedString>
 				<string name="ScriptGuid">{41E24A8E-5511-4422-8C68-CEFABDDADEE9}</string>
 				<ProtectedString name="Source"><![CDATA[local modules = {}
 
---timeOut dflt: 5
---maxTries dflt: 1
-function modules.get(name, timeOut, maxTries)
-    timeOut = timeOut or 5
-    maxTries = maxTries or 1
+function modules.get(name)
     assert(typeof(name)=="string", " `name` must be a string!")
-    assert(typeof(timeOut)=="number", " `timeOut` must be a number or nil!")
-    assert(typeof(maxTries)=="number", " `tries` must be a number or nil!")
-
-    --searching for module
-    local tries = 0
-    local module = nil
-    while (tries < maxTries) do
-        local suc, err = pcall(function()
-            module = script:WaitForChild(name)
-        end)
-        print("Err: ", err)
-        if suc then break end
-    end
-    --requiring module if one is found
-    if not module then 
-        warn("Infinity")
-    else
-        local contents
-        local suc = pcall(function()
-            contents = require(module)
-        end)
-        
-        if not contents then
-            assert(false, "Error")
-        else
-            return contents
-        end    
-    end
+    return require(script:WaitForChild(name))
 end
 
 return modules]]></ProtectedString>
@@ -865,12 +921,287 @@ return modules]]></ProtectedString>
 				<BinaryString name="Tags"></BinaryString>
 			</Properties>
 		</Item>
-		<Item class="ModuleScript" referent="RBX26B3E3E9AB284622B7A3BF6077E77588">
+	</Item>
+	<Item class="ServerStorage" referent="RBX6BC79C7AC48D42738D4AA1175F068CAD">
+		<Properties>
+			<BinaryString name="AttributesSerialize"></BinaryString>
+			<string name="Name">ServerStorage</string>
+			<int64 name="SourceAssetId">-1</int64>
+			<BinaryString name="Tags"></BinaryString>
+		</Properties>
+	</Item>
+	<Item class="ReplicatedStorage" referent="1">
+		<Properties>
+			<BinaryString name="AttributesSerialize"></BinaryString>
+			<string name="Name">ReplicatedStorage</string>
+			<int64 name="SourceAssetId">-1</int64>
+			<BinaryString name="Tags"></BinaryString>
+		</Properties>
+		<Item class="ModuleScript" referent="RBX326A4E9554DD4F7EBFAAAB08E651D357">
+			<Properties>
+				<BinaryString name="AttributesSerialize"></BinaryString>
+				<Content name="LinkedSource"><null></null></Content>
+				<string name="Name">Hello</string>
+				<string name="ScriptGuid">{D26C78E9-25E9-4FDA-BF48-018A087BD3E4}</string>
+				<ProtectedString name="Source"></ProtectedString>
+				<int64 name="SourceAssetId">-1</int64>
+				<BinaryString name="Tags"></BinaryString>
+			</Properties>
+		</Item>
+		<Item class="ModuleScript" referent="RBX01B960BD728D49FD84DF20A31CD76165">
+			<Properties>
+				<BinaryString name="AttributesSerialize"></BinaryString>
+				<Content name="LinkedSource"><null></null></Content>
+				<string name="Name">modules</string>
+				<string name="ScriptGuid">{0CAF7C57-B156-49F9-BC66-A3106A574EDC}</string>
+				<ProtectedString name="Source"><![CDATA[local modules = {}
+
+function modules.get(name)
+    assert(typeof(name)=="string", " `name` must be a string!")
+    return require(script:WaitForChild(name))
+end
+
+return modules]]></ProtectedString>
+				<int64 name="SourceAssetId">-1</int64>
+				<BinaryString name="Tags"></BinaryString>
+			</Properties>
+			<Item class="ModuleScript" referent="RBX031B668A716548C99FA24B4701844208">
+				<Properties>
+					<BinaryString name="AttributesSerialize"></BinaryString>
+					<Content name="LinkedSource"><null></null></Content>
+					<string name="Name">class</string>
+					<string name="ScriptGuid">{4EDDB4EF-9B1C-4340-96C7-B21EB4F3C7B6}</string>
+					<ProtectedString name="Source"><![CDATA[local class = {}
+class.__index = class
+
+function class.new(className)
+    assert(typeof(className)=="string", " `className` must be a string!")
+
+    local self = setmetatable({}, class)
+    self.__index = self
+    self.__IsClass = true
+    self.__Static = true
+    self.__ClassName = className
+    return self
+end
+
+function class:newInstance()
+    assert(typeof(self)=="table" and self.__IsClass, " member function got called with . istead of :!")
+        
+    local newInst = setmetatable({}, self)
+    newInst.__IsClass = true
+    newInst.__Static = false
+    newInst.__ClassName = self.__ClassName
+    return newInst
+end
+
+function class:isInstaceOfMe(instance)
+    assert(typeof(self)=="table" and self.__IsClass, " member function got called with . istead of :!")
+    assert(instance~=nil, " `instance` is required!")
+
+    if typeof(instance)=="table" and instance.__IsClass and instance.__ClassName==self.__ClassName then
+        return true
+    else
+        return false
+    end
+end
+
+function class:memberFunctionAssert(instance)
+    assert(instance~=nil and self:isInstaceOfMe(instance), " member function got called with . istead of :!")
+    assert(not instance.__Static, string.format(" this member function cannot be called on a static class: %s", self.__ClassName))
+end
+
+return class]]></ProtectedString>
+					<int64 name="SourceAssetId">-1</int64>
+					<BinaryString name="Tags"></BinaryString>
+				</Properties>
+			</Item>
+			<Item class="ModuleScript" referent="RBX7B0153A5AB94492385F4AAA5BD0CAC9A">
+				<Properties>
+					<BinaryString name="AttributesSerialize"></BinaryString>
+					<Content name="LinkedSource"><null></null></Content>
+					<string name="Name">settings</string>
+					<string name="ScriptGuid">{C526D185-38B9-49AE-9359-949F31FA5CDE}</string>
+					<ProtectedString name="Source"><![CDATA[local modules = require(script.Parent)
+local class = modules.get("class")
+
+local settings = class.new("Settings")
+settings.__index = settings
+settings.__Static = true
+
+function settings.new(folder)
+    assert(typeof(folder)=="Instance" and (folder.ClassName=="Folder" or folder.ClassName=="Configuration"), " `folder must be a Instance of a Folder or Configuration!`")
+
+    local self = settings:newInstance()
+    self.__Folder = folder
+    return self
+end
+
+function settings:enabled(name)
+    settings:memberFunctionAssert(self)
+    assert(typeof(name)=="string", " `name` must be a string!")
+    
+    local setting = self.__Folder:FindFirstChild(name)
+    if setting and typeof(setting) == "Instance" and (
+        setting.ClassName == "BoolValue" or setting.ClassName == "NumberValue" or setting.ClassName == "IntValue" or 
+        setting.ClassName == "StringValue" or setting.ClassName == "Vector3Value" or setting.ClassName == "Color3Value" or
+        setting.ClassName == "ObjectValue" or setting.ClassName == "RayValue" or setting.ClassName == "CFrameValue" or setting.ClassName == "BrickColorValue" ) then
+            return setting.Value
+        elseif setting ~= nil then
+            warn(string.format(" %s that has been found is not in a correct format pls use only (Instance)Value's!", tostring(setting)))
+            return false
+        else
+            return false
+        end
+end
+
+function settings:ifEnabled(name, cb)
+    settings:memberFunctionAssert(self)
+    assert(typeof(name)=="string", " `name` must be a string!")
+    assert(typeof(cb)=="function", " `cb` must be a function!")
+
+    if self:enabled(name) then
+        cb(name)
+    end
+end
+
+function settings:ifEnabledPrintf(name, msg, ...)
+    settings:memberFunctionAssert(self)
+    assert(typeof(name)=="string", " `name` must be a string!")
+    assert(typeof(msg)=="string", " `msg` must be a string!")
+    
+    local args = {...}
+    self:ifEnabled(name, function()
+        print(string.format(msg, table.unpack(args)))
+    end)
+end
+
+return settings]]></ProtectedString>
+					<int64 name="SourceAssetId">-1</int64>
+					<BinaryString name="Tags"></BinaryString>
+				</Properties>
+			</Item>
+			<Item class="ModuleScript" referent="RBXC3BFD65184D24326B3124FCC33BBB295">
+				<Properties>
+					<BinaryString name="AttributesSerialize"></BinaryString>
+					<Content name="LinkedSource"><null></null></Content>
+					<string name="Name">random</string>
+					<string name="ScriptGuid">{0DA21E8B-4934-4766-973A-13C6F794ABD4}</string>
+					<ProtectedString name="Source"><![CDATA[local modules = require(script.Parent)
+
+local settings = modules.get("settings")
+local config = settings.new(game:GetService("ReplicatedStorage"):WaitForChild("config"))
+
+local class = modules.get("class")
+local random = class.new("Random")
+random.__index = random
+
+function random.new(seed, autoSeed)
+    assert(typeof(seed)=="number" or seed==nil, " `seed` must be a number or nil!")
+    assert(typeof(autoSeed)=="boolean" or autoSeed==nil, " `autoSeed` must be a boolean or nil!")
+
+    local self = random:newInstance()
+    self.__Seed = seed
+    self.__SeedGenInterval = 5*60
+
+    if autoSeed ~= false or autoSeed == nil then
+        spawn(function()
+            while true do
+                wait(self.__SeedGenInterval)
+                self:__generateSeed()
+            end
+        end)
+    end
+
+    if not self.__Seed then self:__generateSeed() end
+    self:__init()
+    return self
+end
+
+function random:__init()
+    random:memberFunctionAssert(self)
+    self.__Random = Random.new(self.__Seed)
+end
+
+function random:__generateSeed()
+    random:memberFunctionAssert(self)
+    
+    --random Table
+    self.__RandTable = {}
+    local hex = tostring(self.__RandTable):sub(7, 21)
+    self.__Seed = tonumber(hex, 16) + os.time()
+    config:ifEnabledPrintf("DebugPrint", "Generated seed: [%d]", self.__Seed)
+    self:__init()
+end
+
+function random:setSeedGenInterval(interval)
+    random:memberFunctionAssert(self)
+    assert(typeof(interval)=="number" or interval==nil, " `interval` must be a number or nil!")
+
+    self.__SeedGenInterval = interval or (5*60)
+end
+
+function random:nextInt(min, max)
+    random:memberFunctionAssert(self)
+    assert(typeof(min)=="number" or min==nil, " `min` must be a number or nil!")
+    assert(typeof(max)=="number" or max==nil, " `max` must be a number or nil!")
+    assert((min or 0)<(max or 1), " `min` cannot be >= then `max`!")
+
+    return self.__Random:NextInteger(min or 0, max or 1)
+end
+
+function random:nextNumber(min, max)
+    random:memberFunctionAssert(self)
+    assert(typeof(min)=="number" or min==nil, " `min` must be a number or nil!")
+    assert(typeof(max)=="number" or max==nil, " `max` must be a number or nil!")
+    assert((min or 0)<(max or 1), " `min` cannot be >= then `max`!")
+        
+    return self.__Random:NextNumber(min or 0, max or 1)
+end
+
+function random:choice(t)
+    random:memberFunctionAssert(self)
+    assert(typeof(t)=="table", " `t` must be a table!")
+
+    local tLen = #t
+    assert(tLen==0, " `t` cannot be a empty table!")
+
+    if tLen == 1 then
+        return t[1]
+    else
+        return t[self:nextInt(1, tLen)]
+    end
+end
+
+return random]]></ProtectedString>
+					<int64 name="SourceAssetId">-1</int64>
+					<BinaryString name="Tags"></BinaryString>
+				</Properties>
+			</Item>
+		</Item>
+		<Item class="Configuration" referent="RBXDB9DDFD5871643438D46DC790BAFCDA8">
+			<Properties>
+				<BinaryString name="AttributesSerialize"></BinaryString>
+				<string name="Name">config</string>
+				<int64 name="SourceAssetId">-1</int64>
+				<BinaryString name="Tags"></BinaryString>
+			</Properties>
+			<Item class="BoolValue" referent="RBXEB86AFF4C41D40D78633F1CFCE849C81">
+				<Properties>
+					<BinaryString name="AttributesSerialize"></BinaryString>
+					<string name="Name">DebugPrint</string>
+					<int64 name="SourceAssetId">-1</int64>
+					<BinaryString name="Tags"></BinaryString>
+					<bool name="Value">true</bool>
+				</Properties>
+			</Item>
+		</Item>
+		<Item class="ModuleScript" referent="RBXE8815FBE920D492C95B26059942D3605">
 			<Properties>
 				<BinaryString name="AttributesSerialize"></BinaryString>
 				<Content name="LinkedSource"><null></null></Content>
 				<string name="Name">roact</string>
-				<string name="ScriptGuid"></string>
+				<string name="ScriptGuid">{E6F0C285-761F-4F89-883D-DF12FB0AA962}</string>
 				<ProtectedString name="Source"><![CDATA[--[[
 	Packages up the internals of Roact and exposes a public API for it.
 ]]
@@ -922,12 +1253,12 @@ return Roact]]></ProtectedString>
 				<int64 name="SourceAssetId">-1</int64>
 				<BinaryString name="Tags"></BinaryString>
 			</Properties>
-			<Item class="ModuleScript" referent="RBX102FA0E6E4DF422E82E3A65CD111EE24">
+			<Item class="ModuleScript" referent="RBX70EFDD3B1A674EECAF434638EF0768ED">
 				<Properties>
 					<BinaryString name="AttributesSerialize"></BinaryString>
 					<Content name="LinkedSource"><null></null></Content>
 					<string name="Name">Binding</string>
-					<string name="ScriptGuid"></string>
+					<string name="ScriptGuid">{4F4B1C8E-FBC7-47CC-B7E7-A6EA01EAF502}</string>
 					<ProtectedString name="Source"><![CDATA[local createSignal = require(script.Parent.createSignal)
 local Symbol = require(script.Parent.Symbol)
 local Type = require(script.Parent.Type)
@@ -1089,12 +1420,12 @@ return BindingInternalApi]]></ProtectedString>
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
 			</Item>
-			<Item class="ModuleScript" referent="RBXD971965D670842E3A6A7D871C75277A7">
+			<Item class="ModuleScript" referent="RBX79C6EED2D596405A9748DBE7AB3A4320">
 				<Properties>
 					<BinaryString name="AttributesSerialize"></BinaryString>
 					<Content name="LinkedSource"><null></null></Content>
 					<string name="Name">Component</string>
-					<string name="ScriptGuid"></string>
+					<string name="ScriptGuid">{312994AE-B314-467F-8939-8F5AD7B0AAA5}</string>
 					<ProtectedString name="Source"><![CDATA[local assign = require(script.Parent.assign)
 local ComponentLifecyclePhase = require(script.Parent.ComponentLifecyclePhase)
 local Type = require(script.Parent.Type)
@@ -1607,12 +1938,12 @@ return Component]]></ProtectedString>
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
 			</Item>
-			<Item class="ModuleScript" referent="RBX5561925321874268A0A31D35B9B1E23F">
+			<Item class="ModuleScript" referent="RBX86B48E7EB1C949D99B849B0DC9D5C5FD">
 				<Properties>
 					<BinaryString name="AttributesSerialize"></BinaryString>
 					<Content name="LinkedSource"><null></null></Content>
 					<string name="Name">ComponentLifecyclePhase</string>
-					<string name="ScriptGuid"></string>
+					<string name="ScriptGuid">{C22B44C2-3FC2-415C-95EE-8F44DF45BBFC}</string>
 					<ProtectedString name="Source"><![CDATA[local Symbol = require(script.Parent.Symbol)
 local strict = require(script.Parent.strict)
 
@@ -1636,12 +1967,12 @@ return ComponentLifecyclePhase]]></ProtectedString>
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
 			</Item>
-			<Item class="ModuleScript" referent="RBXF57AAF4B6A10430E97C54873B804ED06">
+			<Item class="ModuleScript" referent="RBX6E40368B1BB94D04AD422A3D80116279">
 				<Properties>
 					<BinaryString name="AttributesSerialize"></BinaryString>
 					<Content name="LinkedSource"><null></null></Content>
 					<string name="Name">Config</string>
-					<string name="ScriptGuid"></string>
+					<string name="ScriptGuid">{71F1B9DA-5D4A-4BAF-8C89-BEEE8DE2E7F6}</string>
 					<ProtectedString name="Source"><![CDATA[--[[
 	Exposes an interface to set global configuration values for Roact.
 
@@ -1769,12 +2100,12 @@ return Config]]></ProtectedString>
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
 			</Item>
-			<Item class="ModuleScript" referent="RBX140CC78BB0894D31B2D9A5C161DA58E4">
+			<Item class="ModuleScript" referent="RBXDA712C7C4FF14EED8ABCDE8971C0E6A3">
 				<Properties>
 					<BinaryString name="AttributesSerialize"></BinaryString>
 					<Content name="LinkedSource"><null></null></Content>
 					<string name="Name">ElementKind</string>
-					<string name="ScriptGuid"></string>
+					<string name="ScriptGuid">{85FB521F-4983-4EA5-9130-8F6674988041}</string>
 					<ProtectedString name="Source"><![CDATA[--[[
 	Contains markers for annotating the type of an element.
 
@@ -1830,12 +2161,12 @@ return ElementKind]]></ProtectedString>
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
 			</Item>
-			<Item class="ModuleScript" referent="RBX85C9AFB16FE543AB81ABFB347003CD25">
+			<Item class="ModuleScript" referent="RBXB8B2E2DFF67B42C4982FC532C327E5B3">
 				<Properties>
 					<BinaryString name="AttributesSerialize"></BinaryString>
 					<Content name="LinkedSource"><null></null></Content>
 					<string name="Name">ElementUtils</string>
-					<string name="ScriptGuid"></string>
+					<string name="ScriptGuid">{DE29391D-A79C-43A1-84BD-19E8094CDACA}</string>
 					<ProtectedString name="Source"><![CDATA[local Type = require(script.Parent.Type)
 local Symbol = require(script.Parent.Symbol)
 
@@ -1939,12 +2270,12 @@ return ElementUtils]]></ProtectedString>
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
 			</Item>
-			<Item class="ModuleScript" referent="RBX8C7D8CD1F6B1468CA223E04841EDAE2D">
+			<Item class="ModuleScript" referent="RBX4ED6DD6358FA4D5A8F37F24A1FCEB64E">
 				<Properties>
 					<BinaryString name="AttributesSerialize"></BinaryString>
 					<Content name="LinkedSource"><null></null></Content>
 					<string name="Name">GlobalConfig</string>
-					<string name="ScriptGuid"></string>
+					<string name="ScriptGuid">{2F806E75-D7CA-4CE5-A875-ABF040B72F89}</string>
 					<ProtectedString name="Source"><![CDATA[--[[
 	Exposes a single instance of a configuration as Roact's GlobalConfig.
 ]]
@@ -1956,12 +2287,12 @@ return Config.new()]]></ProtectedString>
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
 			</Item>
-			<Item class="ModuleScript" referent="RBX7E2B960DCD6D48C9BA3A3A2B85F62697">
+			<Item class="ModuleScript" referent="RBX922202FCB963416E98F4235361DDE491">
 				<Properties>
 					<BinaryString name="AttributesSerialize"></BinaryString>
 					<Content name="LinkedSource"><null></null></Content>
 					<string name="Name">Logging</string>
-					<string name="ScriptGuid"></string>
+					<string name="ScriptGuid">{90FD3506-D865-4EEF-9ECA-18D964A30D21}</string>
 					<ProtectedString name="Source"><![CDATA[--[[
 	Centralized place to handle logging. Lets us:
 	- Unit test log output via `Logging.capture`
@@ -2125,12 +2456,12 @@ return Logging]]></ProtectedString>
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
 			</Item>
-			<Item class="ModuleScript" referent="RBXB964C7C1190949718662152B5A0742F3">
+			<Item class="ModuleScript" referent="RBXFDAB84FECB604F05B65D5B02D5B791B7">
 				<Properties>
 					<BinaryString name="AttributesSerialize"></BinaryString>
 					<Content name="LinkedSource"><null></null></Content>
 					<string name="Name">None</string>
-					<string name="ScriptGuid"></string>
+					<string name="ScriptGuid">{58DF9231-4982-4566-A74F-54C8B204D770}</string>
 					<ProtectedString name="Source"><![CDATA[local Symbol = require(script.Parent.Symbol)
 
 -- Marker used to specify that the value is nothing, because nil cannot be
@@ -2142,12 +2473,12 @@ return None]]></ProtectedString>
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
 			</Item>
-			<Item class="ModuleScript" referent="RBX21BA2877E6124B5C9AF0F40BA0ED7137">
+			<Item class="ModuleScript" referent="RBXAD35C77464E7462984F342ED4C4F62F3">
 				<Properties>
 					<BinaryString name="AttributesSerialize"></BinaryString>
 					<Content name="LinkedSource"><null></null></Content>
 					<string name="Name">NoopRenderer</string>
-					<string name="ScriptGuid"></string>
+					<string name="ScriptGuid">{719A9EC4-F645-44FE-A53A-FF970BA89AEB}</string>
 					<ProtectedString name="Source"><![CDATA[--[[
 	Reference renderer intended for use in tests as well as for documenting the
 	minimum required interface for a Roact renderer.
@@ -2176,12 +2507,12 @@ return NoopRenderer]]></ProtectedString>
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
 			</Item>
-			<Item class="ModuleScript" referent="RBX73D1CD04D00E40B1941A04D5F33588D9">
+			<Item class="ModuleScript" referent="RBX456371DA8B204AEF9EBF385F6193165C">
 				<Properties>
 					<BinaryString name="AttributesSerialize"></BinaryString>
 					<Content name="LinkedSource"><null></null></Content>
 					<string name="Name">Portal</string>
-					<string name="ScriptGuid"></string>
+					<string name="ScriptGuid">{C7ACD445-0326-4665-8C9A-B6A8D4A1F32A}</string>
 					<ProtectedString name="Source"><![CDATA[local Symbol = require(script.Parent.Symbol)
 
 local Portal = Symbol.named("Portal")
@@ -2191,19 +2522,19 @@ return Portal]]></ProtectedString>
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
 			</Item>
-			<Item class="Folder" referent="RBX780FA63AD32A421BB825DC7EACEB6075">
+			<Item class="Folder" referent="RBX675CF76C2DD84D4A89C902D42347DA34">
 				<Properties>
 					<BinaryString name="AttributesSerialize"></BinaryString>
 					<string name="Name">PropMarkers</string>
 					<int64 name="SourceAssetId">-1</int64>
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
-				<Item class="ModuleScript" referent="RBX81CD0E6F578F4F4BBD3EC2BB5629A372">
+				<Item class="ModuleScript" referent="RBX7360111DD9E842C7A8C57610B3E7608C">
 					<Properties>
 						<BinaryString name="AttributesSerialize"></BinaryString>
 						<Content name="LinkedSource"><null></null></Content>
 						<string name="Name">Change</string>
-						<string name="ScriptGuid"></string>
+						<string name="ScriptGuid">{0C6B0A66-6466-49D9-BB43-79E85393E8E7}</string>
 						<ProtectedString name="Source"><![CDATA[--[[
 	Change is used to generate special prop keys that can be used to connect to
 	GetPropertyChangedSignal.
@@ -2247,12 +2578,12 @@ return Change
 						<BinaryString name="Tags"></BinaryString>
 					</Properties>
 				</Item>
-				<Item class="ModuleScript" referent="RBX493B93C5297F4942AC07CE5D996E6331">
+				<Item class="ModuleScript" referent="RBXDE05A7AF1F7C42B2884E3D6A3B9C9AA4">
 					<Properties>
 						<BinaryString name="AttributesSerialize"></BinaryString>
 						<Content name="LinkedSource"><null></null></Content>
 						<string name="Name">Children</string>
-						<string name="ScriptGuid"></string>
+						<string name="ScriptGuid">{E13FA794-57A5-4B66-86BD-C647E021E7D5}</string>
 						<ProtectedString name="Source"><![CDATA[local Symbol = require(script.Parent.Parent.Symbol)
 
 local Children = Symbol.named("Children")
@@ -2262,12 +2593,12 @@ return Children]]></ProtectedString>
 						<BinaryString name="Tags"></BinaryString>
 					</Properties>
 				</Item>
-				<Item class="ModuleScript" referent="RBX343635CC45A44C57B4C4B6CE7B0F9213">
+				<Item class="ModuleScript" referent="RBX5B1BDFB8571644C98D4A6D46FDED22C3">
 					<Properties>
 						<BinaryString name="AttributesSerialize"></BinaryString>
 						<Content name="LinkedSource"><null></null></Content>
 						<string name="Name">Event</string>
-						<string name="ScriptGuid"></string>
+						<string name="ScriptGuid">{35ED600A-CD5D-47C1-AFCA-0D0853387076}</string>
 						<ProtectedString name="Source"><![CDATA[--[[
 	Index into `Event` to get a prop key for attaching to an event on a Roblox
 	Instance.
@@ -2314,12 +2645,12 @@ return Event
 						<BinaryString name="Tags"></BinaryString>
 					</Properties>
 				</Item>
-				<Item class="ModuleScript" referent="RBXC197A56A34CB4D5C8BBB4497AB80A0FF">
+				<Item class="ModuleScript" referent="RBX01087E60A19B44BFA1B728EA97C37D01">
 					<Properties>
 						<BinaryString name="AttributesSerialize"></BinaryString>
 						<Content name="LinkedSource"><null></null></Content>
 						<string name="Name">Ref</string>
-						<string name="ScriptGuid"></string>
+						<string name="ScriptGuid">{277492DE-30E1-4921-9D1B-5CEBBBF6AA12}</string>
 						<ProtectedString name="Source"><![CDATA[local Symbol = require(script.Parent.Parent.Symbol)
 
 local Ref = Symbol.named("Ref")
@@ -2330,12 +2661,12 @@ return Ref]]></ProtectedString>
 					</Properties>
 				</Item>
 			</Item>
-			<Item class="ModuleScript" referent="RBXD97C339FA92E4F4E9C303519127F6F33">
+			<Item class="ModuleScript" referent="RBX1B54C20578F84F46B2D9EEAF1FC5179B">
 				<Properties>
 					<BinaryString name="AttributesSerialize"></BinaryString>
 					<Content name="LinkedSource"><null></null></Content>
 					<string name="Name">PureComponent</string>
-					<string name="ScriptGuid"></string>
+					<string name="ScriptGuid">{0CC50D14-B910-4EA7-959C-4D70727EA7D6}</string>
 					<ProtectedString name="Source"><![CDATA[--[[
 	A version of Component with a `shouldUpdate` method that forces the
 	resulting component to be pure.
@@ -2381,12 +2712,12 @@ return PureComponent]]></ProtectedString>
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
 			</Item>
-			<Item class="ModuleScript" referent="RBX92F499927F074E70A05DBDD42554EDC6">
+			<Item class="ModuleScript" referent="RBX39643DA3957E4194BD884E5D9CA4F1A3">
 				<Properties>
 					<BinaryString name="AttributesSerialize"></BinaryString>
 					<Content name="LinkedSource"><null></null></Content>
 					<string name="Name">RobloxRenderer</string>
-					<string name="ScriptGuid"></string>
+					<string name="ScriptGuid">{ECD4F8BB-1044-4B2E-AD2D-C874457B2679}</string>
 					<ProtectedString name="Source"><![CDATA[--[[
 	Renderer that deals in terms of Roblox Instances. This is the most
 	well-supported renderer after NoopRenderer and is currently the only
@@ -2675,12 +3006,12 @@ return RobloxRenderer
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
 			</Item>
-			<Item class="ModuleScript" referent="RBX0D84104511E946098BF0975BDFCBF129">
+			<Item class="ModuleScript" referent="RBX118ED2E4B37146BF99BA070DB7B0CE04">
 				<Properties>
 					<BinaryString name="AttributesSerialize"></BinaryString>
 					<Content name="LinkedSource"><null></null></Content>
 					<string name="Name">SingleEventManager</string>
-					<string name="ScriptGuid"></string>
+					<string name="ScriptGuid">{ED603D5B-FA5E-48DE-91E8-1DEF4B541D29}</string>
 					<ProtectedString name="Source"><![CDATA[--[[
 	A manager for a single host virtual node's connected events.
 ]]
@@ -2832,12 +3163,12 @@ return SingleEventManager]]></ProtectedString>
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
 			</Item>
-			<Item class="ModuleScript" referent="RBX0496BD052CDC4F59B50445546CB77ECF">
+			<Item class="ModuleScript" referent="RBX3A9BD26186864063B2E96FAB18EB9310">
 				<Properties>
 					<BinaryString name="AttributesSerialize"></BinaryString>
 					<Content name="LinkedSource"><null></null></Content>
 					<string name="Name">Symbol</string>
-					<string name="ScriptGuid"></string>
+					<string name="ScriptGuid">{CC43D9F8-8840-4291-9672-F6892DE33E24}</string>
 					<ProtectedString name="Source"><![CDATA[--[[
 	A 'Symbol' is an opaque marker type.
 
@@ -2872,12 +3203,12 @@ return Symbol]]></ProtectedString>
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
 			</Item>
-			<Item class="ModuleScript" referent="RBX649EF1CEA6984F35AB7AFF19A561B088">
+			<Item class="ModuleScript" referent="RBX030D0912A36D4424AECB5A3385758995">
 				<Properties>
 					<BinaryString name="AttributesSerialize"></BinaryString>
 					<Content name="LinkedSource"><null></null></Content>
 					<string name="Name">Type</string>
-					<string name="ScriptGuid"></string>
+					<string name="ScriptGuid">{2681A49F-EABE-4323-AFF8-43E0F9A812EF}</string>
 					<ProtectedString name="Source"><![CDATA[--[[
 	Contains markers for annotating objects with types.
 
@@ -2930,12 +3261,12 @@ return Type]]></ProtectedString>
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
 			</Item>
-			<Item class="ModuleScript" referent="RBX9DF86ED8D28E4576A68822B231C47366">
+			<Item class="ModuleScript" referent="RBX4625D5FB50E84A649CC6844A709B8B40">
 				<Properties>
 					<BinaryString name="AttributesSerialize"></BinaryString>
 					<Content name="LinkedSource"><null></null></Content>
 					<string name="Name">assertDeepEqual</string>
-					<string name="ScriptGuid"></string>
+					<string name="ScriptGuid">{ABB17D56-771F-4C47-9303-C08D00C51F22}</string>
 					<ProtectedString name="Source"><![CDATA[--[[
 	A utility used to assert that two objects are value-equal recursively. It
 	outputs fairly nicely formatted messages to help diagnose why two objects
@@ -3013,12 +3344,12 @@ return assertDeepEqual]]></ProtectedString>
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
 			</Item>
-			<Item class="ModuleScript" referent="RBX9B347804193046E3A5FF66A9F81922CB">
+			<Item class="ModuleScript" referent="RBXF325C5B3432349219B67D703AE9FECB0">
 				<Properties>
 					<BinaryString name="AttributesSerialize"></BinaryString>
 					<Content name="LinkedSource"><null></null></Content>
 					<string name="Name">assign</string>
-					<string name="ScriptGuid"></string>
+					<string name="ScriptGuid">{930BAD73-CA4E-4F77-9553-1AFA9CD838E4}</string>
 					<ProtectedString name="Source"><![CDATA[local None = require(script.Parent.None)
 
 --[[
@@ -3050,12 +3381,12 @@ return assign]]></ProtectedString>
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
 			</Item>
-			<Item class="ModuleScript" referent="RBXB250A4ABB46C4D4792FA519BA0703981">
+			<Item class="ModuleScript" referent="RBXAED2137254584D78B88135D35C0285F0">
 				<Properties>
 					<BinaryString name="AttributesSerialize"></BinaryString>
 					<Content name="LinkedSource"><null></null></Content>
 					<string name="Name">createContext</string>
-					<string name="ScriptGuid"></string>
+					<string name="ScriptGuid">{F46D6339-AD5A-43C6-894E-3200DE151AAE}</string>
 					<ProtectedString name="Source"><![CDATA[local Symbol = require(script.Parent.Symbol)
 local createFragment = require(script.Parent.createFragment)
 local createSignal = require(script.Parent.createSignal)
@@ -3212,12 +3543,12 @@ return createContext
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
 			</Item>
-			<Item class="ModuleScript" referent="RBXF3E942579A5E4057AD37F7A253AFA6AD">
+			<Item class="ModuleScript" referent="RBX72522760D4C744D694CE59363720609D">
 				<Properties>
 					<BinaryString name="AttributesSerialize"></BinaryString>
 					<Content name="LinkedSource"><null></null></Content>
 					<string name="Name">createElement</string>
-					<string name="ScriptGuid"></string>
+					<string name="ScriptGuid">{4A8987A7-1CE3-40B7-8231-E0C17894AEB7}</string>
 					<ProtectedString name="Source"><![CDATA[local Children = require(script.Parent.PropMarkers.Children)
 local ElementKind = require(script.Parent.ElementKind)
 local Logging = require(script.Parent.Logging)
@@ -3296,12 +3627,12 @@ return createElement]]></ProtectedString>
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
 			</Item>
-			<Item class="ModuleScript" referent="RBX955F5B8C88DC4A5A9AC37CA990C923FB">
+			<Item class="ModuleScript" referent="RBX4A0409D43A964293BA8747C63CA44242">
 				<Properties>
 					<BinaryString name="AttributesSerialize"></BinaryString>
 					<Content name="LinkedSource"><null></null></Content>
 					<string name="Name">createFragment</string>
-					<string name="ScriptGuid"></string>
+					<string name="ScriptGuid">{B117EAAC-A6DC-42E5-AE9E-37CFA8DC5AD4}</string>
 					<ProtectedString name="Source"><![CDATA[local ElementKind = require(script.Parent.ElementKind)
 local Type = require(script.Parent.Type)
 
@@ -3318,12 +3649,12 @@ return createFragment]]></ProtectedString>
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
 			</Item>
-			<Item class="ModuleScript" referent="RBXF06D6DF6AECF4305A077727291DB8EA6">
+			<Item class="ModuleScript" referent="RBX1B1DA0B81DE2477BB6E88EA60165B4E3">
 				<Properties>
 					<BinaryString name="AttributesSerialize"></BinaryString>
 					<Content name="LinkedSource"><null></null></Content>
 					<string name="Name">createReconciler</string>
-					<string name="ScriptGuid"></string>
+					<string name="ScriptGuid">{5DE71D2B-9828-44A8-ACF0-70CC7AF58AE2}</string>
 					<ProtectedString name="Source"><![CDATA[local Type = require(script.Parent.Type)
 local ElementKind = require(script.Parent.ElementKind)
 local ElementUtils = require(script.Parent.ElementUtils)
@@ -3785,12 +4116,12 @@ return createReconciler
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
 			</Item>
-			<Item class="ModuleScript" referent="RBXAE7B42169F9B48C09860A1B0130BAE87">
+			<Item class="ModuleScript" referent="RBX496FD1C248744E5DBF8362D2184DEEB5">
 				<Properties>
 					<BinaryString name="AttributesSerialize"></BinaryString>
 					<Content name="LinkedSource"><null></null></Content>
 					<string name="Name">createReconcilerCompat</string>
-					<string name="ScriptGuid"></string>
+					<string name="ScriptGuid">{195A8BB4-A4DF-44C5-AEF4-87E49221AF16}</string>
 					<ProtectedString name="Source"><![CDATA[--[[
 	Contains deprecated methods from Reconciler. Broken out so that removing
 	this shim is easy -- just delete this file and remove it from init.
@@ -3842,12 +4173,12 @@ return createReconcilerCompat]]></ProtectedString>
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
 			</Item>
-			<Item class="ModuleScript" referent="RBX2F5D4203A6FC4FF580E12057692A7AA7">
+			<Item class="ModuleScript" referent="RBX62988401AAA847068951D5316A27DCEC">
 				<Properties>
 					<BinaryString name="AttributesSerialize"></BinaryString>
 					<Content name="LinkedSource"><null></null></Content>
 					<string name="Name">createRef</string>
-					<string name="ScriptGuid"></string>
+					<string name="ScriptGuid">{2CFDAB3E-83B3-4CC0-B89F-8A67EA04A20E}</string>
 					<ProtectedString name="Source"><![CDATA[--[[
 	A ref is nothing more than a binding with a special field 'current'
 	that maps to the getValue method of the binding
@@ -3890,12 +4221,12 @@ return createRef]]></ProtectedString>
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
 			</Item>
-			<Item class="ModuleScript" referent="RBX49CE049AE6174A2AAD28D0460BB234CC">
+			<Item class="ModuleScript" referent="RBXC89BC34B3BB343F1839BC76EA8972AC9">
 				<Properties>
 					<BinaryString name="AttributesSerialize"></BinaryString>
 					<Content name="LinkedSource"><null></null></Content>
 					<string name="Name">createSignal</string>
-					<string name="ScriptGuid"></string>
+					<string name="ScriptGuid">{65CFAA9E-CB13-41CE-9D9D-63EF3D0965E3}</string>
 					<ProtectedString name="Source"><![CDATA[--[[
 	This is a simple signal implementation that has a dead-simple API.
 
@@ -3975,12 +4306,12 @@ return createSignal]]></ProtectedString>
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
 			</Item>
-			<Item class="ModuleScript" referent="RBX0B1129ED23884D178C425B33B12EE963">
+			<Item class="ModuleScript" referent="RBX427C68BE663F4F978A99804D5AD68C1F">
 				<Properties>
 					<BinaryString name="AttributesSerialize"></BinaryString>
 					<Content name="LinkedSource"><null></null></Content>
 					<string name="Name">createSpy</string>
-					<string name="ScriptGuid"></string>
+					<string name="ScriptGuid">{E55CF1C3-EB34-457B-9D75-A6B46B7E9145}</string>
 					<ProtectedString name="Source"><![CDATA[--[[
 	A utility used to create a function spy that can be used to robustly test
 	that functions are invoked the correct number of times and with the correct
@@ -4070,12 +4401,12 @@ return createSpy]]></ProtectedString>
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
 			</Item>
-			<Item class="ModuleScript" referent="RBX950285C94FA04CC5A25DEBA80601101F">
+			<Item class="ModuleScript" referent="RBXB8BC02882B41474D898BDD9C367288CB">
 				<Properties>
 					<BinaryString name="AttributesSerialize"></BinaryString>
 					<Content name="LinkedSource"><null></null></Content>
 					<string name="Name">getDefaultInstanceProperty</string>
-					<string name="ScriptGuid"></string>
+					<string name="ScriptGuid">{D0CBC58A-699D-407F-8F7E-99F733822587}</string>
 					<ProtectedString name="Source"><![CDATA[--[[
 	Attempts to get the default value of a given property on a Roblox instance.
 
@@ -4134,12 +4465,12 @@ return getDefaultInstanceProperty]]></ProtectedString>
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
 			</Item>
-			<Item class="ModuleScript" referent="RBX4C28DDC76D824E019BAB87EBB5B5A8C4">
+			<Item class="ModuleScript" referent="RBX36927702C5D0418A9610B8BF294CE979">
 				<Properties>
 					<BinaryString name="AttributesSerialize"></BinaryString>
 					<Content name="LinkedSource"><null></null></Content>
 					<string name="Name">internalAssert</string>
-					<string name="ScriptGuid"></string>
+					<string name="ScriptGuid">{EAA6069F-C462-4C05-BBAF-A8B58886C504}</string>
 					<ProtectedString name="Source"><![CDATA[local function internalAssert(condition, message)
 	if not condition then
 		error(message .. " (This is probably a bug in Roact!)", 3)
@@ -4151,12 +4482,12 @@ return internalAssert]]></ProtectedString>
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
 			</Item>
-			<Item class="ModuleScript" referent="RBXDC5C40CC54154574B6DFC6AD9310B7CD">
+			<Item class="ModuleScript" referent="RBX5792D1D3628E40518B5E973F8AE1E8DD">
 				<Properties>
 					<BinaryString name="AttributesSerialize"></BinaryString>
 					<Content name="LinkedSource"><null></null></Content>
 					<string name="Name">invalidSetStateMessages</string>
-					<string name="ScriptGuid"></string>
+					<string name="ScriptGuid">{1CFB4AB9-BC3D-46FD-9775-05EBBFD758C0}</string>
 					<ProtectedString name="Source"><![CDATA[--[[
 	These messages are used by Component to help users diagnose when they're
 	calling setState in inappropriate places.
@@ -4205,12 +4536,12 @@ return invalidSetStateMessages]]></ProtectedString>
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
 			</Item>
-			<Item class="ModuleScript" referent="RBXFC64D6ABFA1449FEBA6E6C9A59435860">
+			<Item class="ModuleScript" referent="RBXA7A053F035CE4A15B36210379E42E737">
 				<Properties>
 					<BinaryString name="AttributesSerialize"></BinaryString>
 					<Content name="LinkedSource"><null></null></Content>
 					<string name="Name">oneChild</string>
-					<string name="ScriptGuid"></string>
+					<string name="ScriptGuid">{AB2BABC8-0CC0-4192-BD82-B30498783AA5}</string>
 					<ProtectedString name="Source"><![CDATA[--[[
 	Retrieves at most one child from the children passed to a component.
 
@@ -4243,12 +4574,12 @@ return oneChild]]></ProtectedString>
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
 			</Item>
-			<Item class="ModuleScript" referent="RBXB3440412F5C34989A5EC7F8B1587FBED">
+			<Item class="ModuleScript" referent="RBX4F1BD738DAE54DE4ADAB8D2832E39E91">
 				<Properties>
 					<BinaryString name="AttributesSerialize"></BinaryString>
 					<Content name="LinkedSource"><null></null></Content>
 					<string name="Name">strict</string>
-					<string name="ScriptGuid"></string>
+					<string name="ScriptGuid">{754C1E10-01B5-40B6-8BC7-055803FD4D8A}</string>
 					<ProtectedString name="Source"><![CDATA[local function strict(t, name)
 	name = name or tostring(t)
 
@@ -4278,311 +4609,6 @@ end
 return strict]]></ProtectedString>
 					<int64 name="SourceAssetId">-1</int64>
 					<BinaryString name="Tags"></BinaryString>
-				</Properties>
-			</Item>
-		</Item>
-	</Item>
-	<Item class="ServerStorage" referent="RBX6BC79C7AC48D42738D4AA1175F068CAD">
-		<Properties>
-			<BinaryString name="AttributesSerialize"></BinaryString>
-			<string name="Name">ServerStorage</string>
-			<int64 name="SourceAssetId">-1</int64>
-			<BinaryString name="Tags"></BinaryString>
-		</Properties>
-	</Item>
-	<Item class="ReplicatedStorage" referent="1">
-		<Properties>
-			<BinaryString name="AttributesSerialize"></BinaryString>
-			<string name="Name">ReplicatedStorage</string>
-			<int64 name="SourceAssetId">-1</int64>
-			<BinaryString name="Tags"></BinaryString>
-		</Properties>
-		<Item class="ModuleScript" referent="RBX326A4E9554DD4F7EBFAAAB08E651D357">
-			<Properties>
-				<BinaryString name="AttributesSerialize"></BinaryString>
-				<Content name="LinkedSource"><null></null></Content>
-				<string name="Name">Hello</string>
-				<string name="ScriptGuid"></string>
-				<ProtectedString name="Source"></ProtectedString>
-				<int64 name="SourceAssetId">-1</int64>
-				<BinaryString name="Tags"></BinaryString>
-			</Properties>
-		</Item>
-		<Item class="ModuleScript" referent="RBX01B960BD728D49FD84DF20A31CD76165">
-			<Properties>
-				<BinaryString name="AttributesSerialize"></BinaryString>
-				<Content name="LinkedSource"><null></null></Content>
-				<string name="Name">modules</string>
-				<string name="ScriptGuid"></string>
-				<ProtectedString name="Source"><![CDATA[local modules = {}
-
---timeOut dflt: 5
---maxTries dflt: 1
-function modules.get(name, timeOut, maxTries)
-    timeOut = timeOut or 5
-    maxTries = maxTries or 1
-    assert(typeof(name)=="string", " `name` must be a string!")
-    assert(typeof(timeOut)=="number", " `timeOut` must be a number or nil!")
-    assert(typeof(maxTries)=="number", " `tries` must be a number or nil!")
-
-    --searching for module
-    local tries = 0
-    local module = nil
-    while (tries < maxTries) do
-        local suc, err = pcall(function()
-            module = script:WaitForChild(name)
-        end)
-        print("Err: ", err)
-        if suc then break end
-    end
-    --requiring module if one is found
-    if not module then 
-        warn("Infinity")
-    else
-        local contents
-        local suc = pcall(function()
-            contents = require(module)
-        end)
-        
-        if not contents then
-            assert(false, "Error")
-        else
-            return contents
-        end    
-    end
-end
-
-return modules]]></ProtectedString>
-				<int64 name="SourceAssetId">-1</int64>
-				<BinaryString name="Tags"></BinaryString>
-			</Properties>
-			<Item class="ModuleScript" referent="RBX031B668A716548C99FA24B4701844208">
-				<Properties>
-					<BinaryString name="AttributesSerialize"></BinaryString>
-					<Content name="LinkedSource"><null></null></Content>
-					<string name="Name">class</string>
-					<string name="ScriptGuid"></string>
-					<ProtectedString name="Source"><![CDATA[local class = {}
-class.__index = class
-
-function class.new(className)
-    assert(typeof(className)=="string", " `className` must be a string!")
-
-    local self = setmetatable({}, class)
-    self.__IsClass = true
-    self.__Static = true
-    self.__ClassName = className
-    return self
-end
-
-function class:newInstance()
-    assert(typeof(self)=="table" and self.__IsClass, " member function got called with . istead of :!")
-        
-    local newInst = setmetatable({}, self)
-    newInst.__IsClass = true
-    newInst.__Static = false
-    newInst.__ClassName = self.__ClassName
-    return newInst
-end
-
-function class:isInstaceOfMe(instance)
-    assert(typeof(self)=="table" and self.__IsClass, " member function got called with . istead of :!")
-    assert(instance~=nil, " `instance` is required!")
-
-    if typeof(instance)=="table" and instance.__IsClass and instance.__ClassName==self.__ClassName then
-        return true
-    else
-        return false
-    end
-end
-
-function class:memberFunctionAssert(instance)
-    assert(instance~=nil and self:isInstaceOfMe(instance), " member function got called with . istead of :!")
-    assert(not instance.__Static, string.format(" this member function cannot be called on a static class: %s", self.__ClassName))
-end
-
-return class]]></ProtectedString>
-					<int64 name="SourceAssetId">-1</int64>
-					<BinaryString name="Tags"></BinaryString>
-				</Properties>
-			</Item>
-			<Item class="ModuleScript" referent="RBX7B0153A5AB94492385F4AAA5BD0CAC9A">
-				<Properties>
-					<BinaryString name="AttributesSerialize"></BinaryString>
-					<Content name="LinkedSource"><null></null></Content>
-					<string name="Name">settings</string>
-					<string name="ScriptGuid"></string>
-					<ProtectedString name="Source"><![CDATA[local modules = require(script.Parent)
-local class = modules.get("class")
-
-local settings = class.new("Settings")
-settings.__index = settings
-settings.__Static = true
-
-function settings.new(folder)
-    assert(typeof(folder)=="Instance" and (folder.ClassName=="Folder" or folder.ClassName=="Configuration"), " `folder must be a Instance of a Folder or Configuration!`")
-
-    local self = settings:newInstance()
-    self.__Folder = folder
-    return self
-end
-
-function settings:enabled(name)
-    settings:memberFunctionAssert(self)
-    assert(typeof(name)=="string", " `name` must be a string!")
-    
-    local setting = self.__Folder:FindFirstChild(name)
-    if setting and typeof(setting) == "Instance" and (
-        setting.ClassName == "BoolValue" or setting.ClassName == "NumberValue" or setting.ClassName == "IntValue" or 
-        setting.ClassName == "StringValue" or setting.ClassName == "Vector3Value" or setting.ClassName == "Color3Value" or
-        setting.ClassName == "ObjectValue" or setting.ClassName == "RayValue" or setting.ClassName == "CFrameValue" or setting.ClassName == "BrickColorValue" ) then
-            return setting.Value
-        elseif setting ~= nil then
-            warn(string.format(" %s that has been found is not in a correct format pls use only (Instance)Value's!", tostring(setting)))
-            return false
-        else
-            return false
-        end
-end
-
-function settings:ifEnabled(name, cb)
-    settings:memberFunctionAssert(self)
-    assert(typeof(name)=="string", " `name` must be a string!")
-    assert(typeof(cb)=="function", " `cb` must be a function!")
-
-    if self:enabled(name) then
-        cb(name)
-    end
-end
-
-function settings:ifEnabledPrintf(name, msg, ...)
-    settings:memberFunctionAssert(self)
-    assert(typeof(name)=="string", " `name` must be a string!")
-    assert(typeof(msg)=="string", " `msg` must be a string!")
-    
-    local args = {...}
-    self:ifEnabled(name, function()
-        print(string.format(msg, table.unpack(args)))
-    end)
-end
-
-return settings]]></ProtectedString>
-					<int64 name="SourceAssetId">-1</int64>
-					<BinaryString name="Tags"></BinaryString>
-				</Properties>
-			</Item>
-			<Item class="ModuleScript" referent="RBXC3BFD65184D24326B3124FCC33BBB295">
-				<Properties>
-					<BinaryString name="AttributesSerialize"></BinaryString>
-					<Content name="LinkedSource"><null></null></Content>
-					<string name="Name">random</string>
-					<string name="ScriptGuid"></string>
-					<ProtectedString name="Source"><![CDATA[local modules = require(script.Parent)
-
-local settings = modules.get("settings")
-local config = settings.new(game:GetService("ReplicatedStorage"):WaitForChild("config"))
-
-local class = modules.get("class")
-local random = class.new("Random")
-random.__index = random
-
-function random.new(seed, autoSeed)
-    assert(typeof(seed)=="number" or seed==nil, " `seed` must be a number or nil!")
-    assert(typeof(autoSeed)=="boolean" or autoSeed==nil, " `autoSeed` must be a boolean or nil!")
-
-    local self = random:newInstance()
-    self.__Seed = seed
-    self.__SeedGenInterval = 5*60
-
-    if autoSeed ~= false or autoSeed == nil then
-        spawn(function()
-            while true do
-                wait(self.__SeedGenInterval)
-                self:__generateSeed()
-            end
-        end)
-    end
-
-    if not self.__Seed then self:__generateSeed() end
-    self:__init()
-    return self
-end
-
-function random:__init()
-    random:memberFunctionAssert(self)
-    self.__Random = Random.new(self.__Seed)
-end
-
-function random:__generateSeed()
-    random:memberFunctionAssert(self)
-    
-    --random Table
-    self.__RandTable = {}
-    local hex = tostring(self.__RandTable):sub(7, 21)
-    self.__Seed = tonumber(hex, 16) + os.time()
-    config:ifEnabledPrintf("DebugPrint", "Generated seed: [%d]", self.__Seed)
-    self:__init()
-end
-
-function random:setSeedGenInterval(interval)
-    random:memberFunctionAssert(self)
-    assert(typeof(interval)=="number" or interval==nil, " `interval` must be a number or nil!")
-
-    self.__SeedGenInterval = interval or 5*60
-end
-
-function random:nextInt(min, max)
-    random:memberFunctionAssert(self)
-    assert(typeof(min)=="number" or min==nil, " `min` must be a number or nil!")
-    assert(typeof(max)=="number" or max==nil, " `max` must be a number or nil!")
-    assert((min or 0)<(max or 1), " `min` cannot be >= then `max`!")
-
-    return self.__Random:NextInteger(min or 0, max or 1)
-end
-
-function random:nextNumber(min, max)
-    random:memberFunctionAssert(self)
-    assert(typeof(min)=="number" or min==nil, " `min` must be a number or nil!")
-    assert(typeof(max)=="number" or max==nil, " `max` must be a number or nil!")
-    assert((min or 0)<(max or 1), " `min` cannot be >= then `max`!")
-        
-    return self.__Random:NextNumber(min or 0, max or 1)
-end
-
-function random:choice(t)
-    random:memberFunctionAssert(self)
-    assert(typeof(t)=="table", " `t` must be a table!")
-
-    local tLen = #t
-    assert(tLen==0, " `t` cannot be a empty table!")
-
-    if tLen == 1 then
-        return t[1]
-    else
-        return t[self:nextInt(1, tLen)]
-    end
-end
-
-return random]]></ProtectedString>
-					<int64 name="SourceAssetId">-1</int64>
-					<BinaryString name="Tags"></BinaryString>
-				</Properties>
-			</Item>
-		</Item>
-		<Item class="Configuration" referent="RBXDB9DDFD5871643438D46DC790BAFCDA8">
-			<Properties>
-				<BinaryString name="AttributesSerialize"></BinaryString>
-				<string name="Name">config</string>
-				<int64 name="SourceAssetId">-1</int64>
-				<BinaryString name="Tags"></BinaryString>
-			</Properties>
-			<Item class="BoolValue" referent="RBX150137FA01F34810AE566D0874E82C2C">
-				<Properties>
-					<BinaryString name="AttributesSerialize"></BinaryString>
-					<string name="Name">DebugPrint</string>
-					<int64 name="SourceAssetId">-1</int64>
-					<BinaryString name="Tags"></BinaryString>
-					<bool name="Value">true</bool>
 				</Properties>
 			</Item>
 		</Item>

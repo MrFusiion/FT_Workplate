@@ -49,7 +49,7 @@ function random:setSeedGenInterval(interval)
     random:memberFunctionAssert(self)
     assert(typeof(interval)=="number" or interval==nil, " `interval` must be a number or nil!")
 
-    self.__SeedGenInterval = interval or 5*60
+    self.__SeedGenInterval = interval or (5*60)
 end
 
 function random:nextInt(min, max)

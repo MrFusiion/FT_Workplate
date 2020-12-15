@@ -1,7 +1,4 @@
-local modules = require(game:GetService("ServerScriptService"):WaitForChild("modules"))
-local random = modules.get("random")
+local shared = require(game:GetService("ReplicatedStorage"):WaitForChild("modules"))
+local random = shared.get("random")
 
 local rand = random.new()
-rand:setSeedGenInterval(1)
-
-game:WaitForChild("hello")
