@@ -53,7 +53,7 @@
     },
 
     "SoundService": {
-      "$className": "StarterPack",
+      "$className": "SoundService",
       "$path": "src/sound",
       "$properties": {
         "RespectFilteringEnabled": true
@@ -62,15 +62,8 @@
 
     "Workspace": {
       "$className": "Workspace",
-      "$path": "src/workspace",
       "$properties": {
         "FilteringEnabled": true
-      },
-      "Terrain": {
-        "$className": "Terrain"
-      },
-      "Camera": {
-        "$className": "Camera"
       },
       "Baseplate": {
         "$className": "Part",
