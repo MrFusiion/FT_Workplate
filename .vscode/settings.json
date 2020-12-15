@@ -1,6 +1,11 @@
 {
+    "files.exclude": {
+        "**/desktop.ini": true,
+        "**/.vscode": true
+    },
     "workbench.tree.indent": 20,
-    //"workbench.colorTheme": "RBLXDark",
+    "workbench.colorTheme": "RBLXDark",
+
     "workbench.iconTheme": "vscode-icons",
 
     "vsicons.associations.files": [
@@ -45,25 +50,85 @@
             "format": "png"
         },
         {
-            "icon": "config_folder",
-            "extensions": ["config"],
+            "icon": "value",
+            "extensions": ["value.model.json"],
+            "format": "png"
+        },
+        {
+            "icon": "tool",
+            "extensions": ["tool.model.json"],
+            "format": "png"
+        },
+        {
+            "icon": "part",
+            "extensions": ["part.model.json"],
+            "format": "png"
+        },
+        {
+            "icon": "value",
+            "extensions": ["value.meta.json"],
+            "format": "png"
+        },
+        {
+            "icon": "tool",
+            "extensions": ["tool.meta.json"],
+            "format": "png"
+        },
+        {
+            "icon": "part",
+            "extensions": ["part.meta.json"],
+            "format": "png"
+        },
+        {
+            "icon": "model",
+            "extensions": ["model.json"],
             "format": "png"
         }
     ],
     "vsicons.associations.folders": [
         {
             "icon": "game",
-            "extensions": ["src"],
-            "format": "png"
-        },
-        {
-            "icon": "serverscriptservice",
-            "extensions": ["ServerScriptService"],
+            "extensions": ["src", "workspace"],
             "format": "png"
         },
         {
             "icon": "studio",
-            "extensions": ["client", "server", "shared", "modules"],
+            "extensions": ["modules", "config"],
+            "format": "png"
+        },
+        {
+            "icon": "replicated",
+            "extensions": ["shared", "first"],
+            "format": "png"
+        },
+        {
+            "icon": "serverscripts",
+            "extensions": ["server"],
+            "format": "png"
+        },
+        {
+            "icon": "playerscripts",
+            "extensions": ["client"],
+            "format": "png"
+        },
+        {
+            "icon": "gui",
+            "extensions": ["gui"],
+            "format": "png"
+        },
+        {
+            "icon": "tool",
+            "extensions": ["tools"],
+            "format": "png"
+        },
+        {
+            "icon": "light",
+            "extensions": ["light"],
+            "format": "png"
+        },
+        {
+            "icon": "sound",
+            "extensions": ["sound"],
             "format": "png"
         }
     ],

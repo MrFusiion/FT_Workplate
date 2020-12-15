@@ -1,7 +1,9 @@
-local settings = require(script.Parent:WaitForChild("settings"))
-local config = settings.new(game:GetService("ServerScriptService"):WaitForChild("config"))
+local modules = require(script.Parent)
 
-local class = require(script.Parent:WaitForChild("class"))
+local settings = modules.get("settings")
+local config = settings.new(game:GetService("ReplicatedStorage"):WaitForChild("config"))
+
+local class = modules.get("class")
 local random = class.new("Random")
 random.__index = random
 

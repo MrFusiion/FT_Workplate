@@ -1,4 +1,5 @@
-local class = require(script.Parent:WaitForChild("class"))
+local modules = require(script.Parent)
+local class = modules.get("class")
 
 local settings = class.new("Settings")
 settings.__index = settings
@@ -22,8 +23,10 @@ function settings:enabled(name)
         setting.ClassName == "StringValue" or setting.ClassName == "Vector3Value" or setting.ClassName == "Color3Value" or
         setting.ClassName == "ObjectValue" or setting.ClassName == "RayValue" or setting.ClassName == "CFrameValue" or setting.ClassName == "BrickColorValue" ) then
             return setting.Value
+        elseif setting ~= nil then
+            warn(string.format(" %s that has been found is not in a correct format pls use only (Instance)Value's!", tostring(setting)))
+            return false
         else
-            warn(string.format(" %s that has been found is not in a correct format pls use only (Instance)Value's!", setting))
             return false
         end
 end

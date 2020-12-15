@@ -3,29 +3,74 @@
   "tree": {
     "$className": "DataModel",
 
-    "ReplicatedStorage": {
-      "Common": {
-        "$path": "src/shared"
+    "Lighting": {
+      "$className": "Lighting",
+      "$path": "src/light",
+      "$properties": {
+        "Ambient": [
+          0,
+          0,
+          0
+        ],
+        "Brightness": 2,
+        "GlobalShadows": true,
+        "Outlines": false,
+        "Technology": "Voxel"
       }
+    },
+
+    "ReplicatedFirst": {
+      "$className": "ReplicatedFirst",
+      "$path": "src/first"
+    },
+
+    "ReplicatedStorage": {
+      "$className": "ReplicatedStorage",
+      "$path": "src/shared"
     },
 
     "ServerScriptService": {
-      "Server": {
-        "$path": "src/server"
-      }
+      "$className": "ServerScriptService",
+      "$path": "src/server"
     },
 
     "StarterPlayer": {
+      "$className": "StarterPlayer",
       "StarterPlayerScripts": {
-        "Client": {
-          "$path": "src/client"
-        }
+        "$className": "StarterPlayerScripts",
+        "$path": "src/client"
+      }
+    },
+
+    "StarterGui": {
+      "$className": "StarterGui",
+      "$path": "src/gui"
+    },
+
+    "StarterPack": {
+      "$className": "StarterPack",
+      "$path": "src/tools"
+    },
+
+    "SoundService": {
+      "$className": "StarterPack",
+      "$path": "src/sound",
+      "$properties": {
+        "RespectFilteringEnabled": true
       }
     },
 
     "Workspace": {
+      "$className": "Workspace",
+      "$path": "src/workspace",
       "$properties": {
         "FilteringEnabled": true
+      },
+      "Terrain": {
+        "$className": "Terrain"
+      },
+      "Camera": {
+        "$className": "Camera"
       },
       "Baseplate": {
         "$className": "Part",
@@ -48,24 +93,6 @@
             512
           ]
         }
-      }
-    },
-    "Lighting": {
-      "$properties": {
-        "Ambient": [
-          0,
-          0,
-          0
-        ],
-        "Brightness": 2,
-        "GlobalShadows": true,
-        "Outlines": false,
-        "Technology": "Voxel"
-      }
-    },
-    "SoundService": {
-      "$properties": {
-        "RespectFilteringEnabled": true
       }
     }
   }
