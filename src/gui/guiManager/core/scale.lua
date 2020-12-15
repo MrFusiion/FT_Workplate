@@ -10,7 +10,7 @@ function scale:get()
     if UIS.TouchEnabled and playerGui.CurrentScreenOrientation
         == Enum.ScreenOrientation.Portrait then
 
-        playerGui.ScreenOrientation = Enum.ScreenOrientation.LandScapeSensor
+        playerGui.ScreenOrientation = Enum.ScreenOrientation.LandscapeSensor
         screenSize = Vector2.new(screenSize.Y, screenSize.X)
     end
     return math.min(screenSize.X / DEFAULT_RES.X, screenSize.Y / DEFAULT_RES.Y)
@@ -32,4 +32,4 @@ function scale:getTextSize(size)
     return math.floor(self:get() * size + .5) * self:getModifier()
 end
 
-local scale
+return scale
