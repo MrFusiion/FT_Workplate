@@ -1,7 +1,0 @@
-{
-    "ClassName" : "BoolValue",
-    "Properties" : {
-        "Name" : "DebugPrint",
-        "Value" : true
-    }
-}

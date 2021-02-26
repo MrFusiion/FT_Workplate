@@ -229,9 +229,9 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 			<Properties>
 				<BinaryString name="AttributesSerialize"></BinaryString>
 				<CoordinateFrame name="CFrame">
-					<X>96.1500854</X>
-					<Y>125.15789</Y>
-					<Z>127.296936</Z>
+					<X>95.2756577</X>
+					<Y>130.451828</Y>
+					<Z>145.014832</Z>
 					<R00>0.24189353</R00>
 					<R01>-0.540629208</R01>
 					<R02>0.805734277</R02>
@@ -247,9 +247,9 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 				<float name="FieldOfView">70</float>
 				<token name="FieldOfViewMode">0</token>
 				<CoordinateFrame name="Focus">
-					<X>94.53862</X>
-					<Y>124.043541</Y>
-					<Z>126.895203</Z>
+					<X>93.6641922</X>
+					<Y>129.337479</Y>
+					<Z>144.613098</Z>
 					<R00>1</R00>
 					<R01>0</R01>
 					<R02>0</R02>
@@ -449,6 +449,617 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
 			</Item>
+			<Item class="LocalScript" referent="RBX7546AC0D330F44CB98CA44535F5053AC">
+				<Properties>
+					<BinaryString name="AttributesSerialize"></BinaryString>
+					<bool name="Disabled">false</bool>
+					<Content name="LinkedSource"><null></null></Content>
+					<string name="Name">guiManager</string>
+					<string name="ScriptGuid">{68AA4E47-F34D-453F-8055-DDA5DCF8074F}</string>
+					<ProtectedString name="Source"><![CDATA[local core = require(script:WaitForChild("core"))
+
+--Player
+local player = game:GetService("Players").LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
+
+function loadElements()
+    for _, element in ipairs(script:WaitForChild("elements"):GetChildren()) do
+        core.elements.add(element.Name, element)
+    end
+end
+
+function getTrees()
+    print("Get Trees")
+    local trees = {}
+    for _, gui in ipairs(script:WaitForChild("guis"):GetChildren()) do
+        if gui:IsA("ModuleScript") then
+            local _, err = pcall(function()
+                trees[gui.Name] = require(gui)
+            end)
+            if err then
+                warn(string.format(" Couldn't load gui module: %s", gui.Name))
+            end
+        end
+    end
+    return trees
+end
+
+function mount()
+	local handles = {}
+    for name, tree in pairs(getTrees()) do
+		handles[name] = core.roact.mount(tree, playerGui, name)
+	end
+	return function()
+		local trees = getTrees()
+		for name, handle in pairs(handles) do
+			core.roact.update(handle, trees[name])
+		end
+	end
+end
+
+--/////[init]/////--
+loadElements()
+update = mount()
+
+--UpdateGui
+workspace.CurrentCamera:GetPropertyChangedSignal("ViewportSize"):Connect(function()
+	update()
+end)
+
+playerGui:GetPropertyChangedSignal("CurrentScreenOrientation"):Connect(function()
+	update()
+end)]]></ProtectedString>
+					<int64 name="SourceAssetId">-1</int64>
+					<BinaryString name="Tags"></BinaryString>
+				</Properties>
+				<Item class="ModuleScript" referent="RBXEA4EC7CAD1544C35BFB0A775E66F10D7">
+					<Properties>
+						<BinaryString name="AttributesSerialize"></BinaryString>
+						<Content name="LinkedSource"><null></null></Content>
+						<string name="Name">core</string>
+						<string name="ScriptGuid">{699E691A-A264-452F-A7E2-564FDAEF2D4B}</string>
+						<ProtectedString name="Source"><![CDATA[local roact = game:GetService("ReplicatedStorage"):WaitForChild("roact")
+
+local core = {}
+
+--Main Modules
+core.roact = require(roact)
+core.color = require(script:WaitForChild("color"))
+core.elements = require(script:WaitForChild("elements"))
+core.subfix = require(script:WaitForChild("gui"))
+core.scale = require(script:WaitForChild("scale"))
+core.soundlist = require(script:WaitForChild("soundlist"))
+core.subfix = require(script:WaitForChild("subfix"))
+
+--[[
+    This is my hacky solution for my primitive gui elements.
+    That also need a reference to the Instance.
+    Without modifing roact src code.
+]]
+local roact_binding = require(roact:WaitForChild("Binding")) 
+function core.updateRef(ref, rbx)
+    roact_binding.update(ref, rbx)
+end
+
+
+--Main Services
+core.TS = game:GetService("TweenService")
+
+return core]]></ProtectedString>
+						<int64 name="SourceAssetId">-1</int64>
+						<BinaryString name="Tags"></BinaryString>
+					</Properties>
+					<Item class="ModuleScript" referent="RBX7BC139D85A11464687370863C0269CEE">
+						<Properties>
+							<BinaryString name="AttributesSerialize"></BinaryString>
+							<Content name="LinkedSource"><null></null></Content>
+							<string name="Name">color</string>
+							<string name="ScriptGuid">{737C0219-AB00-471F-B565-EFB4B4866166}</string>
+							<ProtectedString name="Source"><![CDATA[local color = {}
+
+function color.shade(color, factor)
+    assert(typeof(color)=='Color3', " `color` must be a Color3!")
+    assert(typeof(factor)=='number', " `factor` must be a number!")
+    return Color3.new(
+        color.R * (1 - factor),
+        color.G * (1 - factor),
+        color.B * (1 - factor)
+    )
+end
+
+function color.tint(color, factor)
+    assert(typeof(color)=='Color3', " `color` must be a Color3!")
+    assert(typeof(factor)=='number', " `factor` must be a number!")
+    return Color3.new(
+        color.R + (1 - color.R) * factor,
+        color.G + (1 - color.G) * factor,
+        color.B + (1 - color.B) * factor
+    )
+end
+
+--returns a value between (0 - 1)
+--where 0 is darkest and 1 is the lightest
+function  color.getLuma(color)
+    assert(typeof(color)=='Color3', " `color` must be a Color3!")
+    local luma = .2126 * color.R + .7152 * color.G + .0722 * color.B
+    return math.clamp(luma, 0, 1)
+end
+
+return color]]></ProtectedString>
+							<int64 name="SourceAssetId">-1</int64>
+							<BinaryString name="Tags"></BinaryString>
+						</Properties>
+					</Item>
+					<Item class="ModuleScript" referent="RBXA2E1C74D008F43E3ABDFFC125AFE1E74">
+						<Properties>
+							<BinaryString name="AttributesSerialize"></BinaryString>
+							<Content name="LinkedSource"><null></null></Content>
+							<string name="Name">elements</string>
+							<string name="ScriptGuid">{91220F9C-1E01-4AE2-8914-713823411610}</string>
+							<ProtectedString name="Source"><![CDATA[local elements = {}
+
+function elements.add(name, element)
+    assert(typeof(name)=='string', " `name` must be a string!")
+    assert(not elements[name], string.format(" `%s` Name allready exist in elements!", name))
+    elements[name] = require(element)
+end
+
+return elements]]></ProtectedString>
+							<int64 name="SourceAssetId">-1</int64>
+							<BinaryString name="Tags"></BinaryString>
+						</Properties>
+					</Item>
+					<Item class="ModuleScript" referent="RBXD93A028DFADA4D65ADCD8A5250903930">
+						<Properties>
+							<BinaryString name="AttributesSerialize"></BinaryString>
+							<Content name="LinkedSource"><null></null></Content>
+							<string name="Name">gui</string>
+							<string name="ScriptGuid">{F11DABE5-446A-4302-91F1-6116BB3F33F1}</string>
+							<ProtectedString name="Source"><![CDATA[local Gui = {}
+
+Gui.__List = {}
+
+function Gui:Add(name, bool)
+	local enabled = Instance.new("BoolValue")
+	enabled.Name = name
+	enabled.Value = bool or false
+	self.__List[name] = enabled
+	return enabled
+end
+
+function Gui:Get(name)
+	return self.__List[name]
+end
+
+return Gui]]></ProtectedString>
+							<int64 name="SourceAssetId">-1</int64>
+							<BinaryString name="Tags"></BinaryString>
+						</Properties>
+					</Item>
+					<Item class="ModuleScript" referent="RBXD517AA5BCDAD4CAC958640A7C6DC72D0">
+						<Properties>
+							<BinaryString name="AttributesSerialize"></BinaryString>
+							<Content name="LinkedSource"><null></null></Content>
+							<string name="Name">scale</string>
+							<string name="ScriptGuid">{6675E492-944F-47EE-BF8F-3025C4881C77}</string>
+							<ProtectedString name="Source"><![CDATA[local DEFAULT_RES = Vector2.new(1920, 1080)
+
+local UIS = game:GetService("UserInputService")
+local playerGui = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
+
+local scale = {}
+
+function scale:get()
+    local screenSize = game.Workspace.CurrentCamera.ViewportSize
+    if UIS.TouchEnabled and playerGui.CurrentScreenOrientation
+        == Enum.ScreenOrientation.Portrait then
+
+        playerGui.ScreenOrientation = Enum.ScreenOrientation.LandscapeSensor
+        screenSize = Vector2.new(screenSize.Y, screenSize.X)
+    end
+    return math.min(screenSize.X / DEFAULT_RES.X, screenSize.Y / DEFAULT_RES.Y)
+end
+
+function scale:getModifier()
+    if UIS.TouchEnabled then
+        return 1.3
+    else
+        return 1
+    end
+end
+
+function scale:getOffset(offset)
+    return math.floor(self:get() * offset + .5) * self:getModifier()
+end
+
+function scale:getTextSize(size)
+    return math.floor(self:get() * size + .5) * self:getModifier()
+end
+
+return scale]]></ProtectedString>
+							<int64 name="SourceAssetId">-1</int64>
+							<BinaryString name="Tags"></BinaryString>
+						</Properties>
+					</Item>
+					<Item class="ModuleScript" referent="RBX39AB0DBAA4634CF79935471D5081E56A">
+						<Properties>
+							<BinaryString name="AttributesSerialize"></BinaryString>
+							<Content name="LinkedSource"><null></null></Content>
+							<string name="Name">soundlist</string>
+							<string name="ScriptGuid">{2975B49F-29AD-447A-8591-3EDA7683537A}</string>
+							<ProtectedString name="Source"><![CDATA[local modules = require(game:GetService("ReplicatedStorage"):WaitForChild("modules"))
+local class = modules.get("class")
+
+local SS = game:GetService("SoundService")
+
+local soundlist = class.new("Soundlist")
+
+function soundlist.new()
+    local newSoundlist = soundlist:newInstance()
+    newSoundlist.__List = {}
+    return newSoundlist
+end
+
+function soundlist:add(name, id, overide)
+    soundlist:memberFunctionAssert(self)
+    assert(typeof(name)=='string', " `name` must be a string!")
+    assert(typeof(id)=='number', " `id` must be a number!")
+    assert(not overide or typeof(overide)=='boolean', " `overide` must be a boolean or nil!")
+    assert(not self.__List[name] and not overide, string.format(' `%s` allready exist in soundlist pls consider removing it first or set overide to true!', name))
+    self.__List[name] = Instance.new("Sound")
+    self.__List[name].SoundId = "rbxassetid://"..id
+end
+
+function soundlist:remove(name)
+    soundlist:memberFunctionAssert(self)
+    assert(typeof(name)=='string', " `name` must be a string!")
+    assert(self.__List[name], string.format(' `%s` does not exist in soundlist!', name))
+    self.__List[name]:Destroy()
+    self.__List[name] = nil
+end
+
+function soundlist:play(name)
+    soundlist:memberFunctionAssert(self)
+    assert(typeof(name)=='string', " `name` must be a string!")
+    assert(self.__List[name], string.format(' `%s` does not exist in soundlist!', name))
+    SS:PlayLocalSound(self.__List[name])
+end
+
+return soundlist]]></ProtectedString>
+							<int64 name="SourceAssetId">-1</int64>
+							<BinaryString name="Tags"></BinaryString>
+						</Properties>
+					</Item>
+					<Item class="ModuleScript" referent="RBXF634ADE52AD547B2AC4632C8010B07EB">
+						<Properties>
+							<BinaryString name="AttributesSerialize"></BinaryString>
+							<Content name="LinkedSource"><null></null></Content>
+							<string name="Name">subfix</string>
+							<string name="ScriptGuid">{E5F91D0B-85FE-416D-A244-2BF3DAFE70D2}</string>
+							<ProtectedString name="Source"><![CDATA[local subfix = {}
+subfix.Symbols = { '', 'K', 'M', 'B', 'T', 'qD'}
+subfix.symbolsLen = #subfix.Symbols
+
+function subfix.addSubfix(n)
+    assert(typeof(n)=='number', " 'n' must be a number!")
+    local count = 1
+    while wait() do
+        if count == subfix.symbolsLen or n / 1e3^count < 1 then 
+            break 
+        end
+        count+=1
+    end
+    --TODO: fix rounding point
+    return string.format('%.3f', n / 1e3^(count-1))..
+        (subfix.Symbols[count] == '' and '' or ' '..subfix.Symbols[count])
+end
+
+return subfix]]></ProtectedString>
+							<int64 name="SourceAssetId">-1</int64>
+							<BinaryString name="Tags"></BinaryString>
+						</Properties>
+					</Item>
+				</Item>
+				<Item class="ModuleScript" referent="RBXE336E82DC9BC47B785DFBDDDF6CA3D57">
+					<Properties>
+						<BinaryString name="AttributesSerialize"></BinaryString>
+						<Content name="LinkedSource"><null></null></Content>
+						<string name="Name">elements</string>
+						<string name="ScriptGuid">{3FA67109-97C4-47FC-A0A9-2195B19FA3B6}</string>
+						<ProtectedString name="Source"><![CDATA[return require(script.Parent:WaitForChild("core"))
+
+--[[ element template
+local core = require(script.Parent)
+
+local element = core.roact.PureComponent:extend("__" .. script.Name .. "__")
+
+function element:init()
+    
+end
+
+function element:render()
+    
+end
+
+function element:didMount()
+    
+end
+
+return element
+]]]]></ProtectedString>
+						<int64 name="SourceAssetId">-1</int64>
+						<BinaryString name="Tags"></BinaryString>
+					</Properties>
+					<Item class="ModuleScript" referent="RBX83532277E74541548124FEFE68537EFC">
+						<Properties>
+							<BinaryString name="AttributesSerialize"></BinaryString>
+							<Content name="LinkedSource"><null></null></Content>
+							<string name="Name">TextButton</string>
+							<string name="ScriptGuid">{684D7005-79E3-4B23-8DD0-FC652AF6C641}</string>
+							<ProtectedString name="Source"><![CDATA[local core = require(script.Parent)
+
+local DFLT_BG_COLOR = Color3.fromRGB(100, 100, 100)
+
+local DFLT_TEXT_COLOR = Color3.fromRGB(255, 255, 255)
+local DFLT_TEXT_FONT = Enum.Font.SourceSansSemibold
+
+local element = core.roact.PureComponent:extend("__" .. script.Name .. "__")
+
+function element:init()
+    self.sounds = core.soundlist.new()
+    self.sounds:add("click", 452267918)
+    self.sounds:add("hover", 421058925)
+    self.AnimFrameRef = function(rbx) self.AnimFrame = rbx end
+end
+
+function element:render()
+
+    --////[props]////--
+    --steal ref and then put it back
+    local ref = self.props[core.roact.Ref]
+    self.props[core.roact.Ref] = function(rbx)
+        self.Button = rbx
+        if typeof(ref) == 'function' then
+            ref(rbx)
+        elseif ref then
+            core.updateRef(ref, rbx)
+        end
+    end
+
+    --transfer custom props
+    self.Animate = (self.props.Animate == nil) or self.props.Animate
+    self.props.Animate = nil
+
+    self.Sound = (self.props.Sound == nil) or self.props.Sound
+    self.props.Sound = nil
+
+    --apply dflt props
+    self.props.BackgroundColor3 = self.props.BackgroundColor3 or DFLT_BG_COLOR
+    self.props.TextColor3 = self.props.TextColor3 or DFLT_TEXT_COLOR
+    self.props.Font = self.props.Font or DFLT_TEXT_FONT
+
+    --////[children]////--
+    local children = self.props[core.roact.Children] or {}
+    self.props[core.roact.Children] = nil
+
+    children.UICorner = core.roact.createElement(core.elements.UICorner)
+
+    children.AnimFrame = core.roact.createElement("Frame", {
+        AnchorPoint = Vector2.new(.5, .5),
+        BackgroundColor3 = self.props.BackgroundColor3,
+        BorderSizePixel = 0,
+        Position = UDim2.new(.5, 0, .5, 0),
+        Size = UDim2.new(1, 0, 1, 0),
+        ZIndex = (self.props.Zindex or 1) - 1,
+        [core.roact.Ref] = self.AnimFrameRef
+    }, {
+        UICorner = core.roact.createElement(core.elements.UICorner)
+    })
+    
+    return core.roact.createElement(script.Name, self.props, children)
+end
+
+function element:didMount()
+    if self.props.Animate then
+        local pressAnim = core.TS:Create(self.AnimFrame, TweenInfo.new(.3, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {
+            Size = UDim2.new(2, 0, 2, 0),
+            BackgroundTransparency = 1,
+        })
+
+        self.Button.Activated:Connect(function()
+            --Clean up
+            pressAnim:Cancel()
+            self.AnimFrame.Size = UDim2.new(1, 0, 1, 0)
+            self.AnimFrame.BackgroundTransparency = 0
+        
+            pressAnim:Play()
+        end)
+    end
+
+    if self.props.Sound then
+        self.Button.Activated:Connect(function()
+            self.sounds:play("click")
+        end)
+
+        self.Button.MouseEnter:Connect(function()
+            self.sounds:play("hover")
+        end)
+    end
+end
+
+return element]]></ProtectedString>
+							<int64 name="SourceAssetId">-1</int64>
+							<BinaryString name="Tags"></BinaryString>
+						</Properties>
+					</Item>
+					<Item class="ModuleScript" referent="RBX9FAD6BE3B4B147028535AAE0715837C1">
+						<Properties>
+							<BinaryString name="AttributesSerialize"></BinaryString>
+							<Content name="LinkedSource"><null></null></Content>
+							<string name="Name">UICorner</string>
+							<string name="ScriptGuid">{E6FAC810-29C8-4A40-BC80-762CB1571657}</string>
+							<ProtectedString name="Source"><![CDATA[local core = require(script.Parent)
+
+local element = core.roact.PureComponent:extend("__" .. script.Name .. "__")
+
+function element:render()
+    return core.roact.createElement('UICorner', {
+        CornerRadius = UDim.new(0, core.scale:getOffset(10))
+    }, self.props[core.roact.Children])
+end
+
+return element]]></ProtectedString>
+							<int64 name="SourceAssetId">-1</int64>
+							<BinaryString name="Tags"></BinaryString>
+						</Properties>
+					</Item>
+					<Item class="ModuleScript" referent="RBX45C8C1E6FEC34609935B9EC39906692E">
+						<Properties>
+							<BinaryString name="AttributesSerialize"></BinaryString>
+							<Content name="LinkedSource"><null></null></Content>
+							<string name="Name">Window</string>
+							<string name="ScriptGuid">{1783E895-F1A3-4F84-9CD2-356587ED7B15}</string>
+							<ProtectedString name="Source"><![CDATA[local core = require(script.Parent)
+
+local DFLT_BG_IMAGE = 'rbxassetid://6093172294'
+local DFLT_BG_COLOR = Color3.fromRGB(100, 100, 100)
+local DFLT_BORDER_COLOR = Color3.fromRGB(50, 50, 50)
+local DFLT_TITLE_COLOR = Color3.fromRGB(255, 255, 255)
+
+local element = core.roact.PureComponent:extend("__" .. script.Name .. "__")
+
+function element:init()
+    
+end
+
+function element:render()
+    
+end
+
+function element:didMount()
+    
+end
+
+return element]]></ProtectedString>
+							<int64 name="SourceAssetId">-1</int64>
+							<BinaryString name="Tags"></BinaryString>
+						</Properties>
+					</Item>
+					<Item class="ModuleScript" referent="RBX8E8A544CF92E4E31ACFE6000422D2681">
+						<Properties>
+							<BinaryString name="AttributesSerialize"></BinaryString>
+							<Content name="LinkedSource"><null></null></Content>
+							<string name="Name">AnimatedBg</string>
+							<string name="ScriptGuid">{13143AA9-1343-4807-B0B5-D3D865B5D8D8}</string>
+							<ProtectedString name="Source"><![CDATA[local core = require(script.Parent)
+
+local DFLT_BG_IMAGE = 'rbxassetid://6093172294'
+local DFLT_BG_COLOR = Color3.fromRGB(100, 100, 100)
+
+local element = core.roact.PureComponent:extend("__" .. script.Name .. "__")
+
+function element:init()
+    self.ImageRef = function(rbx) self.Image = rbx end
+end
+
+function element:render()
+        --////[props]////--
+    --steal ref and then put it back
+    local ref = self.props[core.roact.Ref]
+    self.props[core.roact.Ref] = function(rbx)
+        self.Button = rbx
+        if typeof(ref) == 'function' then
+            ref(rbx)
+        elseif ref then
+            core.updateRef(ref, rbx)
+        end
+    end
+
+    --transfer custom props
+    self.Time = self.props.Time
+    self.props.Time = nil
+
+    self.props.BorderSizePixel = 0
+    self.props.BackgroundTransparency = 1
+    self.props.ClipsDescendants = true
+
+    --////[children]////--
+    local children = self.props[core.roact.Children] or {}
+    self.props[core.roact.Children] = nil
+
+    children.Image = core.roact.createElement("ImageLabel", {
+        BorderSizePixel = 0,
+        Size = UDim2.new(1.5, 0, 1.5, 0),
+        Image = DFLT_BG_IMAGE,
+        ImageColor3 = DFLT_BG_COLOR,
+        ScaleType = Enum.ScaleType.Tile,
+        TileSize = UDim2.new(0, core.scale:getOffset(400), 0, core.scale:getOffset(400)),
+        [core.roact.Ref] = self.ImageRef
+    })
+
+    return core.roact.createElement("Frame", self.props, children)
+end
+
+function element:didMount()
+    local tween = core.TS:Create(self.Image, TweenInfo.new(self.Time or 1, Enum.EasingStyle.Linear, Enum.EasingDirection.Out), {
+        Position = UDim2.new(0, core.scale:getOffset(-57), 0, core.scale:getOffset(-57))
+    })
+    spawn(function()
+        tween:Play()
+        tween.Completed:Connect(function()
+            self.Image.Position = UDim2.new()
+            tween:Play()
+        end)
+    end)
+end
+
+return element
+]]></ProtectedString>
+							<int64 name="SourceAssetId">-1</int64>
+							<BinaryString name="Tags"></BinaryString>
+						</Properties>
+					</Item>
+				</Item>
+				<Item class="ModuleScript" referent="RBX039892B2D3D64DD1BAABAD0E7052D557">
+					<Properties>
+						<BinaryString name="AttributesSerialize"></BinaryString>
+						<Content name="LinkedSource"><null></null></Content>
+						<string name="Name">guis</string>
+						<string name="ScriptGuid">{2F34BEB9-9990-458B-AF30-C24BD46B1A43}</string>
+						<ProtectedString name="Source">return require(script.Parent:WaitForChild(&quot;core&quot;))</ProtectedString>
+						<int64 name="SourceAssetId">-1</int64>
+						<BinaryString name="Tags"></BinaryString>
+					</Properties>
+					<Item class="ModuleScript" referent="RBXD0FA96505B7748BEA649BCC1F3E2DF0E">
+						<Properties>
+							<BinaryString name="AttributesSerialize"></BinaryString>
+							<Content name="LinkedSource"><null></null></Content>
+							<string name="Name">hud</string>
+							<string name="ScriptGuid">{4FE5342A-85F9-4C43-B3E1-070B58DD567A}</string>
+							<ProtectedString name="Source"><![CDATA[local core = require(script.Parent)
+
+return core.roact.createElement("ScreenGui", {
+    IgnoreGuiInset = true,
+    ZIndexBehavior = 'Global'
+}, {
+    buttonTest = core.roact.createElement(core.elements.TextButton, {
+        AnchorPoint = Vector2.new(.5, 0),
+        Position = UDim2.new(.5, 0, 0, core.scale:getOffset(5)),
+        Size = UDim2.new(0, core.scale:getOffset(200), 0, core.scale:getOffset(50)),
+        Text = "Button TEST",
+        TextSize = core.scale:getOffset(30)
+    }),
+    bg = core.roact.createElement(core.elements.AnimatedBg, {
+        Size = UDim2.new(1, 0, 1, 0),
+        Time = .5
+    })
+})]]></ProtectedString>
+							<int64 name="SourceAssetId">-1</int64>
+							<BinaryString name="Tags"></BinaryString>
+						</Properties>
+					</Item>
+				</Item>
+			</Item>
 		</Item>
 		<Item class="StarterCharacterScripts" referent="RBX80534432E09049DB86C971B150D41498">
 			<Properties>
@@ -466,7 +1077,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 			<int64 name="SourceAssetId">-1</int64>
 			<BinaryString name="Tags"></BinaryString>
 		</Properties>
-		<Item class="Tool" referent="RBXCCD474D82FF644AEA3BF1175592CC843">
+		<Item class="Tool" referent="RBX853E5B276B2C43EC8350284DF9983499">
 			<Properties>
 				<BinaryString name="AttributesSerialize"></BinaryString>
 				<bool name="CanBeDropped">true</bool>
@@ -505,230 +1116,20 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 			<int64 name="SourceAssetId">-1</int64>
 			<BinaryString name="Tags"></BinaryString>
 		</Properties>
-		<Item class="LocalScript" referent="RBXD189B2CD9E1E49A08A9F09A9B16FD810">
+		<Item class="ScreenGui" referent="RBXBA64F61CB76F485D8DF6454904ABEAED">
 			<Properties>
 				<BinaryString name="AttributesSerialize"></BinaryString>
-				<bool name="Disabled">false</bool>
-				<Content name="LinkedSource"><null></null></Content>
-				<string name="Name">guiManager</string>
-				<string name="ScriptGuid">{CA6B9BA3-6E8F-4006-B61B-5D296AA0823E}</string>
-				<ProtectedString name="Source"><![CDATA[local core = require(script:WaitForChild("core"))
-
-print(core.subfix(121e5)) --12 100 000 = 12.1M]]></ProtectedString>
+				<bool name="AutoLocalize">true</bool>
+				<int name="DisplayOrder">0</int>
+				<bool name="Enabled">true</bool>
+				<bool name="IgnoreGuiInset">false</bool>
+				<string name="Name">ScreenGui</string>
+				<bool name="ResetOnSpawn">true</bool>
+				<Ref name="RootLocalizationTable">null</Ref>
 				<int64 name="SourceAssetId">-1</int64>
 				<BinaryString name="Tags"></BinaryString>
+				<token name="ZIndexBehavior">0</token>
 			</Properties>
-			<Item class="Folder" referent="RBX9AF29789292947C99BFA016527EA8F49">
-				<Properties>
-					<BinaryString name="AttributesSerialize"></BinaryString>
-					<string name="Name">guis</string>
-					<int64 name="SourceAssetId">-1</int64>
-					<BinaryString name="Tags"></BinaryString>
-				</Properties>
-			</Item>
-			<Item class="Folder" referent="RBX6910E98B3A094B8B95A20411185F3F24">
-				<Properties>
-					<BinaryString name="AttributesSerialize"></BinaryString>
-					<string name="Name">elements</string>
-					<int64 name="SourceAssetId">-1</int64>
-					<BinaryString name="Tags"></BinaryString>
-				</Properties>
-			</Item>
-			<Item class="ModuleScript" referent="RBX3E1687F5415B4CB182A5FD7251706F16">
-				<Properties>
-					<BinaryString name="AttributesSerialize"></BinaryString>
-					<Content name="LinkedSource"><null></null></Content>
-					<string name="Name">core</string>
-					<string name="ScriptGuid">{B352E587-C54A-4ABB-86B6-A25AEE1D024F}</string>
-					<ProtectedString name="Source"><![CDATA[local core = {}
-core.roact = require(game:GetService("ReplicatedStorage"):WaitForChild("roact"))
-core.color = require(script:WaitForChild("color"))
-core.elements = require(script:WaitForChild("elements"))
-core.scale = require(script:WaitForChild("scale"))
-core.sound = require(script:WaitForChild("soundlist"))
-core.subfix = require(script:WaitForChild("subfix"))
-return core]]></ProtectedString>
-					<int64 name="SourceAssetId">-1</int64>
-					<BinaryString name="Tags"></BinaryString>
-				</Properties>
-				<Item class="ModuleScript" referent="RBX570B2C94937B46C78CDC6E5F217ACF1E">
-					<Properties>
-						<BinaryString name="AttributesSerialize"></BinaryString>
-						<Content name="LinkedSource"><null></null></Content>
-						<string name="Name">color</string>
-						<string name="ScriptGuid">{E89E4D94-77BC-42BF-9C79-60C76669BA41}</string>
-						<ProtectedString name="Source"><![CDATA[local color = {}
-
-function color.shade(color, factor)
-    assert(typeof(color)=='Color3', " `color` must be a Color3!")
-    assert(typeof(factor)=='number', " `factor` must be a number!")
-    return Color3.new(
-        color.R * (1 - factor),
-        color.G * (1 - factor),
-        color.B * (1 - factor)
-    )
-end
-
-function color.tint(color, factor)
-    assert(typeof(color)=='Color3', " `color` must be a Color3!")
-    assert(typeof(factor)=='number', " `factor` must be a number!")
-    return Color3.new(
-        color.R + (1 - color.R) * factor,
-        color.G + (1 - color.G) * factor,
-        color.B + (1 - color.B) * factor
-    )
-end
-
---returns a value between (0 - 1)
---where 0 is darkest and 1 is the lightest
-function  color.getLuma(color)
-    assert(typeof(color)=='Color3', " `color` must be a Color3!")
-    local luma = .2126 * color.R + .7152 * color.G + .0722 * color.B
-    return math.clamp(luma, 0, 1)
-end
-
-return color]]></ProtectedString>
-						<int64 name="SourceAssetId">-1</int64>
-						<BinaryString name="Tags"></BinaryString>
-					</Properties>
-				</Item>
-				<Item class="ModuleScript" referent="RBXC081B299E5AB44A99B2768414742BE6A">
-					<Properties>
-						<BinaryString name="AttributesSerialize"></BinaryString>
-						<Content name="LinkedSource"><null></null></Content>
-						<string name="Name">elements</string>
-						<string name="ScriptGuid">{C69A6AAF-472B-43A0-A73F-5D204118C82D}</string>
-						<ProtectedString name="Source"><![CDATA[local elements = {}
-
-for _, element in pairs(script.Parent.Parent:WaitForChild("elements"):GetChildren()) do
-    table.insert(elements, require(element))
-end
-
-return elements]]></ProtectedString>
-						<int64 name="SourceAssetId">-1</int64>
-						<BinaryString name="Tags"></BinaryString>
-					</Properties>
-				</Item>
-				<Item class="ModuleScript" referent="RBXF03CEAFA848B423C9C996BC81A06B606">
-					<Properties>
-						<BinaryString name="AttributesSerialize"></BinaryString>
-						<Content name="LinkedSource"><null></null></Content>
-						<string name="Name">subfix</string>
-						<string name="ScriptGuid">{85E876AD-6333-4EE3-A3F0-EB240D84CA50}</string>
-						<ProtectedString name="Source"><![CDATA[local subfix = {}
-subfix.Symbols = { '', 'K', 'M', 'B', 'T', 'qD'}
-subfix.symbolsLen = #subfix.Symbols
-
-function subfix.addSubfix(n)
-    assert(typeof(n)=='number', " 'n' must be a number!")
-    local count = 1
-    while wait() do
-        if count == subfix.symbolsLen or n / 1e3^count < 1 then 
-            break 
-        end
-        count+=1
-    end
-    return string.format('%.3f', n / 1e3^count)..subfix.Symbols[count]
-end
-
-return subfix]]></ProtectedString>
-						<int64 name="SourceAssetId">-1</int64>
-						<BinaryString name="Tags"></BinaryString>
-					</Properties>
-				</Item>
-				<Item class="ModuleScript" referent="RBX8779B6B2B5834049B09710A4D683FCF7">
-					<Properties>
-						<BinaryString name="AttributesSerialize"></BinaryString>
-						<Content name="LinkedSource"><null></null></Content>
-						<string name="Name">scale</string>
-						<string name="ScriptGuid">{C48E54F9-25BA-4BE3-9DE1-00773011E340}</string>
-						<ProtectedString name="Source"><![CDATA[local DEFAULT_RES = Vector2.new(1920, 1080)
-
-local UIS = game:GetService("UserInputService")
-local playerGui = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
-
-local scale = {}
-
-function scale:get()
-    local screenSize = game.Workspace.CurrentCamera.ViewportSize
-    if UIS.TouchEnabled and playerGui.CurrentScreenOrientation
-        == Enum.ScreenOrientation.Portrait then
-
-        playerGui.ScreenOrientation = Enum.ScreenOrientation.LandscapeSensor
-        screenSize = Vector2.new(screenSize.Y, screenSize.X)
-    end
-    return math.min(screenSize.X / DEFAULT_RES.X, screenSize.Y / DEFAULT_RES.Y)
-end
-
-function scale:getModifier()
-    if UIS.TouchEnabled then
-        return 1.3
-    else
-        return 1
-    end
-end
-
-function scale:getOffset(offset)
-    return math.floor(self:get() * offset + .5) * self:getModifier()
-end
-
-function scale:getTextSize(size)
-    return math.floor(self:get() * size + .5) * self:getModifier()
-end
-
-return scale]]></ProtectedString>
-						<int64 name="SourceAssetId">-1</int64>
-						<BinaryString name="Tags"></BinaryString>
-					</Properties>
-				</Item>
-				<Item class="ModuleScript" referent="RBX88A18D13B11D41AB95EB4FDD7A5D2554">
-					<Properties>
-						<BinaryString name="AttributesSerialize"></BinaryString>
-						<Content name="LinkedSource"><null></null></Content>
-						<string name="Name">soundlist</string>
-						<string name="ScriptGuid">{9B2E4763-A3D2-4CF2-9ED7-EEE29D58FF6F}</string>
-						<ProtectedString name="Source"><![CDATA[local modules = require(game:GetService("ReplicatedStorage"):WaitForChild("modules"))
-local class = modules.get("class")
-
-local soundlist = class.new("Soundlist")
-
-function soundlist.new()
-    local newSoundlist = setmetatable({}, soundlist)
-    newSoundlist.__List = {}
-    return newSoundlist
-end
-
-function soundlist:add(name, id, overide)
-    soundlist:memberFunctionAssert(self)
-    assert(typeof(name)=='string', " `name` must be a string!")
-    assert(typeof(id)=='number', " `id` must be a number!")
-    assert(typeof(overide)=='boolean', " `id` must be a number!")
-    assert(not self.__List[name] and not overide, string.format(' `%s` allready exist in soundlist pls consider removing it first or set overide to true!'))
-    self.__List[name] = Instance.new("Sound")
-    self.__List[name].SoundId = id
-end
-
-function soundlist:remove(name)
-    soundlist:memberFunctionAssert(self)
-    assert(typeof(name)=='string', " `name` must be a string!")
-    assert(self.__List[name], string.format(' `%s` does not exist in soundlist!'))
-    self.__List[name]:Destroy()
-    self.__List[name] = nil
-end
-
-function soundlist:play(name)
-    soundlist:memberFunctionAssert(self)
-    assert(typeof(name)=='string', " `name` must be a string!")
-    assert(self.__List[name], string.format(' `%s` does not exist in soundlist!'))
-    self.__List[name]:Play()
-end
-
-return soundlist]]></ProtectedString>
-						<int64 name="SourceAssetId">-1</int64>
-						<BinaryString name="Tags"></BinaryString>
-					</Properties>
-				</Item>
-			</Item>
 		</Item>
 	</Item>
 	<Item class="LocalizationService" referent="RBXDC35686708F644E3AA00233AC954B2BD">
@@ -893,7 +1294,7 @@ local rand = random.new()]]></ProtectedString>
 				<int64 name="SourceAssetId">-1</int64>
 				<BinaryString name="Tags"></BinaryString>
 			</Properties>
-			<Item class="BoolValue" referent="RBXED36BD5719154766B6CEF23F22451360">
+			<Item class="BoolValue" referent="RBX34DD1A0E15F14A4581C2B2A2445F4332">
 				<Properties>
 					<BinaryString name="AttributesSerialize"></BinaryString>
 					<string name="Name">DebugPrint</string>
@@ -1186,7 +1587,7 @@ return random]]></ProtectedString>
 				<int64 name="SourceAssetId">-1</int64>
 				<BinaryString name="Tags"></BinaryString>
 			</Properties>
-			<Item class="BoolValue" referent="RBXEB86AFF4C41D40D78633F1CFCE849C81">
+			<Item class="BoolValue" referent="RBX0150FFAE39E54B41806D6A006751D22D">
 				<Properties>
 					<BinaryString name="AttributesSerialize"></BinaryString>
 					<string name="Name">DebugPrint</string>

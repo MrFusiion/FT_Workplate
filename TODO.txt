@@ -1,0 +1,7 @@
+1: Clean gui scripts
+2: move wire modules to replicatedstorage
+3: clean wire and wrench scripts
+4: make connector module
+5: make blueprint module
+6: make building module
+7: make land [buy/add] module

@@ -4,7 +4,7 @@
         "**/.vscode": true
     },
     "workbench.tree.indent": 20,
-    "workbench.colorTheme": "Super One Dark",
+    "workbench.colorTheme": "Atom One Dark",
 
     "workbench.iconTheme": "vscode-icons",
 
@@ -51,37 +51,32 @@
         },
         {
             "icon": "value",
-            "extensions": ["value.model.json"],
+            "extensions": ["value.meta.json", "value.model.json"],
             "format": "png"
         },
         {
             "icon": "tool",
-            "extensions": ["tool.model.json"],
+            "extensions": ["tool.meta.json", "tool.model.json"],
             "format": "png"
         },
         {
             "icon": "part",
-            "extensions": ["part.model.json"],
-            "format": "png"
-        },
-        {
-            "icon": "value",
-            "extensions": ["value.meta.json"],
-            "format": "png"
-        },
-        {
-            "icon": "tool",
-            "extensions": ["tool.meta.json"],
-            "format": "png"
-        },
-        {
-            "icon": "part",
-            "extensions": ["part.meta.json"],
+            "extensions": ["part.meta.json", "part.model.json"],
             "format": "png"
         },
         {
             "icon": "model",
             "extensions": ["model.json"],
+            "format": "png"
+        },
+        {
+            "icon": "event",
+            "extensions": ["event.meta.json", "event.model.json"],
+            "format": "png"
+        },
+        {
+            "icon": "function",
+            "extensions": ["function.meta.json", "function.model.json"],
             "format": "png"
         }
     ],
@@ -135,5 +130,9 @@
     "vsicons.associations.folderDefault.folder": {
         "icon": "studio",
         "format": "png"
-    }
+    },
+    "Lua.diagnostics.disable": [
+        "unused-function",
+        "unused-local"
+    ]
 }

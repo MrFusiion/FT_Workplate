@@ -3,22 +3,6 @@
   "tree": {
     "$className": "DataModel",
 
-    "Lighting": {
-      "$className": "Lighting",
-      "$path": "src/light",
-      "$properties": {
-        "Ambient": [
-          0,
-          0,
-          0
-        ],
-        "Brightness": 2,
-        "GlobalShadows": true,
-        "Outlines": false,
-        "Technology": "Voxel"
-      }
-    },
-
     "ReplicatedFirst": {
       "$className": "ReplicatedFirst",
       "$path": "src/first"
@@ -26,12 +10,21 @@
 
     "ReplicatedStorage": {
       "$className": "ReplicatedStorage",
-      "$path": "src/shared"
+      "modules": {
+        "$path": "src/shared/modules"
+      }
     },
 
     "ServerScriptService": {
       "$className": "ServerScriptService",
       "$path": "src/server"
+    },
+
+    "ServerStorage": {
+      "$className": "ServerStorage",
+      "CammandLinePlus" : {
+        "$path": "src/serverStorage/CommandLinePlus"
+      }
     },
 
     "StarterPlayer": {
@@ -42,50 +35,10 @@
       }
     },
 
-    "StarterGui": {
-      "$className": "StarterGui",
-      "$path": "src/gui"
-    },
-
-    "StarterPack": {
-      "$className": "StarterPack",
-      "$path": "src/tools"
-    },
-
-    "SoundService": {
-      "$className": "SoundService",
-      "$path": "src/sound",
-      "$properties": {
-        "RespectFilteringEnabled": true
-      }
-    },
-
     "Workspace": {
       "$className": "Workspace",
       "$properties": {
         "FilteringEnabled": true
-      },
-      "Baseplate": {
-        "$className": "Part",
-        "$properties": {
-          "Anchored": true,
-          "Color": [
-            0.38823,
-            0.37254,
-            0.38823
-          ],
-          "Locked": true,
-          "Position": [
-            0,
-            -10,
-            0
-          ],
-          "Size": [
-            512,
-            20,
-            512
-          ]
-        }
       }
     }
   }
