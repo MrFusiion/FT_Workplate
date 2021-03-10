@@ -1,13 +1,13 @@
-local server = require(game:GetService('ServerScriptService'):WaitForChild('modules'))
-local datastore = server.get('datastore')
+local server = require(game:GetService("ServerScriptService"):WaitForChild("Modules"))
+local datastore = server.get("datastore")
 
-local shared = require(game:GetService('ReplicatedStorage'):WaitForChild('modules'))
-local stringUtils = shared.get('stringUtils')
+local shared = require(game:GetService("ReplicatedStorage"):WaitForChild("Modules"))
+local stringUtils = shared.get("stringUtils")
 
-local COMMAND_PREFIX = '/'
-local RANK_TREE = { ['DEV'] = 1, ['ADMIN'] = 2, ['USER'] = 3 }
+local COMMAND_PREFIX = "/"
+local RANK_TREE = { ["DEV"] = 1, ["ADMIN"] = 2, ["USER"] = 3 }
 
-local commands = require(script.Parent:WaitForChild('commands'))
+local commands = require(script.Parent:WaitForChild("commands"))
 local command = {}
 
 function command.getCommand(msg)
@@ -24,8 +24,8 @@ function command.getCommand(msg)
 end
 
 function command.canPlayerUseCommand(player, cmd)
-    local store = datastore.combined.player(player, 'Data', 'Rank')
-    local rank = store:get('Rank')
+    local store = datastore.combined.player(player, "Data", "Rank")
+    local rank = store:get("Rank")
     return RANK_TREE[rank] <= RANK_TREE[cmd.rank]
 end
 
@@ -35,8 +35,8 @@ function command.getArgValue(str, arg)
         string = function(value)
             if value then
                 local len = #value
-                if (value:sub(1, 1) == '\'' or value:sub(1, 1) == '\"') and
-                        (value:sub(len, len) == '\'' or value:sub(len, len) == '\"') then
+                if (value:sub(1, 1) == "\"" or value:sub(1, 1) == "\"") and
+                        (value:sub(len, len) == "\"" or value:sub(len, len) == "\"") then
                     return value:sub(2, len-1)
                 end
             end
@@ -51,8 +51,8 @@ function command.getArgValue(str, arg)
         end
     }
 
-    for _, type in ipairs({ 'string', 'number' }) do
-        if arg.find(arg, type) or arg.find(arg, 'variant') then
+    for _, type in ipairs({ "string", "number" }) do
+        if arg.find(arg, type) or arg.find(arg, "variant") then
             local value = validateType[type](str)
             if value ~= nil then
                 return value

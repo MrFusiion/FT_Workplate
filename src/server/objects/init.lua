@@ -16,4 +16,5 @@ for _, catogory in ipairs(script:GetChildren()) do
         objects[catogory.Name] = getObjects(catogory)
     end
 end
+
 return objects

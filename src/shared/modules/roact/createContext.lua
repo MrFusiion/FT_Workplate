@@ -5,7 +5,7 @@ local Children = require(script.Parent.PropMarkers.Children)
 local Component = require(script.Parent.Component)
 
 --[[
-	Construct the value that is assigned to Roact's context storage.
+	Construct the value that is assigned to Roact"s context storage.
 ]]
 local function createContextEntry(currentValue)
 	return {
@@ -34,10 +34,10 @@ local function createProvider(context)
 	end
 
 	function Provider:didUpdate(prevProps)
-		-- If the provided value changed, after we've updated every reachable
+		-- If the provided value changed, after we"ve updated every reachable
 		-- component, fire a signal to update the rest.
 		--
-		-- This signal will notify all context consumers. It's expected that
+		-- This signal will notify all context consumers. It"s expected that
 		-- they will compare the last context value they updated with and only
 		-- trigger an update on themselves if this value is different.
 		--
@@ -75,7 +75,7 @@ local function createConsumer(context)
 	function Consumer:render()
 		-- Render using the latest available for this context item.
 		--
-		-- We don't store this value in state in order to have more fine-grained
+		-- We don"t store this value in state in order to have more fine-grained
 		-- control over our update behavior.
 		local value
 		if self.contextEntry ~= nil then

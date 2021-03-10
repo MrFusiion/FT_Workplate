@@ -47,7 +47,7 @@ function element:render()
                 Corner = core.roact.createElement(core.elements.UICorner)
             })
 
-            children.Activate = core.roact.createElement('BindableEvent', {
+            children.Activate = core.roact.createElement("BindableEvent", {
                 [core.roact.Ref] = function (rbx)
                     if not rbx then return end
                     self.Activate = rbx.Event

@@ -1,7 +1,7 @@
-local PS = game:GetService('PhysicsService')
+local PS = game:GetService("PhysicsService")
 
-local client = require(game:GetService('StarterPlayer').StarterPlayerScripts.modules)
-local input = client.get('input')
+local client = require(game:GetService("StarterPlayer").StarterPlayerScripts.Modules)
+local input = client.get("input")
 
 --=====================================/Config/=====================================--
 local PositionGridSize = .5
@@ -11,7 +11,7 @@ local handleColor = Color3.new(1, 0.768627, 0)
 
 --====================================/Utility====================================--
 local function Hit(part)
-    local player = game:GetService('Players').LocalPlayer
+    local player = game:GetService("Players").LocalPlayer
     local mouse = player:GetMouse()
     local params = RaycastParams.new()
     params.FilterDescendantsInstances = { part, player.Character }
@@ -35,8 +35,8 @@ local function vector3SnapToGrid(vector, gridSize)
 end
 
 local function vector3Clamp(vector, min, max)
-    min = typeof(min) == 'number' and Vector3.new(1, 1, 1) * min or min
-    max = typeof(max) == 'number' and Vector3.new(1, 1, 1) * max or max
+    min = typeof(min) == "number" and Vector3.new(1, 1, 1) * min or min
+    max = typeof(max) == "number" and Vector3.new(1, 1, 1) * max or max
     return Vector3.new(
         math.min(max.X, math.max(vector.X, min.X)),
         math.min(max.Y, math.max(vector.Y, min.Y)),
@@ -72,21 +72,21 @@ function blueprint.new(data)
     return newBlueprint
 end
 
-local folder = game:GetService('ReplicatedStorage'):WaitForChild('BlueprintStructures')
+local folder = game:GetService("ReplicatedStorage"):WaitForChild("BlueprintStructures")
 for _, catogory in ipairs(folder:GetChildren()) do
     for _, item in ipairs(catogory:GetChildren()) do
-        local model = item:FindFirstChildWhichIsA('Model')
+        local model = item:FindFirstChildWhichIsA("Model")
         if model then
             blueprint.Blueprints[item.Name] = blueprint.new{
                 Name = item.Name,
-                Image = item:FindFirstChild('Image') and item.Image.Value or '',
-                MaxVolume = item:FindFirstChild('MaxVolume') and item.MaxVolume.Value or 16*16*16,
-                MaxAxisSize = item:FindFirstChild('MaxAxisSize') and item.MaxAxisSize.Value or Vector3.new(1, 1, 1) * 16,
-                Scalable = item:FindFirstChild('Scalable') and item.Scalable.Value or false,
+                Image = item:FindFirstChild("Image") and item.Image.Value or "",
+                MaxVolume = item:FindFirstChild("MaxVolume") and item.MaxVolume.Value or 16*16*16,
+                MaxAxisSize = item:FindFirstChild("MaxAxisSize") and item.MaxAxisSize.Value or Vector3.new(1, 1, 1) * 16,
+                Scalable = item:FindFirstChild("Scalable") and item.Scalable.Value or false,
                 Model = model
             }
         else
-            warn(string.format('Folder with name: %s could not be created into blueprint!', item.Name))
+            warn(string.format("Folder with name: %s could not be created into blueprint!", item.Name))
         end
     end
 end
@@ -97,18 +97,18 @@ function blueprint.mt:new()
 
     newInstance.Model = self.Model:Clone()
     for _, descendant in ipairs(newInstance.Model:GetDescendants()) do
-        if descendant:IsA('BasePart') and descendant ~= newInstance.PrimaryPart
+        if descendant:IsA("BasePart") and descendant ~= newInstance.PrimaryPart
             and descendant.Transparency ~= 1 then
             descendant.Transparency = .5
             descendant.CanCollide = false
             descendant.Anchored = true
             descendant.BrickColor = BrickColor.Black()
-            descendant.Material = 'SmoothPlastic'
+            descendant.Material = "SmoothPlastic"
         end
     end
     newInstance.Model.Parent = workspace
 
-    newInstance.Box = Instance.new('SelectionBox')
+    newInstance.Box = Instance.new("SelectionBox")
     newInstance.Box.Color3 = handleColor
     newInstance.Box.LineThickness = .001
     newInstance.Box.Adornee = newInstance.Model.PrimaryPart
@@ -120,27 +120,27 @@ function blueprint.mt:new()
 end
 
 function blueprint.mt:setupInput()
-    input.bindPriority('BlueprintPlace', input.beginWrapper(function()
+    input.bindPriority("BlueprintPlace", input.beginWrapper(function()
         self:confirmPlace()
         self:startSizing()
 
-        input.bindPriority('BlueprintPlace', input.beginWrapper(function()
-            input.safeUnbind('BlueprintPlace', 'BlueprintCancel')
+        input.bindPriority("BlueprintPlace", input.beginWrapper(function()
+            input.safeUnbind("BlueprintPlace", "BlueprintCancel")
             self:confirmSize()
         end), false, 3000, Enum.KeyCode.E, Enum.KeyCode.ButtonX)
 
     end), false, 3000, Enum.KeyCode.E, Enum.KeyCode.ButtonX)
 
-    input.bindPriority('BlueprintRotate', input.beginWrapper(function()
+    input.bindPriority("BlueprintRotate", input.beginWrapper(function()
         self:rotate(90)
     end), false, 3000, Enum.KeyCode.R, Enum.KeyCode.DPadRight)
 
-    input.bindPriority('BlueprintTurn', input.beginWrapper(function()
+    input.bindPriority("BlueprintTurn", input.beginWrapper(function()
         self:turn(90)
     end), false, 3000, Enum.KeyCode.T, Enum.KeyCode.DPadUp)
 
-    input.bindPriority('BlueprintCancel', input.beginWrapper(function()
-        input.safeUnbind('BlueprintPlace', 'BlueprintCancel')
+    input.bindPriority("BlueprintCancel", input.beginWrapper(function()
+        input.safeUnbind("BlueprintPlace", "BlueprintCancel")
         self:destroy()
     end), false, 3000, Enum.KeyCode.B, Enum.KeyCode.ButtonB)
 end
@@ -148,7 +148,7 @@ end
 function blueprint.mt:startPlacement()
     self:setupInput()
 
-    self.PlaceConnection = game:GetService('RunService').Heartbeat:Connect(function()
+    self.PlaceConnection = game:GetService("RunService").Heartbeat:Connect(function()
         local intance, normal, pos = Hit(self.Model)
         normal = normal or Vector3.new()
 
@@ -160,12 +160,12 @@ end
 function blueprint.mt:startSizing()
     if not self.Scalable then return self:confirmSize() end
     local size, cf
-    self.Handles = Instance.new('Handles')
+    self.Handles = Instance.new("Handles")
     self.Handles.Color3 = handleColor
     self.Handles.Transparency = .5
     self.Handles.Adornee = self.Model.PrimaryPart
-    self.Handles.Parent = game:GetService('Players').LocalPlayer
-        .PlayerGui:WaitForChild('Handles')
+    self.Handles.Parent = game:GetService("Players").LocalPlayer
+        .PlayerGui:WaitForChild("Handles")
 
     self.Handles.MouseDrag:Connect(function(normalId, dist)
         if not size and not cf then
@@ -178,8 +178,14 @@ function blueprint.mt:startSizing()
         local newSize = vector3Clamp(size + addSize, 1, self.MaxAxisSize)
 
         if (newSize.X*newSize.Y*newSize.Z) <= self.MaxVolume then--TODO when exceeding limit extend axis to maximum
-            self.Model.PrimaryPart.Size = newSize
-            self.Model:GetChildren()[1].Size = newSize
+            for _, part in ipairs(self.Model:GetChildren()) do
+                local mesh = part:FindFirstChildWhichIsA("SpecialMesh")
+                if mesh then
+                    mesh.Scale = newSize
+                else
+                    part.Size = newSize
+                end
+            end
             self.Model:SetPrimaryPartCFrame(CFrame.new(cf * (Vector3.fromNormalId(normalId) * (newSize - size) * .5)) * self.Rotation)
         end
     end)
@@ -191,7 +197,7 @@ end
 
 function blueprint.mt:confirmPlace()
     self.PlaceConnection:Disconnect()
-    input.safeUnbind('BlueprintPlace', 'BlueprintRotate', 'BlueprintTurn')
+    input.safeUnbind("BlueprintPlace", "BlueprintRotate", "BlueprintTurn")
 end
 
 function blueprint.mt:confirmSize()
@@ -199,7 +205,7 @@ function blueprint.mt:confirmSize()
         self.Handles:Destroy()
     end
     self.Box:Destroy()
-    input.safeUnbind('BlueprintPlace', 'BlueprintRotate', 'BlueprintTurn', 'BlueprintCancel')
+    input.safeUnbind("BlueprintPlace", "BlueprintRotate", "BlueprintTurn", "BlueprintCancel")
 end
 
 function blueprint.mt:destroy()
@@ -210,7 +216,7 @@ function blueprint.mt:destroy()
     if self.PlaceConnection then
         self.PlaceConnection:Disconnect()
     end
-    input.safeUnbind('BlueprintPlace', 'BlueprintRotate', 'BlueprintTurn', 'BlueprintCancel')
+    input.safeUnbind("BlueprintPlace", "BlueprintRotate", "BlueprintTurn", "BlueprintCancel")
 end
 
 function blueprint.mt:rotate(degrees)

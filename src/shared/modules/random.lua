@@ -1,94 +1,53 @@
 --@initApi
---@Class: 'Random'
+--@Class: "Random"
 local modules = require(script.Parent)
 
+local tableUtils = modules.get("tableUtils")
+
 local settings = modules.get("settings")
-local config = settings.new(game:GetService("ReplicatedStorage"):WaitForChild("config"))
+local config = settings.new(game:GetService("ReplicatedStorage"):WaitForChild("Config"))
 
-local class = modules.get("class")
-local random = class.new("Random")
+local class = modules.get('class')
 
---[[@Function: {
-    'class' : 'Random',
-    'name' : 'new',
-    'args' : { 'seed' : 'number/nil', 'autoSeed' : 'boolean/nil' },
-    'return' : 'Random',
-    'info' : 'Creates a new Random object.'
-}
-@Properties: {
-    'class' : 'Random',
-    'props' : [{
-        'name' : '__Seed',
-        'type' : 'number',
-        'info' : '[Private]'
-    }, {
-        'name' : '__SeedGenInterval',
-        'type' : 'number',
-        'info' : '[Private] time it takes for a new seed to be generated'
-    }, {
-        'name' : '__Random',
-        'type' : 'Random(Roblox)',
-        'info' : '[Private] (Roblox)Random object.'
-    }, {
-        'name' : '__RandTable',
-        'type' : 'table',
-        'info' : '[Private] random table asigned every seed generation.'
-    }, {
-        'name' : '__SeedGenRunning',
-        'type' : 'boolean',
-        'info' : '[Private] describes if the seed genration loop is running'
-    }]
-}]]
-function random.new(seed, autoSeed)
-    assert(typeof(seed)=="number" or seed==nil, " `seed` must be a number or nil!")
-    assert(typeof(autoSeed)=="boolean" or autoSeed==nil, " `autoSeed` must be a boolean or nil!")
+local random = {}
+random.__index = random
 
-    local self = random:newInstance()
-    self.__Seed = seed
-    self.__SeedGenInterval = 5*60
-
-    if autoSeed ~= false or autoSeed == nil then
-        self:startSeedGen()
-    end
-
-    if not self.__Seed then self:__generateSeed() end
-    self:__init()
-    return self
-end
-
---[[@Function: {
-    'class' : 'Random',
-    'name' : '__init',
-    'args' : { 'self' : 'Random' },
-    'info' : '[Private] initalizes the Random object.'
-}]]
-function random.__init(self)
-    random:memberFunctionAssert(self)
+local function __init(self)
     self.__Random = Random.new(self.__Seed)
 end
 
---[[@Function: {
-    'class' : 'Random',
-    'name' : '__generateSeed',
-    'args' : { 'self' : 'Random' },
-    'info' : '[Private] Generates a new seed for this object.'
-}]]
-function random.__generateSeed(self)
-    random:memberFunctionAssert(self)
-    
+local function __generateSeed(self)
     --random Table
     self.__RandTable = {}
     local hex = tostring(self.__RandTable):sub(7, 21)
     self.__Seed = tonumber(hex, 16) + os.time()
+
     config:ifEnabledPrintf("DebugPrint", "Generated seed: [%d]", self.__Seed)
-    self:__init()
+    __init(self)
+end
+
+local function newRandom(seed, autoSeed)
+    assert(typeof(seed)=="number" or seed==nil, " `seed` must be a number or nil!")
+    assert(typeof(autoSeed)=="boolean" or autoSeed==nil, " `autoSeed` must be a boolean or nil!")
+
+    local newRandomGen = setmetatable({}, random)
+    newRandomGen.__Seed = seed
+    newRandomGen.__SeedGenInterval = 5*60
+
+    if autoSeed ~= false or autoSeed == nil then
+        newRandomGen:startSeedGen()
+    end
+
+    if not seed then __generateSeed(newRandomGen) end
+    __init(newRandomGen)
+    return newRandomGen
 end
 
 --[[@Function: {
-    'class' : 'Random',
-    'name' : 'startSeedGen',
-    'args' : { 'self' : 'Random' },
-    'info' : 'Starts the seed generation loop.'
+    "class" : "Random",
+    "name" : "startSeedGen",
+    "args" : { "self" : "Random" },
+    "info" : "Starts the seed generation loop."
 }]]
 function random.startSeedGen(self)
     if not self.__SeedGenRunning then
@@ -96,7 +55,7 @@ function random.startSeedGen(self)
         spawn(function()
             while self.__SeedGenRunning do
                 wait(self.__SeedGenInterval)
-                self:__generateSeed()
+                __generateSeed(self)
             end
         end)
     else
@@ -105,36 +64,50 @@ function random.startSeedGen(self)
 end
 
 --[[@Function: {
-    'class' : 'Random',
-    'name' : 'stopSeedGen',
-    'args' : { 'self' : 'Random' },
-    'info' : 'Stops the seed generation loop.'
+    "class" : "Random",
+    "name" : "stopSeedGen",
+    "args" : { "self" : "Random" },
+    "info" : "Stops the seed generation loop."
 }]]
 function random.stopSeedGen(self)
     self.__SeedGenRunning = false
 end
 
 --[[@Function: {
-    'class' : 'Random',
-    'name' : 'setSeedGenInterval',
-    'args' : { 'self' : 'Random', 'interval' : 'number' },
-    'info' : 'Sets the seed generate interval time.'
+    "class" : "Random",
+    "name" : "setSeedGenInterval",
+    "args" : { "self" : "Random", "interval" : "number" },
+    "info" : "Sets the seed generate interval time."
 }]]
 function random:setSeedGenInterval(self, interval)
-    random:memberFunctionAssert(self)
     assert(typeof(interval)=="number" or interval==nil, " `interval` must be a number or nil!")
 
     self.__SeedGenInterval = interval or (5*60)
 end
 
 --[[@Function: {
-    'class' : 'Random',
-    'name' : 'nextInt',
-    'args' : { 'self' : 'Random', 'min' : 'number/nil', 'max' : 'number/nil' },
-    'info' : 'Returns a pseudorandom integer uniformly distributed over [min or 0, max or 1].'
+    "class" : "Random",
+    "name" : "toWeightedList",
+    "args" : { "..." : "table" },
+    "info" : "Returns a table where each item is added n times given by the weigth."
+}]]
+function random.toWeightedList(...)
+    local weightedList = {}
+    for _, t in ipairs{...} do
+        for _=1, t.weight do
+            table.insert(weightedList, t.value)
+        end
+    end
+    return weightedList
+end
+
+--[[@Function: {
+    "class" : "Random",
+    "name" : "nextInt",
+    "args" : { "self" : "Random", "min" : "number/nil", "max" : "number/nil" },
+    "info" : "Returns a pseudorandom integer uniformly distributed over [min or 0, max or 1]."
 }]]
 function random.nextInt(self, min, max)
-    random:memberFunctionAssert(self)
     assert(typeof(min)=="number" or min==nil, " `min` must be a number or nil!")
     assert(typeof(max)=="number" or max==nil, " `max` must be a number or nil!")
 
@@ -146,13 +119,12 @@ function random.nextInt(self, min, max)
 end
 
 --[[@Function: {
-    'class' : 'Random',
-    'name' : 'nextRangeInt',
-    'args' : { 'self' : 'Random', 't' : 'table' },
-    'info' : 'Returns a pseudorandom integer uniformly distributed over [min or 0, max or 1].'
+    "class" : "Random",
+    "name" : "nextRangeInt",
+    "args" : { "self" : "Random", "t" : "table" },
+    "info" : "Returns a pseudorandom integer uniformly distributed over [min or 0, max or 1]."
 }]]
 function random.nextRangeInt(self, t)
-    random:memberFunctionAssert(self)
     assert(typeof(t)=="table", "t must be a table!")
     assert(typeof(t.min)=="number" or t.min==nil, " `t.min` must be a number or nil!")
     assert(typeof(t.max)=="number" or t.max==nil, " `t.max` must be a number or nil!")
@@ -160,14 +132,13 @@ function random.nextRangeInt(self, t)
 end
 
 --[[@Function: {
-    'class' : 'Random',
-    'name' : 'nextNumber',
-    'args' : { 'self' : 'Random', 'min' : 'number/nil', 'max' : 'number/nil' },
-    'return' : 'number',
-    'info' : 'Returns a pseudorandom number uniformly distributed over [min or 0, max or 1).'
+    "class" : "Random",
+    "name" : "nextNumber",
+    "args" : { "self" : "Random", "min" : "number/nil", "max" : "number/nil" },
+    "return" : "number",
+    "info" : "Returns a pseudorandom number uniformly distributed over [min or 0, max or 1)."
 }]]
 function random.nextNumber(self, min, max)
-    random:memberFunctionAssert(self)
     assert(typeof(min)=="number" or min==nil, " `min` must be a number or nil!")
     assert(typeof(max)=="number" or max==nil, " `max` must be a number or nil!")
 
@@ -179,13 +150,12 @@ function random.nextNumber(self, min, max)
 end
 
 --[[@Function: {
-    'class' : 'Random',
-    'name' : 'nextRange',
-    'args' : { 'self' : 'Random', 't' : 'table' },
-    'info' : 'Returns a pseudorandom integer uniformly distributed over [min or 0, max or 1].'
+    "class" : "Random",
+    "name" : "nextRange",
+    "args" : { "self" : "Random", "t" : "table" },
+    "info" : "Returns a pseudorandom integer uniformly distributed over [min or 0, max or 1]."
 }]]
 function random.nextRange(self, t)
-    random:memberFunctionAssert(self)
     assert(typeof(t)=="table", "t must be a table!")
     assert(typeof(t.min)=="number" or t.min==nil, " `t.min` must be a number or nil!")
     assert(typeof(t.max)=="number" or t.max==nil, " `t.max` must be a number or nil!")
@@ -193,14 +163,13 @@ function random.nextRange(self, t)
 end
 
 --[[@Function: {
-    'class' : 'Random',
-    'name' : 'choice',
-    'args' : { 'self' : 'Random', 't' : 'table' },
-    'return' : 'any',
-    'info' : 'Returns a pseudorandom element from the table.'
+    "class" : "Random",
+    "name" : "choice",
+    "args" : { "self" : "Random", "t" : "table" },
+    "return" : "any",
+    "info" : "Returns a pseudorandom element from the table."
 }]]
 function random.choice(self, t)
-    random:memberFunctionAssert(self)
     assert(typeof(t)=="table", " `t` must be a table!")
 
     local tLen = #t
@@ -213,4 +182,5 @@ function random.choice(self, t)
     end
 end
 
-return random
+local r = newRandom(nil, true)
+return r

@@ -1,4 +1,4 @@
-local command = require(script:WaitForChild('command'))
+local command = require(script:WaitForChild("command"))
 
 return function (player, msg)
     local cmd = command.getCommand(msg)

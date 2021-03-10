@@ -1,6 +1,6 @@
-local TS = game:GetService('TweenService')
+local TS = game:GetService("TweenService")
 local core = require(script.Parent.Parent.Parent)
-local element = core.roact.Component:extend('BlueprintButton')
+local element = core.roact.Component:extend("BlueprintButton")
 
 function element:init()
     self.Idle = Color3.fromRGB(2, 66, 135)
@@ -9,25 +9,25 @@ function element:init()
 end
 
 function element:render()
-    return core.roact.createElement('ImageButton', {
+    return core.roact.createElement("ImageButton", {
         BackgroundColor3 = self.Idle,
         AutoButtonColor = false,
         ZIndex = 5,
-        Image = '',
+        Image = "",
         [core.roact.Ref] = core.cloneRef(self.props[core.roact.Ref], function(rbx)
             self.Button = rbx
         end)
     }, {
-        ['Corner'] = core.roact.createElement(core.elements.UICorner),
-        ['Frame'] = core.roact.createElement('Frame', {
+        ["Corner"] = core.roact.createElement(core.elements.UICorner),
+        ["Frame"] = core.roact.createElement("Frame", {
             AnchorPoint = Vector2.new(.5, .5),
             BackgroundColor3 = Color3.fromRGB(12, 99, 199),
             ZIndex = 6,
             Position = UDim2.fromScale(.5, .5),
             Size = UDim2.new(1, core.scale:getOffset(-5), 1, core.scale:getOffset(-5))
         }, {
-            ['Corner'] = core.roact.createElement(core.elements.UICorner),
-            ['Name'] = core.roact.createElement('TextLabel', {
+            ["Corner"] = core.roact.createElement(core.elements.UICorner),
+            ["Name"] = core.roact.createElement("TextLabel", {
                 AnchorPoint = Vector2.new(.5, 1),
                 BackgroundColor3 = Color3.fromRGB(2, 66, 135),
                 Position = UDim2.fromScale(.5, 1),
@@ -39,23 +39,23 @@ function element:render()
                 TextSize = core.scale:getTextSize(20),
                 TextWrapped = true
             }, {
-                ['Corner'] = core.roact.createElement(core.elements.UICorner)
+                ["Corner"] = core.roact.createElement(core.elements.UICorner)
             }),
-            ['Background'] = core.roact.createElement('ImageLabel', {
+            ["Background"] = core.roact.createElement("ImageLabel", {
                 Size = UDim2.fromScale(1, 1),
                 SizeConstraint = Enum.SizeConstraint.RelativeXX,
                 ZIndex = 7,
-                Image = 'rbxassetid://6276549643',
+                Image = "rbxassetid://6276549643",
                 ScaleType = Enum.ScaleType.Fit
             }, {
-                ['Corner'] = core.roact.createElement(core.elements.UICorner)
+                ["Corner"] = core.roact.createElement(core.elements.UICorner)
             }),
-            ['Icon'] = core.roact.createElement('ImageLabel', {
+            ["Icon"] = core.roact.createElement("ImageLabel", {
                 BackgroundTransparency = 1,
                 Size = UDim2.fromScale(1, 1),
                 SizeConstraint = Enum.SizeConstraint.RelativeXX,
                 ZIndex = 8,
-                Image = self.props.Image or 'rbxassetid://5456796819',
+                Image = self.props.Image or "rbxassetid://5456796819",
                 [core.roact.Ref] = function(rbx) self.IconParent = rbx end
             })
         })

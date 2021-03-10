@@ -2,7 +2,7 @@ local treeClass = require(script.Parent.Parent.TreeClass)
 
 local treeType = setmetatable({}, treeClass)
 treeType.__index = treeType
-treeType.Name = 'Birch'
+treeType.Name = "Birch"
 --===============================================================================================================--
 --===============================================/     Stats     /===============================================--
 
@@ -15,19 +15,19 @@ treeType.Hardness = 7
 --===============================================================================================================--
 --===============================================/   Apearence   /===============================================--
 
-treeType.WoodMaterial = 'Wood'
-treeType.WoodColor = BrickColor.new('Mid gray')
-treeType.PlankMaterial = 'WoodPlanks'
-treeType.PlankColor = BrickColor.new('Mid gray')
-treeType.BarkMaterial = 'Concrete'
-treeType.BarkColor = BrickColor.new('Pastel yellow')
+treeType.WoodMaterial = "Wood"
+treeType.WoodColor = BrickColor.new("Mid gray")
+treeType.PlankMaterial = "WoodPlanks"
+treeType.PlankColor = BrickColor.new("Mid gray")
+treeType.BarkMaterial = "Concrete"
+treeType.BarkColor = BrickColor.new("Pastel yellow")
 
 treeType.BarkThickness = .02
 
 treeType.LeafClass = nil
 
 treeType.LeafColors={
-	{ material='Grass', color=BrickColor.new("Bright green") },
+	{ material="Grass", color=BrickColor.new("Bright green") },
 }
 
 treeType.NumLeafParts = { min=1, max=1 }
@@ -56,7 +56,7 @@ treeType.GrowInterval = { min=10, max=15 }--Seconds between :Grow() is called
 
 treeType.MaxGrowCalls = { min=70, max=85 }--Max distance from bottom of trunk to tip of farthest extremety
 
-treeType.NewBranchCutoff = 10 --Don't create a new section if we are within this many grow calls of maximum TODO rename
+treeType.NewBranchCutoff = 10 --Don"t create a new section if we are within this many grow calls of maximum TODO rename
 treeType.LifetimePerVolume = 45 --Tree will die after this much time after it stops growing
 treeType.LeafDropTime = 80 --Tree will drop leaves at this time before death
 

@@ -1,14 +1,14 @@
 local core = {}
 
 --Main Modules
-core.shared = require(game:GetService('ReplicatedStorage')
-    :WaitForChild('modules')
+core.shared = require(game:GetService("ReplicatedStorage")
+    :WaitForChild("Modules")
 )
-core.client = require(game:GetService('StarterPlayer')
-    :WaitForChild('StarterPlayerScripts')
-    :WaitForChild('modules')
+core.client = require(game:GetService("StarterPlayer")
+    :WaitForChild("StarterPlayerScripts")
+    :WaitForChild("Modules")
 )
-core.roact = core.shared.get('roact')
+core.roact = core.shared.get("roact")
 core.color = require(script:WaitForChild("color"))
 core.elements = require(script:WaitForChild("elements"))
 core.subfix = require(script:WaitForChild("gui"))
@@ -21,7 +21,7 @@ function core.deepCopyTable(original)
     local copy = {}
     for k, v in pairs(original) do
         --[[
-        if typeof(v)=='table' then
+        if typeof(v)=="table" then
             v = core.deepCopyTable(v)
         end]]
         copy[k] = v
@@ -29,9 +29,9 @@ function core.deepCopyTable(original)
 	return copy
 end
 
-local roact_binding = require(game:GetService('ReplicatedStorage')
-    :WaitForChild('modules')
-    :WaitForChild('roact')
+local roact_binding = require(game:GetService("ReplicatedStorage")
+    :WaitForChild("Modules")
+    :WaitForChild("roact")
     :WaitForChild("Binding")
 )
 function core.updateRef(ref, rbx)
@@ -40,15 +40,15 @@ end
 
 function core.cloneRef(ref, targetRef)
     return function (rbx)
-        if typeof(targetRef) == 'function' then
+        if typeof(targetRef) == "function" then
             targetRef(rbx)
-        elseif typeof(targetRef) == 'table' then
+        elseif typeof(targetRef) == "table" then
             roact_binding.update(targetRef, rbx)
         end
 
-        if typeof(ref) == 'function' then
+        if typeof(ref) == "function" then
             ref(rbx)
-        elseif typeof(ref) == 'table' then
+        elseif typeof(ref) == "table" then
             roact_binding.update(ref, rbx)
         end
     end

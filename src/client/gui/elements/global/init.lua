@@ -1,17 +1,17 @@
 local core = require(script.Parent)
-local platform = core.client.get('platform')
-local playerUtils = core.client.get('playerUtils')
+local platform = core.client.get("platform")
+local playerUtils = core.client.get("playerUtils")
 
-local themes = require(script:WaitForChild('themes'))
+local themes = require(script:WaitForChild("themes"))
 
 local globalContext = core.roact.createContext({
-    theme = themes['dark'],
+    theme = themes["dark"],
     platform = platform:getPlatform()
 })
-local global = core.roact.Component:extend('__' .. script.Name .. '__')
+local global = core.roact.Component:extend("__" .. script.Name .. "__")
 
 function global:init()
-    self.themeV = playerUtils:getPlayer():WaitForChild('config'):WaitForChild('Theme')
+    self.themeV = playerUtils:getPlayer():WaitForChild("config"):WaitForChild("Theme")
     self:setState({
         theme = themes[self.themeV.Value],
         platform = platform:getPlatform()
@@ -25,7 +25,7 @@ function global:render()
 end
 
 function global:didMount()
-    self.themeConnection = self.themeV:GetPropertyChangedSignal('Value'):Connect(function()
+    self.themeConnection = self.themeV:GetPropertyChangedSignal("Value"):Connect(function()
         self:setState({
             theme = themes[self.themeV.Value]
         })

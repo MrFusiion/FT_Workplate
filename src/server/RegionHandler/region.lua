@@ -1,13 +1,13 @@
-local shared = require(game:GetService('ReplicatedStorage'):WaitForChild('modules'))
-local event = shared.get('event')
+local shared = require(game:GetService("ReplicatedStorage"):WaitForChild("Modules"))
+local event = shared.get("event")
 
 local region = {}
 region.__index = region
 
 local function TiggerSignalWrapper(signal)
     return function(part)
-        if part.Name == 'HumanoidRootPart' then
-            signal:Fire(game:GetService('Players'):GetPlayerFromCharacter(part.Parent))
+        if part.Name == "HumanoidRootPart" then
+            signal:Fire(game:GetService("Players"):GetPlayerFromCharacter(part.Parent))
         end
     end
 end
@@ -23,15 +23,14 @@ function region.new(name, parts, color)
     newRegion.Color = color
     newRegion.Connections = {}
 
-    for _, part in pairs(typeof(parts)=='table' and parts or {parts}) do
+    for _, part in pairs(typeof(parts)=="table" and parts or {parts}) do
         table.insert(newRegion.Connections, part.Touched:Connect(TiggerSignalWrapper(EnterSignal)))
         table.insert(newRegion.Connections, part.TouchEnded:Connect(TiggerSignalWrapper(LeaveSignal)))
         
         part.Anchored = true
-        part.BrickColor = BrickColor.new(newRegion.Color)
         part.Transparency = 1
         part.CanCollide = false
-        part.Material = 'SmoothPlastic'
+        part.Material = "SmoothPlastic"
     end
 
     return newRegion

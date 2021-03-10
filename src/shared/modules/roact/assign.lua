@@ -4,7 +4,7 @@ local None = require(script.Parent.None)
 	Merges values from zero or more tables onto a target table. If a value is
 	set to None, it will instead be removed from the table.
 
-	This function is identical in functionality to JavaScript's Object.assign.
+	This function is identical in functionality to JavaScript"s Object.assign.
 ]]
 local function assign(target, ...)
 	for index = 1, select("#", ...) do

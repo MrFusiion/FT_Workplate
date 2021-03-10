@@ -1,9 +1,9 @@
 local core = require(script.Parent.Parent)
 
-local buttons = require(script:WaitForChild('Buttons'))
-local SideButton = require(script:WaitForChild('SideButton'))
+local buttons = require(script:WaitForChild("Buttons"))
+local SideButton = require(script:WaitForChild("SideButton"))
 
-local element = core.roact.Component:extend('SideButtons')
+local element = core.roact.Component:extend("SideButtons")
 
 function element:init()
     
@@ -14,7 +14,7 @@ function element:render()
     local sizeX = (core.scale:getOffset(80) + padding) * #buttons - padding + core.scale:getOffset(5)
 
     local children = {
-        Layout = core.roact.createElement('UIListLayout', {
+        Layout = core.roact.createElement("UIListLayout", {
             Padding = UDim.new(0, padding),
             HorizontalAlignment = Enum.HorizontalAlignment.Center,
             SortOrder = Enum.SortOrder.LayoutOrder
@@ -26,7 +26,7 @@ function element:render()
         children[props.Name] = core.roact.createElement(SideButton, props)
     end
 
-    return core.roact.createElement('Frame', {
+    return core.roact.createElement("Frame", {
         AnchorPoint = Vector2.new(0, .5),
         BackgroundTransparency = 1,
         Position = UDim2.new(0, core.scale:getOffset(5), .5, 0),

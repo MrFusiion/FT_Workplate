@@ -1,6 +1,6 @@
 --local AS = game:GetService("AnalyticsService")
 --AS.ApiKey = "519A9"
-local forms = require(script:WaitForChild('forms'))
+local forms = require(script:WaitForChild("forms"))
 
 local analytics = {}
 

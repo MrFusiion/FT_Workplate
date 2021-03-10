@@ -1,5 +1,5 @@
 --@initApi
---@Class: 'Fluid'
+--@Class: "Fluid"
 local fluid = {}
 
 fluid.__index = function(self, key)
@@ -15,7 +15,7 @@ fluid.__index = function(self, key)
 end
 
 fluid.__newindex = function(self, key, value)
-    if key == 'Transparency' then
+    if key == "Transparency" then
         self:setTransparency(value)
     else
         local suc = pcall(function()
@@ -28,26 +28,26 @@ fluid.__newindex = function(self, key, value)
 end
 
 --[[@Function: {
-    'class' : 'Fluid',
-    'name' : 'new',
-    'args' : { 'parent' : 'BasePart' },
-    'return' : 'Fluid',
-    'info' : 'Creates a new Fluid object.'
+    "class" : "Fluid",
+    "name" : "new",
+    "args" : { "parent" : "BasePart" },
+    "return" : "Fluid",
+    "info" : "Creates a new Fluid object."
 }
 @Properties: {
-    'class' : 'Fluid',
-    'props' : [{
-        'name' : 'FluidSpeed',
-        'type' : 'number',
+    "class" : "Fluid",
+    "props" : [{
+        "name" : "FluidSpeed",
+        "type" : "number",
     }, {
-        'name' : 'Textures',
-        'type' : 'table',
+        "name" : "Textures",
+        "type" : "table",
     }, {
-        'name' : 'Running',
-        'type' : 'boolean',
+        "name" : "Running",
+        "type" : "boolean",
     }, {
-        'name' : 'Part',
-        'type' : 'BasePart',
+        "name" : "Part",
+        "type" : "BasePart",
     }]
 }]]
 function fluid.new(parent)
@@ -57,7 +57,7 @@ function fluid.new(parent)
     newFluid.Running = false
 
     newFluid.Part = Instance.new("Part")
-    newFluid.Part.Material = 'SmoothPlastic'
+    newFluid.Part.Material = "SmoothPlastic"
     newFluid.Part.Transparency = .5
     newFluid.Part.Parent = parent
 
@@ -68,10 +68,10 @@ function fluid.new(parent)
 end
 
 --[[@Function: {
-    'class' : 'Fluid',
-    'name' : '__init',
-    'args' : { 'self' : 'Fluid' },
-    'info' : '[Private] Initializes all the textures sides.'
+    "class" : "Fluid",
+    "name" : "__init",
+    "args" : { "self" : "Fluid" },
+    "info" : "[Private] Initializes all the textures sides."
 }]]
 function fluid.__init(self)
     for _, v in pairs(Enum.NormalId:GetEnumItems()) do
@@ -88,26 +88,26 @@ function fluid.__init(self)
 end
 
 --[[@Function: {
-    'class' : 'Fluid',
-    'name' : 'setFluidType',
-    'args' : { 'self' : 'Fluid', 'value' : 'string' },
-    'info' : 'Sets the fluid type (water, lava).'
+    "class" : "Fluid",
+    "name" : "setFluidType",
+    "args" : { "self" : "Fluid", "value" : "string" },
+    "info" : "Sets the fluid type (water, lava)."
 }]]
 function fluid.setFluidType(self, value)
-    if value == 'water' then
+    if value == "water" then
         self:setTransparency(.5)
-        self.Material = 'SmoothPlastic'
-    elseif value == 'lava' then
+        self.Material = "SmoothPlastic"
+    elseif value == "lava" then
         self:setTransparency(0)
-        self.Material = 'Neon'
+        self.Material = "Neon"
     end
 end
 
 --[[@Function: {
-    'class' : 'Fluid',
-    'name' : 'setTransparency',
-    'args' : { 'self' : 'Fluid', 'value' : 'number' },
-    'info' : 'Sets the transaparency of the part and all of his textures sides.'
+    "class" : "Fluid",
+    "name" : "setTransparency",
+    "args" : { "self" : "Fluid", "value" : "number" },
+    "info" : "Sets the transaparency of the part and all of his textures sides."
 }]]
 function  fluid.setTransparency(self, value)
     self.Part.Transparency = value
@@ -117,10 +117,10 @@ function  fluid.setTransparency(self, value)
 end
 
 --[[@Function: {
-    'class' : 'Fluid',
-    'name' : 'start',
-    'args' : { 'self' : 'Fluid', 'speed' : 'number' },
-    'info' : 'Starts the fluid animation.'
+    "class" : "Fluid",
+    "name" : "start",
+    "args" : { "self" : "Fluid", "speed" : "number" },
+    "info" : "Starts the fluid animation."
 }]]
 function fluid.start(self, speed)
     self.FluidSpeed = speed or self.FluidSpeed
@@ -139,20 +139,20 @@ function fluid.start(self, speed)
 end
 
 --[[@Function: {
-    'class' : 'Fluid',
-    'name' : 'stop',
-    'args' : { 'self' : 'Fluid' },
-    'info' : 'Stops the fluid animation.'
+    "class" : "Fluid",
+    "name" : "stop",
+    "args" : { "self" : "Fluid" },
+    "info" : "Stops the fluid animation."
 }]]
 function fluid.stop(self)
     self.Running = false
 end
 
 --[[@Function: {
-    'class' : 'Fluid',
-    'name' : 'getTexture',
-    'args' : { 'index' : 'number' },
-    'info' : 'Gets the water texture from roblox (1 - 25)'
+    "class" : "Fluid",
+    "name" : "getTexture",
+    "args" : { "index" : "number" },
+    "info" : "Gets the water texture from roblox (1 - 25)"
 }]]
 function fluid.getTexture(i)
     i = math.max(1, math.min(25, i or 1))

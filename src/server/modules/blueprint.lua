@@ -1,5 +1,5 @@
 --@initApi
---@Class: 'Blueprint'
+--@Class: "Blueprint"
 local cache = {}
 
 local blueprintFolder = game:GetService("ReplicatedStorage"):FindFirstChild("Blueprints")
@@ -23,22 +23,22 @@ blueprint.__newindex = function(self, key, value)
 end
 
 --[[@Function: {
-    'class' : 'Blueprint',
-    'name' : 'new',
-    'args' : { 'object' : 'table' },
-    'info' : "Creates a new blueprint for this specific object."
+    "class" : "Blueprint",
+    "name" : "new",
+    "args" : { "object" : "table" },
+    "info" : "Creates a new blueprint for this specific object."
 }
 @Properties: {
-    'class' : 'Blueprint',
-    'props' : [{   
-        'name' : 'Object',
-        'type' : 'table'
+    "class" : "Blueprint",
+    "props" : [{   
+        "name" : "Object",
+        "type" : "table"
     }, {
-        'name' : 'Args',
-        'type' : 'table'
+        "name" : "Args",
+        "type" : "table"
     }, {
-        'name' : 'Model',
-        'type' : 'Model'
+        "name" : "Model",
+        "type" : "Model"
     }]
 }]]
 function blueprint.new(object, ...)
@@ -50,10 +50,10 @@ function blueprint.new(object, ...)
 end
 
 --[[@Function: {
-    'class' : 'Blueprint',
-    'name' : 'createModel',
-    'args' : { 'object' : 'table' },
-    'info' : "Creates a blueprint Model for this specific object."
+    "class" : "Blueprint",
+    "name" : "createModel",
+    "args" : { "object" : "table" },
+    "info" : "Creates a blueprint Model for this specific object."
 }]]
 function blueprint.createModel(object)
     if not cache[object.Name] then
@@ -63,7 +63,7 @@ function blueprint.createModel(object)
         for _, descendant in ipairs(model:GetDescendants()) do
             if descendant:IsA("BasePart") then
                 if descendant.CanCollide then
-                    descendant.Material = 'SmoothPlastic'
+                    descendant.Material = "SmoothPlastic"
                     descendant.CanCollide = false
                     descendant.Transparency = .5
                     descendant.BrickColor = BrickColor.Black()
@@ -86,10 +86,10 @@ function blueprint.createModel(object)
 end
 
 --[[@Function: {
-    'class' : 'Blueprint',
-    'name' : 'Place',
-    'args' : { 'self' : 'Blueprint' },
-    'info' : "Places the object this Blueprint coresponds to."
+    "class" : "Blueprint",
+    "name" : "Place",
+    "args" : { "self" : "Blueprint" },
+    "info" : "Places the object this Blueprint coresponds to."
 }]]
 function blueprint.Place(self)
     local cf = self:GetPrimaryPartCFrame()
@@ -97,30 +97,30 @@ function blueprint.Place(self)
 end
 
 --[[@Function: {
-    'class' : 'Blueprint',
-    'name' : 'Destroy',
-    'args' : { 'self' : 'Blueprint' },
-    'info' : "Destroys the this Blueprint."
+    "class" : "Blueprint",
+    "name" : "Destroy",
+    "args" : { "self" : "Blueprint" },
+    "info" : "Destroys the this Blueprint."
 }]]
 function blueprint.Destroy(self)
     self.Model.Parent = blueprintFolder
 end
 
 --[[@Function: {
-    'class' : 'Blueprint',
-    'name' : 'SetPrimaryPartCFrame',
-    'args' : { 'self' : 'Blueprint' },
-    'info' : "Sets the CFrame of the Model this Blueprint coresponds to."
+    "class" : "Blueprint",
+    "name" : "SetPrimaryPartCFrame",
+    "args" : { "self" : "Blueprint" },
+    "info" : "Sets the CFrame of the Model this Blueprint coresponds to."
 }]]
 function blueprint.SetPrimaryPartCFrame(self, cf)
     self.Model:SetPrimaryPartCFrame(cf)
 end
 
 --[[@Function: {
-    'class' : 'Blueprint',
-    'name' : 'GetPrimaryPartCFrame',
-    'args' : { 'self' : 'Blueprint' },
-    'info' : "Gets the CFrame of the Model this Blueprint coresponds to."
+    "class" : "Blueprint",
+    "name" : "GetPrimaryPartCFrame",
+    "args" : { "self" : "Blueprint" },
+    "info" : "Gets the CFrame of the Model this Blueprint coresponds to."
 }]]
 function blueprint.GetPrimaryPartCFrame(self)
     return self.Model:GetPrimaryPartCFrame()

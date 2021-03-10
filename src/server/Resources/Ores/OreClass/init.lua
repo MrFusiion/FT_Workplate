@@ -1,14 +1,35 @@
-local DS = game:GetService('Debris')
+local DS = game:GetService("Debris")
+local PS = game:GetService("PhysicsService")
 
-local shared = require(game:GetService('ReplicatedStorage'):WaitForChild('modules'))
-local random = shared.get('random').new()
+local shared = require(game:GetService("ReplicatedStorage"):WaitForChild("Modules"))
+local random = shared.get("random")
 
-local conecheckIgnoreList = { workspace:WaitForChild('Regions') }
+local conecheckIgnoreList = { workspace:WaitForChild("Regions") }
 
-local shapes = game:GetService('ReplicatedStorage'):WaitForChild('Crystals')
+local vacuumLock = require(script.Parent.Parent.vacuumLock)
 
 local oreClass = {}
+oreClass.Class = "Ore"
 oreClass.__index = oreClass
+
+local function newPart(model)
+	local part = Instance.new("Part")
+
+	part.Anchored = true
+
+	part:SetAttribute("Resource", true)
+	part:SetAttribute("Owner", 0)
+	part:SetAttribute("LastInteraction", 0)
+
+	local modelValue = Instance.new("ObjectValue")
+	modelValue.Name = "Model"
+	modelValue.Value = model
+	modelValue.Parent = part
+
+	PS:SetPartCollisionGroup(part, "Resource")
+
+	return part
+end
 
 --===========================================================================================--
 --======================================/ ParticeClass /======================================--
@@ -36,95 +57,51 @@ end
 --======================================/ Constructor /======================================--
 
 function oreClass.new(ParentModel : Model)
-    local newCrystal = {}
-    newCrystal.ParentModel = ParentModel
+    local newOre = {}
+    newOre.ParentModel = ParentModel
 
-	newCrystal.GrowCalls = 0
-    newCrystal.FinishedGrowing = false
-	newCrystal.Stage = "Growing"
+	newOre.Sections = {}
+	newOre.Locked = false
 
-	return newCrystal
+	newOre.GrowCalls = 0
+    newOre.FinishedGrowing = false
+	newOre.Stage = "Growing"
+
+	return newOre
 end
 
 --=========================================================================================--
 --====================================/ Grow Clocking /====================================--
 
 function oreClass:growCheck(timePassed : float, acceratedGrowth : boolean)
+	if self.VacuumLock.Locked then return end
 	self.TimeToNextGrow -= timePassed
 	if self.TimeToNextGrow <= 0 and not self.FinishedGrowing then
 		self:grow()
 		self.TimeToNextGrow = random:nextRange(self.GrowInterval)
 	elseif self.FinishedGrowing and not acceratedGrowth then
-		self:Age(timePassed)
+		self:age(timePassed)
 	end
 end
 
 --=========================================================================================--
 --====================================/ Seed Planting /====================================--
 
-function oreClass:canPlaceHere(cf : CFrame, otherTrees : table) : boolean
-	for _, tree in pairs(otherTrees) do
-		if tree.SeedCFrame then
-			if (tree.SeedCFrame.Position - cf.Position).Magnitude < self.MinSpawnDistanceToOtherCrystals then
-				return false
-			end
-		end
-	end
-	return true
-end
-
-function oreClass:place(cf : CFrame, distUp : int)
+function oreClass:place(cf : CFrame)
 	self.OriginCFrame = cf
 	self.MaxGrowCalls = random:nextRange(self.MaxGrowCalls)
 
-	self.Model = Instance.new('Model')
+	self.Model = Instance.new("Model")
 	self.Model.Name = self.Name
+	self.Model:SetAttribute("Resource", true)
 	self.Model.Parent = self.ParentModel
 
-	self.Type = Instance.new("StringValue", self.Model)
-	self.Type.Name = "CrystalClass"
-	self.Type.Value = self.Name
+	self.VacuumLock = vacuumLock.new(self)
 
-    self.Onwer = Instance.new('ObjectValue', self.Model)
-	self.Onwer.Name = 'Owner'
-	local lastInteractionV = Instance.new('IntValue', self.Onwer)
-	lastInteractionV.Name = 'LastInteraction'
-	
-	self.Size = random:nextRange(self.ClusterSize)
 	self.TimeToNextGrow = random:nextRange(self.GrowInterval)
-
-	self.ShellPart = shapes[self.Shape]:Clone()
-	self.ShellPart.Name = 'CrystalShell'
-	self.ShellPart.Anchored = true
-	self.ShellPart.Transparency = self.ShellTransparency
-	self.ShellPart.BrickColor = self.ShellColor
-	self.ShellPart.Material = self.ShellMaterial
-	self.ShellPart.Size = Vector3.new(1, 1, 1) * self.Size
-	self.ShellPart.CFrame = self.OriginCFrame * CFrame.new(0, self.Size*(.5 + self.Offset), 0)
-	self.ShellPart.Parent = self.Model
-
-	self.InnerPart = shapes[self.Shape]:Clone()
-	self.InnerPart.Name = 'CrystalInner'
-	self.InnerPart.Anchored = true
-	self.InnerPart.Transparency = self.InnerTransparency
-	self.InnerPart.BrickColor = self.InnerColor
-	self.InnerPart.Material = self.InnerMaterial
-	self.InnerPart.Size = Vector3.new(1, 1, 1) * (self.Size - self.ShellThickness)
-	self.InnerPart.CFrame = self.ShellPart.CFrame
-	self.InnerPart.Parent = self.Model
-
-	if self.Light then
-		local light = Instance.new('PointLight')
-		for propName, propValue in pairs(self.Light) do
-			light[propName] = propValue
-		end
-		light.Parent = self.InnerPart
-	end
-
-	if self.Effects then
-		for name, effect in pairs(self.Effects) do
-			effect:new().Parent = self.ShellPart
-		end
+	
+	for _=1, random:nextRangeInt(self.SectionCount) do
+		self:newSection(self.OriginCFrame)
 	end
 end
 
@@ -136,36 +113,25 @@ function oreClass:destroy()
 end
 
 function oreClass:age(timePassed : int)
-	if self.Stage == 'Growing' then
-		self.TimeUntilDeath = (self.TimeUntilDeath - timePassed) * self:getVolume() / self.FinalVolume
-		self.FinalVolume = self:getVolume()
-	else
-		self.TimeUntilDeath = self.TimeUntilDeath - timePassed
+	if self.Stage == "Growing" then
+		self.Stage = "Grown"
 	end
 
-	if self.Stage == 'Growing' then
+	if self.Stage == "Grown" then
+		self.TimeUntilDeath -= timePassed
+	else
+		self.TimeUntilDeath -= timePassed
+	end
+
+	if self.Stage == "Grown" then
 		if self.TimeUntilDeath <= 0 then
-			self.Stage = 'Broken Up'
+			self.Stage = "Broken Up"
 			self.TimeUntilDeath = 0
-
-            self.Owner:Destroy()
-
-			self.InnerPart:Destroy()
-			for _, effect in ipairs(self.ShellPart:GetChildren()) do
-				effect:Destroy()
-			end
-
-			self.ShellPart.BrickColor = BrickColor.new('Black')
-			self.ShellPart.Anchored = false
-			DS:AddItem(self.ShellPart, 10)
+			self:kill()
         end
-	elseif self.Stage == 'Broken Up' then
+	elseif self.Stage == "Broken Up" then
 		if self.TimeUntilDeath < -10 then
-			self.Stage = 'Dead'
-		end
-	elseif self.Stage == 'Dead' then
-		if self.TimeUntilDeath < -15 then
-			self:destroy()
+			self.Stage = "Dead"
 		end
 	end
 end
@@ -179,58 +145,112 @@ function oreClass:grow(timePassed : int)
 
     self.GrowCalls += 1
 
-	if self:coneCheck(self.OriginCFrame * CFrame.new(0, self.Size, 0)) then
-		local lengthGrow = random:nextRange(self.SizeGrow)
-		self.Size += lengthGrow
-	end
+	for _, section in pairs(self.Sections) do
+		section.Size = section.Size + Vector3.new(
+			random:nextRange(self.SizeGrow),
+			random:nextRange(self.SizeGrow),
+			random:nextRange(self.SizeGrow)
+		)
 
-	self.ShellPart.Size = Vector3.new(1, 1, 1) * self.Size
-	self.ShellPart.CFrame = self.OriginCFrame * CFrame.new(0, self.Size*(.5 + self.Offset), 0)
-	self.InnerPart.Size = Vector3.new(1, 1, 1) * (self.Size - self.ShellThickness)
-	self.InnerPart.CFrame = self.ShellPart.CFrame
+		section.Part.Size = section.Size
+		section.Part.CFrame = section.StartCFrame * CFrame.new(0, section.Size.Y*.5, 0) * section.Angle * CFrame.new(section.Size * section.Offset)
+	end
 
     if self.GrowCalls > self.MaxGrowCalls then
 		self.FinishedGrowing = true
 		self.FinalVolume = self:getVolume()
 		self.TimeUntilDeath = self.FinalVolume * self.LifetimePerVolume
+		self.Stage = "Grown"
 	end
 end
 
 function oreClass:getVolume() : int
-	return self.Size^3
+	local volume = 0
+	for _, section in pairs(self.Sections) do
+		volume += section.Size.X * section.Size.Y * section.Size.Z
+	end
+	return volume
 end
 
-local numThetaChecks = 6
-local numRhoChecks = 3
-function oreClass:coneCheck(cf : any) : boolean
-	local ignoreList = { self.Model }
+--============================================================================================--
+--====================================/ Segment Creation /====================================--
 
-	for _, ignoreItem in ipairs(conecheckIgnoreList) do
-		table.insert(ignoreList, ignoreItem)
-	end
+function oreClass:newSection(cf : CFrame)
+	local section = {}
+	section.Part = newPart(self.Model)
+	section.Part.Name = "Section"
 
-	for _, player in pairs(game.Players:GetPlayers()) do
-		table.insert(ignoreList, player.Character)
-	end
-
-	local checkCFrame = cf
-	for rho=math.rad(self.SpaceCheckCone.angle)/numRhoChecks, math.rad(self.SpaceCheckCone.angle), math.rad(self.SpaceCheckCone.angle)/numRhoChecks do
-		for theta=math.pi*2/numThetaChecks, math.pi*2, math.pi*2/numThetaChecks do
-			local unit=(checkCFrame * CFrame.Angles(0, theta, rho) * CFrame.Angles(math.pi/2,0,0) * CFrame.new(0, 1, 0)).LookVector
-
-			local rayParams = RaycastParams.new()
-			rayParams.FilterDescendantsInstances = ignoreList
-			rayParams.FilterType = Enum.RaycastFilterType.Blacklist
-
-			if workspace:Raycast(checkCFrame.Position, unit * self.SpaceCheckCone.dist, rayParams) then
-				self.FinishedGrowing = true
-				self.FinalVolume = self:getVolume()
-				self.TimeUntilDeath = self.FinalVolume * self.LifetimePerVolume
-				return false
-			end
+	if self.Effects then
+		for name, effect in pairs(self.Effects) do
+			effect:new().Parent = section.Part
 		end
 	end
-	return true
+
+	if typeof(self.OreColor) == "function" then
+		self:OreColor(section.Part)
+	else
+		section.Part.BrickColor = self.OreColor
+	end
+
+	if typeof(self.OreMaterial) == "function" then
+		self:OreMaterial(section.Part)
+	else
+		section.Part.Material = self.OreMaterial
+	end
+
+	section.Offset = Vector3.new(
+		random:nextRange(self.SectionOffset),
+		0,
+		random:nextRange(self.SectionOffset)
+	)
+
+	section.Size = Vector3.new(
+		random:nextRange(self.SectionSize),
+		random:nextRange(self.SectionSize),
+		random:nextRange(self.SectionSize)
+	)
+
+	local phi = random:nextRange(self.SectionPhi)
+	local theta = random:nextRange(self.SectionTheta)
+	section.Angle = CFrame.Angles(0, theta, phi) * CFrame.Angles(0, -theta, 0)
+
+	section.StartCFrame = cf
+	section.Part.Size = section.Size
+	section.Part.CFrame = section.StartCFrame * CFrame.new(0, section.Size.Y*.5, 0) * section.Angle * CFrame.new(section.Size * section.Offset)
+	section.Part.Parent = self.Model
+
+	section.ID = #self.Sections + 1
+
+	local idValue = Instance.new("IntValue", section.Part)
+	idValue.Name = "ID"
+	idValue.Value = section.ID
+
+	self.Sections[#self.Sections + 1] = section
+end
+
+function oreClass:kill()
+	spawn(function()
+		for _, section in pairs(self.Sections) do
+			for _, effect in pairs(section.Part:GetChildren()) do
+				effect:Destroy()
+			end
+			section.Part.Material = "SmoothPlastic"
+			section.Part.BrickColor = BrickColor.new("Black")
+			section.Part.Anchored = false
+
+			DS:AddItem(section.Part, 15)
+		end
+
+		wait(10)
+
+		for _, section in pairs(self.Sections) do
+			section.Part.CanCollide = false
+		end
+
+		wait(5)
+
+		self:destroy()
+	end)
 end
 
 return oreClass

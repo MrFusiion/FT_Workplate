@@ -5,23 +5,23 @@ local lastText = false
 local colors = {}
 
 local function getColor(token, src)
-	if token == 'keyword' then
-		if src == 'self' then
-			return colors['selfKeyword']
-		elseif src == 'nil' then
-			return colors['nilKeyword']
-		elseif src == 'function' then
+	if token == "keyword" then
+		if src == "self" then
+			return colors["selfKeyword"]
+		elseif src == "nil" then
+			return colors["nilKeyword"]
+		elseif src == "function" then
 			lastFunction = true
 		end
-	elseif token == 'space' then
+	elseif token == "space" then
 		if lastText then
 			lastFunction = false
 			lastText = false
 		end
-	elseif token == 'iden' then
+	elseif token == "iden" then
 		if lastFunction then
 			lastText = true
-			return colors['functionName']
+			return colors["functionName"]
 		end
 	end
 	return colors[token]
@@ -55,9 +55,9 @@ function module.scan(s)
 	lastFunction = false
 	lastText = false
 	
-	local newText = ''
+	local newText = ""
 	for token, src in lexer.scan(s) do
-		newText = string.format('%s<font color="%s">%s</font>', newText, getColor(token, string.gsub(src, '</br>', '')) or '#ffffff', src)
+		newText = string.format("%s<font color="%s">%s</font>", newText, getColor(token, string.gsub(src, "</br>", "")) or "#ffffff", src)
 	end
 	return newText
 end

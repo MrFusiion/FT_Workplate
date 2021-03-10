@@ -2,7 +2,7 @@ local treeClass = require(script.Parent.Parent.TreeClass)
 
 local treeType = setmetatable({}, treeClass)
 treeType.__index = treeType
-treeType.Name = 'CaveTree'
+treeType.Name = "CaveTree"
 --===============================================================================================================--
 --===============================================/     Stats     /===============================================--
 
@@ -15,21 +15,21 @@ treeType.Hardness = 0
 --===============================================================================================================--
 --===============================================/   Apearence   /===============================================--
 
-treeType.WoodMaterial = 'Neon'
-treeType.WoodColor = BrickColor.new('Lapis')
+treeType.WoodMaterial = "Neon"
+treeType.WoodColor = BrickColor.new("Lapis")
 
-treeType.PlankMaterial = 'WoodPlanks'
-treeType.PlankColor = BrickColor.new('Lapis')
+treeType.PlankMaterial = "WoodPlanks"
+treeType.PlankColor = BrickColor.new("Lapis")
 
-treeType.BarkMaterial = 'Neon'
-treeType.BarkColor = BrickColor.new('Lapis')
+treeType.BarkMaterial = "Neon"
+treeType.BarkColor = BrickColor.new("Lapis")
 
 treeType.BarkThickness = .02
 
 treeType.LeafClass = nil
 
 treeType.LeafColors={
-	{material='Sand', color=BrickColor.new('Plum') },
+	{material="Sand", color=BrickColor.new("Plum") },
 }
 
 treeType.NumLeafParts = { min=1, max=1 }
@@ -58,17 +58,17 @@ treeType.BranchClasses = {
 
 treeType.GrowInterval = { min=10, max=15 }--Seconds between :Grow() is called
 
-treeType.MaxGrowCalls = { min=80, max=90 }--Max distance from bottom of trunk to tip of farthest extremety
+treeType.MaxGrowCalls = { min=70, max=75 }--Max distance from bottom of trunk to tip of farthest extremety
 
-treeType.NewBranchCutoff = 10 --Don't create a new section if we are within this many grow calls of maximum TODO rename
-treeType.LifetimePerVolume = 140 --Tree will die after this much time after it stops growing
-treeType.LeafDropTime = 80 --Tree will drop leaves at this time before death
+treeType.NewBranchCutoff = 10 --Don"t create a new section if we are within this many grow calls of maximum TODO rename
+treeType.LifetimePerVolume = .1 --Tree will die after this much time after it stops growing
+treeType.LeafDropTime = 5 --Tree will drop leaves at this time before death
 
-treeType.SeedThickness = {	min=1.1, max=1.2 }--Initial outer diameter for seedling tree
+treeType.SeedThickness = {	min=.1, max=.15 }--Initial outer diameter for seedling tree
 
-treeType.ThicknessGrow = {	min=.0009, max=.001 }--Amount the outer diameter thickens for each call of :Grow()
+treeType.ThicknessGrow = {	min=.01, max=.007 }--Amount the outer diameter thickens for each call of :Grow()
 
-treeType.LengthGrow = {	min=.3, max=.4 }--Amount length of extremety branches increases for each call of :Grow()
+treeType.LengthGrow = {	min=.5, max=.55 }--Amount length of extremety branches increases for each call of :Grow()
 
 treeType.NumNewSegmentAttempts = 250
 
@@ -88,7 +88,7 @@ treeType.TrunkDistanceUntilBending = {	min=10, max=15 }--Will yield these distan
 
 treeType.TrunkDistanceUntilSpliting = { min=5, max=9 }
 
-treeType.TrunkDistanceUntilBranching = { min=1, max=5 }
+treeType.TrunkDistanceUntilBranching = { min=4, max=5 }
 
 --//////////[  Trunk ]//////////--
 --//////////////////////////////--

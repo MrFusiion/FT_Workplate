@@ -5,7 +5,7 @@ local player = game:GetService("Players").LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
 
 function loadChildModule(child)
-    if child:IsA('ModuleScript') then
+    if child:IsA("ModuleScript") then
         local suc, contents = pcall(function()
             return core.roact.createElement(require(child))
         end)
@@ -26,8 +26,8 @@ function getTrees()
                 childs[child.Name] = loadChildModule(child)
             end
             local suc, err = pcall(function()
-                trees[gui.Name] = core.roact.createElement('ScreenGui', require(gui), {
-                    ['gloabl'] = core.roact.createElement(core.elements.global, {}, childs)
+                trees[gui.Name] = core.roact.createElement("ScreenGui", require(gui), {
+                    ["gloabl"] = core.roact.createElement(core.elements.global, {}, childs)
                 })
             end)
             if not suc then

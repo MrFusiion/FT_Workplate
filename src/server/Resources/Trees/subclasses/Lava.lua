@@ -2,7 +2,7 @@ local treeClass = require(script.Parent.Parent.TreeClass)
 
 local treeType = setmetatable({}, treeClass)
 treeType.__index = treeType
-treeType.Name = 'Lava'
+treeType.Name = "Lava"
 --===============================================================================================================--
 --===============================================/     Stats     /===============================================--
 
@@ -15,19 +15,19 @@ treeType.Hardness = 7
 --===============================================================================================================--
 --===============================================/   Apearence   /===============================================--
 
-treeType.WoodMaterial = 'Slate'
-treeType.WoodColor = BrickColor.new('Crimson')
-treeType.PlankMaterial = 'WoodPlanks'
-treeType.PlankColor = BrickColor.new('Crimson')
+treeType.WoodMaterial = "Slate"
+treeType.WoodColor = BrickColor.new("Crimson")
+treeType.PlankMaterial = "WoodPlanks"
+treeType.PlankColor = BrickColor.new("Crimson")
 function treeType:BarkMaterial(part)
 	for _, normalId in ipairs(Enum.NormalId:GetEnumItems()) do
-		local surfaceGui = Instance.new('SurfaceGui')
+		local surfaceGui = Instance.new("SurfaceGui")
 		surfaceGui.Face = normalId
 
-		local frame = Instance.new('Frame')
+		local frame = Instance.new("Frame")
 		frame.Size = UDim2.fromScale(1, 1)
 		
-		local gradient = Instance.new('UIGradient')
+		local gradient = Instance.new("UIGradient")
 		gradient.Color = ColorSequence.new(
 			Color3.new(.3, 0, 0),
 			Color3.new(.8, 0, 0)
@@ -37,14 +37,14 @@ function treeType:BarkMaterial(part)
 		surfaceGui.Parent = part
 	end
 end
-treeType.BarkColor = BrickColor.new('Really red')
+treeType.BarkColor = BrickColor.new("Really red")
 
 treeType.BarkThickness = .02
 
 treeType.LeafClass = nil
 
 treeType.LeafColors={
-	{ material='Grass', color=BrickColor.new("Cocoa") },
+	{ material="Grass", color=BrickColor.new("Cocoa") },
 }
 
 treeType.NumLeafParts = { min=1, max=1 }
@@ -73,7 +73,7 @@ treeType.GrowInterval = { min=10, max=15 }--Seconds between :Grow() is called
 
 treeType.MaxGrowCalls = { min=65, max=70 }--Max distance from bottom of trunk to tip of farthest extremety
 
-treeType.NewBranchCutoff = 10 --Don't create a new section if we are within this many grow calls of maximum TODO rename
+treeType.NewBranchCutoff = 10 --Don"t create a new section if we are within this many grow calls of maximum TODO rename
 treeType.LifetimePerVolume = 45 --Tree will die after this much time after it stops growing
 treeType.LeafDropTime = 80 --Tree will drop leaves at this time before death
 

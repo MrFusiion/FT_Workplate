@@ -1,13 +1,13 @@
 local core = require(script.Parent.Parent)
-local tableUtils = core.shared.get('tableUtils')
+local tableUtils = core.shared.get("tableUtils")
 
-local itemClass = require(script:WaitForChild('item'))
-local element = core.roact.Component:extend('Blueprint')
+local itemClass = require(script:WaitForChild("item"))
+local element = core.roact.Component:extend("Blueprint")
 
 function element:init()
     self.Connections = {}
     self:setState({
-        selected = '',
+        selected = "",
         catogories = {},
     })
 end
@@ -15,39 +15,39 @@ end
 function element:render()
     return core.roact.createElement(core.elements.global:getConsumer(), {
         render = function(global)
-            return core.roact.createElement('Frame', {
+            return core.roact.createElement("Frame", {
                 AnchorPoint = Vector2.new(.5, .5),
                 BackgroundTransparency = 1,
                 Position = UDim2.fromScale(.5, .5),
                 Size = UDim2.fromOffset(core.scale:getOffset(1100), core.scale:getOffset(700)),
                 Visible = false
             }, {
-                ['Window'] = core.roact.createElement(core.elements.Window, {
+                ["Window"] = core.roact.createElement(core.elements.Window, {
                     Size = UDim2.fromScale(1, 1),
-                    Title = 'Blueprints',
+                    Title = "Blueprints",
                     CloseEnabled = false
                 }, {
-                    ['Layout'] = core.roact.createElement('UIListLayout', {
+                    ["Layout"] = core.roact.createElement("UIListLayout", {
                         Padding = UDim.new(),
                         FillDirection = Enum.FillDirection.Horizontal,
                         SortOrder = Enum.SortOrder.LayoutOrder
                     }),
-                    ['Left'] = core.roact.createElement('Frame', {
+                    ["Left"] = core.roact.createElement("Frame", {
                         BackgroundTransparency = 1,
                         LayoutOrder = 0,
                         Size = UDim2.new(.15, core.scale:getOffset(-5), 1, 0),
                         ZIndex = 4
                     }, {
-                        ['Scroll'] = core.roact.createElement('ScrollingFrame', {
+                        ["Scroll"] = core.roact.createElement("ScrollingFrame", {
                             AnchorPoint = Vector2.new(.5, .5),
                             BackgroundTransparency = 1,
                             BorderSizePixel = 0,
                             Position = UDim2.fromScale(.5, .5),
                             Size = UDim2.new(1, core.scale:getOffset(-25), 1, core.scale:getOffset(-25)),
                             ZIndex = 4,
-                            BottomImage = 'rbxassetid://5443758967',
-                            MidImage = 'rbxassetid://5443758967',
-                            TopImage = 'rbxassetid://5443758967',
+                            BottomImage = "rbxassetid://5443758967",
+                            MidImage = "rbxassetid://5443758967",
+                            TopImage = "rbxassetid://5443758967",
                             AutomaticCanvasSize = Enum.AutomaticSize.Y,
                             ElasticBehavior = Enum.ElasticBehavior.Never,
                             ScrollBarImageColor3 = global.theme.BgClr,--Color3.fromRGB(160, 180, 255),
@@ -56,39 +56,39 @@ function element:render()
                             [core.roact.Ref] = function(rbx) self.CatogoryScroll = rbx end
                         }, self:renderCatogories())
                     }),
-                    ['Sep'] = core.roact.createElement('Frame', {
+                    ["Sep"] = core.roact.createElement("Frame", {
                         BackgroundColor3 = global.theme.BgClr,
                         BorderSizePixel = 0,
                         LayoutOrder = 1,
                         Size = UDim2.new(0, core.scale:getOffset(10), 1, 0),
                         ZIndex = 4
                     }),
-                    ['Right'] = core.roact.createElement('Frame', {
+                    ["Right"] = core.roact.createElement("Frame", {
                         BackgroundTransparency = 1,
                         LayoutOrder = 2,
                         Size = UDim2.new(.85, core.scale:getOffset(-5), 1, 0),
                         ZIndex = 4
                     }, self:renderItems(global))
                 }),
-                ['Selected'] = core.roact.createElement('StringValue', {
+                ["Selected"] = core.roact.createElement("StringValue", {
                     [core.roact.Ref] = function(rbx) self.Selected = rbx end
                 }),
-                ['Add'] = core.roact.createElement('BindableEvent', {
+                ["Add"] = core.roact.createElement("BindableEvent", {
                     [core.roact.Ref] = function(rbx) self.Add = rbx end
                 }),
-                ['Remove'] = core.roact.createElement('BindableEvent', {
+                ["Remove"] = core.roact.createElement("BindableEvent", {
                     [core.roact.Ref] = function(rbx) self.Remove = rbx end
                 }),
-                ['BulkAdd'] = core.roact.createElement('BindableEvent', {
+                ["BulkAdd"] = core.roact.createElement("BindableEvent", {
                     [core.roact.Ref] = function(rbx) self.BulkAdd = rbx end
                 }),
-                ['BulkRemove'] = core.roact.createElement('BindableEvent', {
+                ["BulkRemove"] = core.roact.createElement("BindableEvent", {
                     [core.roact.Ref] = function(rbx) self.BulkRemove = rbx end
                 }),
-                ['Activated'] = core.roact.createElement('BindableEvent', {
+                ["Activated"] = core.roact.createElement("BindableEvent", {
                     [core.roact.Ref] = function(rbx) self.Activated = rbx end
                 }),
-                ['GetItemClass'] = core.roact.createElement('BindableFunction', {
+                ["GetItemClass"] = core.roact.createElement("BindableFunction", {
                     [core.roact.Ref] = function(rbx) self.GetItemClass = rbx end
                 })
             })
@@ -98,7 +98,7 @@ end
 
 function element:renderCatogories()
     local catogories = {
-        ['Layout'] = core.roact.createElement('UIGridLayout', {
+        ["Layout"] = core.roact.createElement("UIGridLayout", {
             CellPadding = UDim2.fromOffset(core.scale:getOffset(15), core.scale:getOffset(15)),
             CellSize = UDim2.fromOffset(core.scale:getOffset(110), core.scale:getOffset(180)),
             FillDirection = Enum.FillDirection.Horizontal,
@@ -119,23 +119,23 @@ function element:renderItems(global)
         local items = catogory:renderSubItems()
         if #items == 0 then continue end
 
-        items['Layout'] = core.roact.createElement('UIGridLayout', {
+        items["Layout"] = core.roact.createElement("UIGridLayout", {
             CellPadding = UDim2.fromOffset(core.scale:getOffset(15), core.scale:getOffset(15)),
             CellSize = UDim2.fromOffset(core.scale:getOffset(110), core.scale:getOffset(180)),
             FillDirection = Enum.FillDirection.Horizontal,
             HorizontalAlignment = Enum.HorizontalAlignment.Left
         })
 
-        scrolls['Scroll['..catogory.Name..']'] = core.roact.createElement('ScrollingFrame', {
+        scrolls["Scroll["..catogory.Name.."]"] = core.roact.createElement("ScrollingFrame", {
             AnchorPoint = Vector2.new(.5, .5),
             BackgroundTransparency = 1,
             BorderSizePixel = 0,
             Position = UDim2.fromScale(.5, .5),
             Size = UDim2.new(1, core.scale:getOffset(-25), 1, core.scale:getOffset(-25)),
             ZIndex = 4,
-            BottomImage = 'rbxassetid://5443758967',
-            MidImage = 'rbxassetid://5443758967',
-            TopImage = 'rbxassetid://5443758967',
+            BottomImage = "rbxassetid://5443758967",
+            MidImage = "rbxassetid://5443758967",
+            TopImage = "rbxassetid://5443758967",
             AutomaticCanvasSize = Enum.AutomaticSize.Y,
             ElasticBehavior = Enum.ElasticBehavior.Never,
             ScrollBarImageColor3 = global.theme.BgClr,--Color3.fromRGB(160, 180, 255),
@@ -256,11 +256,11 @@ end
 
 function element:test()
     local catogories = {}
-    local blueprintFolder = game:GetService('ReplicatedStorage'):WaitForChild('BlueprintStructures')
+    local blueprintFolder = game:GetService("ReplicatedStorage"):WaitForChild("BlueprintStructures")
     for _, catogoryFolder in ipairs(blueprintFolder:GetChildren()) do
         local catogory = itemClass.new(catogoryFolder.Name)
         for _, item in ipairs(catogoryFolder:GetChildren()) do
-            local icon = item:WaitForChild('Image').Value
+            local icon = item:WaitForChild("Image").Value
             catogory.Image = catogory.Image or icon
             catogory:addSubItem(itemClass.new(item.Name, icon))
         end

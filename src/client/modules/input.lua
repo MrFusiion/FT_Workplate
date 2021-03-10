@@ -1,5 +1,5 @@
-local UIS = game:GetService('UserInputService')
-local CAS = game:GetService('ContextActionService')
+local UIS = game:GetService("UserInputService")
+local CAS = game:GetService("ContextActionService")
 
 local input = {}
 
@@ -50,7 +50,7 @@ function input.safeUnbind(actionName, ...)
 end
 
 function input.enableCore(boolean)
-    local name = 'DISABLE_CORE'
+    local name = "DISABLE_CORE"
     if not boolean then
         input.bind(name, function() end, false, table.unpack(Enum.KeyCode:GetEnumItems()), table.unpack(Enum.UserInputType:GetEnumItems()))
     else

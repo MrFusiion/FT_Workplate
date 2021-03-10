@@ -1,28 +1,30 @@
-local client = require(script.Parent.Parent:WaitForChild('modules'))
-local playerUtils = client.get('playerUtils')
+local client = require(script.Parent.Parent:WaitForChild("Modules"))
+local playerUtils = client.get("playerUtils")
+local toolAnimation = client.get("toolAnimation")
 
-local shared = require(game:GetService('ReplicatedStorage'):WaitForChild('modules'))
-local blueprint = shared.get('blueprint')
+local shared = require(game:GetService("ReplicatedStorage"):WaitForChild("Modules"))
+local blueprint = shared.get("blueprint")
 
 local bpTool = {}
 bpTool.__index = bpTool
-bpTool.HoldAnimation = Instance.new('Animation')
-bpTool.HoldAnimation.AnimationId = 'rbxassetid://6276634576'
+bpTool.Hold = toolAnimation.new{
+    Id = 6276634576,
+    Looped = true,
+    Priority = Enum.AnimationPriority.Action
+}
 
-local blueprintsGui = playerUtils:getPlayerGui():WaitForChild('Hud'):WaitForChild('Blueprints')
-local activated = blueprintsGui:WaitForChild('Activated')
+local blueprintsGui = playerUtils:getPlayerGui():WaitForChild("Hud"):WaitForChild("Blueprints")
+local activated = blueprintsGui:WaitForChild("Activated")
 
 function bpTool.new(tool)
     local newTool = setmetatable({}, bpTool)
     tool.Equipped:Connect(function()
-        newTool:LoadHoldAnimation():Play()
+        bpTool.Hold:play()
         blueprintsGui.Visible = true
     end)
 
     tool.Unequipped:Connect(function()
-        if newTool.Track then
-            newTool.Track:Stop()
-        end
+        bpTool.Hold:stop()
         blueprintsGui.Visible = false
     end)
     
@@ -34,16 +36,6 @@ function bpTool.new(tool)
 
         playerUtils:getHumanoid():UnequipTools()
     end)
-end
-
-function bpTool.LoadHoldAnimation(self)
-    local humanoid = playerUtils:getHumanoid()
-    if humanoid then
-        self.Track = humanoid:WaitForChild('Animator'):LoadAnimation(bpTool.HoldAnimation)
-        self.Track.Looped = true
-        self.Track.Priority = Enum.AnimationPriority.Action
-    end
-    return self.Track
 end
 
 return bpTool

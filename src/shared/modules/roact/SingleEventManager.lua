@@ -1,5 +1,5 @@
 --[[
-	A manager for a single host virtual node's connected events.
+	A manager for a single host virtual node"s connected events.
 ]]
 
 local Logging = require(script.Parent.Logging)
@@ -7,7 +7,7 @@ local Logging = require(script.Parent.Logging)
 local CHANGE_PREFIX = "Change."
 
 local EventStatus = {
-	-- No events are processed at all; they're silently discarded
+	-- No events are processed at all; they"re silently discarded
 	Disabled = "Disabled",
 
 	-- Events are stored in a queue; listeners are invoked when the manager is resumed
@@ -68,7 +68,7 @@ function SingleEventManager:connectPropertyChange(key, listener)
 end
 
 function SingleEventManager:_connect(eventKey, event, listener)
-	-- If the listener doesn't exist we can just disconnect the existing connection
+	-- If the listener doesn"t exist we can just disconnect the existing connection
 	if listener == nil then
 		if self._connections[eventKey] ~= nil then
 			self._connections[eventKey]:Disconnect()
@@ -100,7 +100,7 @@ function SingleEventManager:suspend()
 end
 
 function SingleEventManager:resume()
-	-- If we're already resuming events for this instance, trying to resume
+	-- If we"re already resuming events for this instance, trying to resume
 	-- again would cause a disaster.
 	if self._isResuming then
 		return
@@ -129,7 +129,7 @@ function SingleEventManager:resume()
 				unpack(eventInvocation, 3, 2 + argumentCount))
 
 			-- If the listener threw an error, we log it as a warning, since
-			-- there's no way to write error text in Roblox Lua without killing
+			-- there"s no way to write error text in Roblox Lua without killing
 			-- our thread!
 			if not success then
 				Logging.warn("%s", result)

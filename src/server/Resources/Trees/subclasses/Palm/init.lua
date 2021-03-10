@@ -2,7 +2,7 @@ local treeClass = require(script.Parent.Parent.TreeClass)
 
 local treeType = setmetatable({}, treeClass)
 treeType.__index = treeType
-treeType.Name = 'Palm'
+treeType.Name = "Palm"
 --===============================================================================================================--
 --===============================================/     Stats     /===============================================--
 
@@ -15,38 +15,20 @@ treeType.Hardness = 7
 --===============================================================================================================--
 --===============================================/   Apearence   /===============================================--
 
-treeType.WoodMaterial = 'Wood'
-treeType.WoodColor = BrickColor.new('Beige')
-treeType.PlankMaterial = 'WoodPlanks'
-treeType.PlankColor = BrickColor.new('Beige')
-treeType.BarkMaterial = 'Concrete'
+treeType.WoodMaterial = "Wood"
+treeType.WoodColor = BrickColor.new("Beige")
+treeType.PlankMaterial = "WoodPlanks"
+treeType.PlankColor = BrickColor.new("Beige")
+treeType.BarkMaterial = "Concrete"
 
-treeType.ColorCount = 1
---[[treeType.Colors = {
-	BrickColor.new('Really red'),
-	BrickColor.new('Deep orange'),
-	BrickColor.new('New Yeller'),
-	BrickColor.new('Forest green'),
-	BrickColor.new('Really blue'),
-	BrickColor.new('Magenta')
-}
-function treeType:BarkColor(part)
-	part.BrickColor = self.Colors[self.ColorCount]
-	self.ColorCount = self.ColorCount % #self.Colors + 1
-end
-local colorA = Color3.new(0, 0, 1)
-local colorB = Color3.new(1, 0, 0)
-function treeType:BarkColor(part)
-	part.BrickColor = BrickColor.new(colorA:Lerp(colorB, self.GrowCalls/self.MaxGrowCalls))
-end ]]
-treeType.BarkColor = BrickColor.new('Wheat')
+treeType.BarkColor = BrickColor.new("Wheat")
 
 treeType.BarkThickness = .02
 
 treeType.LeafClass = require(script.leaves)
 
 treeType.LeafColors={
-	{material='Grass', color=BrickColor.new("Medium green") },
+	{material="Grass", color=BrickColor.new("Medium green") },
 }
 
 treeType.NumLeafParts = { min=1, max=1 }
@@ -58,7 +40,6 @@ treeType.LeafAngle = {
 
 treeType.LeafSizeFactor = {
 	X = { min=3, max=3.5 }, --Leaf size as a factor of the thickness of its branch
-	Y = { min=.75, max=1 },
 	Y = { min=.75, max=1 },
 	Z = { min=3, max=3.5 }
 }
@@ -74,17 +55,17 @@ treeType.BranchClasses = nil
 
 treeType.GrowInterval = { min=10, max=15 }--Seconds between :Grow() is called
 
-treeType.MaxGrowCalls = { min=60, max=70 }--Max distance from bottom of trunk to tip of farthest extremety
+treeType.MaxGrowCalls = { min=60, max=65 }--Max distance from bottom of trunk to tip of farthest extremety
 
-treeType.NewBranchCutoff = 10 --Don't create a new section if we are within this many grow calls of maximum TODO rename
-treeType.LifetimePerVolume = 45 --Tree will die after this much time after it stops growing
-treeType.LeafDropTime = 80 --Tree will drop leaves at this time before death
+treeType.NewBranchCutoff = 10 --Don"t create a new section if we are within this many grow calls of maximum TODO rename
+treeType.LifetimePerVolume = 1 --Tree will die after this much time after it stops growing
+treeType.LeafDropTime = 10 --Tree will drop leaves at this time before death
 
-treeType.SeedThickness = {	min=1, max=1.4 }--Initial outer diameter for seedling tree
+treeType.SeedThickness = {	min=0.1, max=.2 }--Initial outer diameter for seedling tree
 
-treeType.ThicknessGrow = {	min=0.009, max=0.014 }--Amount the outer diameter thickens for each call of :Grow()
+treeType.ThicknessGrow = {	min=0.03, max=0.05 }--Amount the outer diameter thickens for each call of :Grow()
 
-treeType.LengthGrow = {	min=0.3, max=0.4 }--Amount length of extremety branches increases for each call of :Grow()
+treeType.LengthGrow = {	min=0.4, max=0.5 }--Amount length of extremety branches increases for each call of :Grow()
 
 treeType.NumNewSegmentAttempts = 250
 

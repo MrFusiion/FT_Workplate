@@ -1,6 +1,4 @@
 {
-    "ClassName" : "BoolValue",
-    "Properties" : {
-        "Name" : "SaveInStudio"
-    }
+    "Name" : "SaveInStudio",
+    "ClassName" : "BoolValue"
 }

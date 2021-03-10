@@ -1,25 +1,17 @@
-local shared = require(game:GetService('ReplicatedStorage'):WaitForChild('modules'))
-local random = shared.get('random').new(nil, false)
+local shared = require(game:GetService("ReplicatedStorage"):WaitForChild("Modules"))
+local random = shared.get("random")
 
 local leaves = {}
 leaves.__index = leaves
 
-function randomRange(value : table) : float
-	return random:nextNumber(value.min, value.max)
-end
-
-function randomRangeInteger(value : table) : int
-	return random:nextInt(value.min, value.max)
-end
-
 function leaves:init(tree)
-    local numLeafPart = randomRangeInteger({ min=5, max=7 })
+    tree.NumLeafs = tree.NumLeafs or random:nextRangeInt({ min=5, max=7 })
 
     local shader = random:choice(tree.LeafColors)
 
-    self.Model = Instance.new('Model')
+    self.Model = Instance.new("Model")
     
-    self.Main = Instance.new('Part')
+    self.Main = Instance.new("Part")
     self.Main.Anchored = true
     self.Main.BrickColor = shader.color
     self.Main.Material = shader.material
@@ -27,11 +19,11 @@ function leaves:init(tree)
 
     local segmentCount = 4
     self.Leaves = {}
-    for i=1, numLeafPart do
+    for i=1, tree.NumLeafs do
         local lastPart = self.Main
         local first
         for j=1, segmentCount do
-            local subLeaf = Instance.new('Part')
+            local subLeaf = Instance.new("Part")
             subLeaf.Anchored = true
             subLeaf.BrickColor = shader.color
             subLeaf.Material = shader.material
@@ -55,7 +47,7 @@ function leaves:update(section)
                 * CFrame.new(0, 0, leaf.Parent.Size.Z*.5)
                 * CFrame.Angles(math.rad(rho), 0, 0)
                 * CFrame.new(0, 0, leaf.Size.Z*.5)
-        local childLeaf  = leaf:FindFirstChildWhichIsA('Part')
+        local childLeaf  = leaf:FindFirstChildWhichIsA("Part")
         if childLeaf then
             scaleLeaf(childLeaf, 0, rho, Vector3.new(1, 1, multiplier.Z))
         end

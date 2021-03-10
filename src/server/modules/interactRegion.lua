@@ -1,17 +1,17 @@
-local shared = require(game:GetService('ReplicatedStorage'):WaitForChild('modules'))
-local event = shared.get('event')
+local shared = require(game:GetService("ReplicatedStorage"):WaitForChild("Modules"))
+local event = shared.get("event")
 
 local interactRegion = {}
 interactRegion.__index = interactRegion
 
-interactRegion.Folder = Instance.new('Folder')
-interactRegion.Folder.Name = 'InteractRegions'
+interactRegion.Folder = Instance.new("Folder")
+interactRegion.Folder.Name = "InteractRegions"
 interactRegion.Parent = workspace
 
 function interactRegion.new(position, radius)
     local newRegion = {}
 
-    newRegion.Part = Instance.new('Part')
+    newRegion.Part = Instance.new("Part")
     newRegion.Part.Shape = Enum.PartType.Ball
     newRegion.Part.CanCollide = false
     newRegion.Part.Anchored = true
@@ -29,16 +29,16 @@ end
 
 function interactRegion.init(self)
     self.Part.Touched:Connect(function(part)
-        if part.Name == 'HumanoidRootPart' then
-            local player = game:GetService('Players'):GetPlayerFromCharacter(part.Parent)
+        if part.Name == "HumanoidRootPart" then
+            local player = game:GetService("Players"):GetPlayerFromCharacter(part.Parent)
             if player then
                 self.__PlayerEnter:Fire(player)
             end
         end
     end)
     self.Part.TouchEnded:Connect(function(part)
-        if part.Name == 'HumanoidRootPart' then
-            local player = game:GetService('Players'):GetPlayerFromCharacter(part.Parent)
+        if part.Name == "HumanoidRootPart" then
+            local player = game:GetService("Players"):GetPlayerFromCharacter(part.Parent)
             if player then
                 self.__PlayerExit:Fire(player)
             end

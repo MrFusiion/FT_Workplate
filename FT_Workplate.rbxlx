@@ -477,7 +477,7 @@ function getTrees()
                 trees[gui.Name] = require(gui)
             end)
             if err then
-                warn(string.format(" Couldn't load gui module: %s", gui.Name))
+                warn(string.format(" Couldn"t load gui module: %s", gui.Name))
             end
         end
     end
@@ -558,8 +558,8 @@ return core]]></ProtectedString>
 							<ProtectedString name="Source"><![CDATA[local color = {}
 
 function color.shade(color, factor)
-    assert(typeof(color)=='Color3', " `color` must be a Color3!")
-    assert(typeof(factor)=='number', " `factor` must be a number!")
+    assert(typeof(color)=="Color3", " `color` must be a Color3!")
+    assert(typeof(factor)=="number", " `factor` must be a number!")
     return Color3.new(
         color.R * (1 - factor),
         color.G * (1 - factor),
@@ -568,8 +568,8 @@ function color.shade(color, factor)
 end
 
 function color.tint(color, factor)
-    assert(typeof(color)=='Color3', " `color` must be a Color3!")
-    assert(typeof(factor)=='number', " `factor` must be a number!")
+    assert(typeof(color)=="Color3", " `color` must be a Color3!")
+    assert(typeof(factor)=="number", " `factor` must be a number!")
     return Color3.new(
         color.R + (1 - color.R) * factor,
         color.G + (1 - color.G) * factor,
@@ -580,7 +580,7 @@ end
 --returns a value between (0 - 1)
 --where 0 is darkest and 1 is the lightest
 function  color.getLuma(color)
-    assert(typeof(color)=='Color3', " `color` must be a Color3!")
+    assert(typeof(color)=="Color3", " `color` must be a Color3!")
     local luma = .2126 * color.R + .7152 * color.G + .0722 * color.B
     return math.clamp(luma, 0, 1)
 end
@@ -599,7 +599,7 @@ return color]]></ProtectedString>
 							<ProtectedString name="Source"><![CDATA[local elements = {}
 
 function elements.add(name, element)
-    assert(typeof(name)=='string', " `name` must be a string!")
+    assert(typeof(name)=="string", " `name` must be a string!")
     assert(not elements[name], string.format(" `%s` Name allready exist in elements!", name))
     elements[name] = require(element)
 end
@@ -702,26 +702,26 @@ end
 
 function soundlist:add(name, id, overide)
     soundlist:memberFunctionAssert(self)
-    assert(typeof(name)=='string', " `name` must be a string!")
-    assert(typeof(id)=='number', " `id` must be a number!")
-    assert(not overide or typeof(overide)=='boolean', " `overide` must be a boolean or nil!")
-    assert(not self.__List[name] and not overide, string.format(' `%s` allready exist in soundlist pls consider removing it first or set overide to true!', name))
+    assert(typeof(name)=="string", " `name` must be a string!")
+    assert(typeof(id)=="number", " `id` must be a number!")
+    assert(not overide or typeof(overide)=="boolean", " `overide` must be a boolean or nil!")
+    assert(not self.__List[name] and not overide, string.format(" `%s` allready exist in soundlist pls consider removing it first or set overide to true!", name))
     self.__List[name] = Instance.new("Sound")
     self.__List[name].SoundId = "rbxassetid://"..id
 end
 
 function soundlist:remove(name)
     soundlist:memberFunctionAssert(self)
-    assert(typeof(name)=='string', " `name` must be a string!")
-    assert(self.__List[name], string.format(' `%s` does not exist in soundlist!', name))
+    assert(typeof(name)=="string", " `name` must be a string!")
+    assert(self.__List[name], string.format(" `%s` does not exist in soundlist!", name))
     self.__List[name]:Destroy()
     self.__List[name] = nil
 end
 
 function soundlist:play(name)
     soundlist:memberFunctionAssert(self)
-    assert(typeof(name)=='string', " `name` must be a string!")
-    assert(self.__List[name], string.format(' `%s` does not exist in soundlist!', name))
+    assert(typeof(name)=="string", " `name` must be a string!")
+    assert(self.__List[name], string.format(" `%s` does not exist in soundlist!", name))
     SS:PlayLocalSound(self.__List[name])
 end
 
@@ -737,11 +737,11 @@ return soundlist]]></ProtectedString>
 							<string name="Name">subfix</string>
 							<string name="ScriptGuid">{E5F91D0B-85FE-416D-A244-2BF3DAFE70D2}</string>
 							<ProtectedString name="Source"><![CDATA[local subfix = {}
-subfix.Symbols = { '', 'K', 'M', 'B', 'T', 'qD'}
+subfix.Symbols = { "", "K", "M", "B", "T", "qD"}
 subfix.symbolsLen = #subfix.Symbols
 
 function subfix.addSubfix(n)
-    assert(typeof(n)=='number', " 'n' must be a number!")
+    assert(typeof(n)=="number", " "n" must be a number!")
     local count = 1
     while wait() do
         if count == subfix.symbolsLen or n / 1e3^count < 1 then 
@@ -750,8 +750,8 @@ function subfix.addSubfix(n)
         count+=1
     end
     --TODO: fix rounding point
-    return string.format('%.3f', n / 1e3^(count-1))..
-        (subfix.Symbols[count] == '' and '' or ' '..subfix.Symbols[count])
+    return string.format("%.3f", n / 1e3^(count-1))..
+        (subfix.Symbols[count] == "" and "" or " "..subfix.Symbols[count])
 end
 
 return subfix]]></ProtectedString>
@@ -819,7 +819,7 @@ function element:render()
     local ref = self.props[core.roact.Ref]
     self.props[core.roact.Ref] = function(rbx)
         self.Button = rbx
-        if typeof(ref) == 'function' then
+        if typeof(ref) == "function" then
             ref(rbx)
         elseif ref then
             core.updateRef(ref, rbx)
@@ -903,7 +903,7 @@ return element]]></ProtectedString>
 local element = core.roact.PureComponent:extend("__" .. script.Name .. "__")
 
 function element:render()
-    return core.roact.createElement('UICorner', {
+    return core.roact.createElement("UICorner", {
         CornerRadius = UDim.new(0, core.scale:getOffset(10))
     }, self.props[core.roact.Children])
 end
@@ -921,7 +921,7 @@ return element]]></ProtectedString>
 							<string name="ScriptGuid">{1783E895-F1A3-4F84-9CD2-356587ED7B15}</string>
 							<ProtectedString name="Source"><![CDATA[local core = require(script.Parent)
 
-local DFLT_BG_IMAGE = 'rbxassetid://6093172294'
+local DFLT_BG_IMAGE = "rbxassetid://6093172294"
 local DFLT_BG_COLOR = Color3.fromRGB(100, 100, 100)
 local DFLT_BORDER_COLOR = Color3.fromRGB(50, 50, 50)
 local DFLT_TITLE_COLOR = Color3.fromRGB(255, 255, 255)
@@ -953,7 +953,7 @@ return element]]></ProtectedString>
 							<string name="ScriptGuid">{13143AA9-1343-4807-B0B5-D3D865B5D8D8}</string>
 							<ProtectedString name="Source"><![CDATA[local core = require(script.Parent)
 
-local DFLT_BG_IMAGE = 'rbxassetid://6093172294'
+local DFLT_BG_IMAGE = "rbxassetid://6093172294"
 local DFLT_BG_COLOR = Color3.fromRGB(100, 100, 100)
 
 local element = core.roact.PureComponent:extend("__" .. script.Name .. "__")
@@ -968,7 +968,7 @@ function element:render()
     local ref = self.props[core.roact.Ref]
     self.props[core.roact.Ref] = function(rbx)
         self.Button = rbx
-        if typeof(ref) == 'function' then
+        if typeof(ref) == "function" then
             ref(rbx)
         elseif ref then
             core.updateRef(ref, rbx)
@@ -1040,7 +1040,7 @@ return element
 
 return core.roact.createElement("ScreenGui", {
     IgnoreGuiInset = true,
-    ZIndexBehavior = 'Global'
+    ZIndexBehavior = "Global"
 }, {
     buttonTest = core.roact.createElement(core.elements.TextButton, {
         AnchorPoint = Vector2.new(.5, 0),
@@ -1449,7 +1449,7 @@ function settings:enabled(name)
         setting.ClassName == "ObjectValue" or setting.ClassName == "RayValue" or setting.ClassName == "CFrameValue" or setting.ClassName == "BrickColorValue" ) then
             return setting.Value
         elseif setting ~= nil then
-            warn(string.format(" %s that has been found is not in a correct format pls use only (Instance)Value's!", tostring(setting)))
+            warn(string.format(" %s that has been found is not in a correct format pls use only (Instance)Value"s!", tostring(setting)))
             return false
         else
             return false
@@ -1851,7 +1851,7 @@ The component %q is missing the `render` method.
 
 local tooManyUpdatesMessage = [[
 The component %q has reached the setState update recursion limit.
-When using `setState` in `didUpdate`, make sure that it won't repeat infinitely!]]
+When using `setState` in `didUpdate`, make sure that it won"t repeat infinitely!]]
 
 local componentClassMetatable = {}
 
@@ -1930,7 +1930,7 @@ function Component:setState(mapState)
 
 	--[[
 		When preparing to update, rendering, or unmounting, it is not safe
-		to call `setState` as it will interfere with in-flight updates. It's
+		to call `setState` as it will interfere with in-flight updates. It"s
 		also disallowed during unmounting
 	]]
 	if lifecyclePhase == ComponentLifecyclePhase.ShouldUpdate or
@@ -1978,8 +1978,8 @@ function Component:setState(mapState)
 		lifecyclePhase == ComponentLifecyclePhase.ReconcileChildren
 	then
 		--[[
-			During certain phases of the component lifecycle, it's acceptable to
-			allow `setState` but defer the update until we're done with ones in flight.
+			During certain phases of the component lifecycle, it"s acceptable to
+			allow `setState` but defer the update until we"re done with ones in flight.
 			We do this by collapsing it into any pending updates we have.
 		]]
 		local derivedState = self:__getDerivedState(self.props, newState)
@@ -2000,7 +2000,7 @@ end
 
 --[[
 	Returns the stack trace of where the element was created that this component
-	instance's properties are based on.
+	instance"s properties are based on.
 
 	Intended to be used primarily by diagnostic tools.
 ]]
@@ -2042,7 +2042,7 @@ function Component:__getContext(key)
 end
 
 --[[
-	Adds a new context entry to this component's context table (which will be
+	Adds a new context entry to this component"s context table (which will be
 	passed down to child components).
 ]]
 function Component:__addContext(key, value)
@@ -2051,8 +2051,8 @@ function Component:__addContext(key, value)
 	end
 	local virtualNode = self[InternalData].virtualNode
 
-	-- Make sure we store a reference to the component's original, unmodified
-	-- context the virtual node. In the reconciler, we'll restore the original
+	-- Make sure we store a reference to the component"s original, unmodified
+	-- context the virtual node. In the reconciler, we"ll restore the original
 	-- context if we need to replace the node (this happens when a node gets
 	-- re-rendered as a different component)
 	if virtualNode.originalContext == nil then
@@ -2067,7 +2067,7 @@ end
 
 --[[
 	Performs property validation if the static method validateProps is declared.
-	validateProps should follow assert's expected arguments:
+	validateProps should follow assert"s expected arguments:
 	(false, message: string) | true. The function may return a message in the
 	true case; it will be ignored. If this fails, the function will throw the
 	error.
@@ -2153,7 +2153,7 @@ function Component:__mount(reconciler, virtualNode)
 		assign(instance.state, instance:__getDerivedState(instance.props, instance.state))
 	end
 
-	-- It's possible for init() to redefine _context!
+	-- It"s possible for init() to redefine _context!
 	virtualNode.legacyContext = instance._context
 
 	internalData.lifecyclePhase = ComponentLifecyclePhase.Render
@@ -2168,7 +2168,7 @@ function Component:__mount(reconciler, virtualNode)
 	end
 
 	if internalData.pendingState ~= nil then
-		-- __update will handle pendingState, so we don't pass any new element or state
+		-- __update will handle pendingState, so we don"t pass any new element or state
 		instance:__update(nil, nil)
 	end
 
@@ -2380,7 +2380,7 @@ return ComponentLifecyclePhase]]></ProtectedString>
 	Configuration can only occur once, and should only be done by an application
 	using Roact, not a library.
 
-	Any keys that aren't recognized will cause errors. Configuration is only
+	Any keys that aren"t recognized will cause errors. Configuration is only
 	intended for configuring Roact itself, not extensions or libraries.
 
 	Configuration is expected to be set immediately after loading Roact. Setting
@@ -2392,7 +2392,7 @@ return ComponentLifecyclePhase]]></ProtectedString>
 local defaultConfig = {
 	-- Enables asserts for internal Roact APIs. Useful for debugging Roact itself.
 	["internalTypeChecks"] = false,
-	-- Enables stricter type asserts for Roact's public API.
+	-- Enables stricter type asserts for Roact"s public API.
 	["typeChecks"] = false,
 	-- Enables storage of `debug.traceback()` values on elements for debugging.
 	["elementTracing"] = false,
@@ -2424,7 +2424,7 @@ function Config.new()
 		end
 	})
 
-	-- We manually bind these methods here so that the Config's methods can be
+	-- We manually bind these methods here so that the Config"s methods can be
 	-- used without passing in self, since they eventually get exposed on the
 	-- root Roact object.
 	self.set = function(...)
@@ -2446,7 +2446,7 @@ end
 
 function Config:set(configValues)
 	-- Validate values without changing any configuration.
-	-- We only want to apply this configuration if it's valid!
+	-- We only want to apply this configuration if it"s valid!
 	for key, value in pairs(configValues) do
 		if defaultConfig[key] == nil then
 			local message = (
@@ -2578,7 +2578,7 @@ end
 local ElementUtils = {}
 
 --[[
-	A signal value indicating that a child should use its parent's key, because
+	A signal value indicating that a child should use its parent"s key, because
 	it has no key of its own.
 
 	This occurs when you return only one element from a function component or
@@ -2638,7 +2638,7 @@ function ElementUtils.iterateElements(elementOrElements)
 end
 
 --[[
-	Gets the child corresponding to a given key, respecting Roact's rules for
+	Gets the child corresponding to a given key, respecting Roact"s rules for
 	children. Specifically:
 	* If `elements` is nil or a boolean, this will return `nil`, regardless of
 		the key given.
@@ -2678,7 +2678,7 @@ return ElementUtils]]></ProtectedString>
 					<string name="Name">GlobalConfig</string>
 					<string name="ScriptGuid">{2F806E75-D7CA-4CE5-A875-ABF040B72F89}</string>
 					<ProtectedString name="Source"><![CDATA[--[[
-	Exposes a single instance of a configuration as Roact's GlobalConfig.
+	Exposes a single instance of a configuration as Roact"s GlobalConfig.
 ]]
 
 local Config = require(script.Parent.Config)
@@ -3077,14 +3077,14 @@ local Component = require(script.Parent.Component)
 
 local PureComponent = Component:extend("PureComponent")
 
--- When extend()ing a component, you don't get an extend method.
+-- When extend()ing a component, you don"t get an extend method.
 -- This is to promote composition over inheritance.
 -- PureComponent is an exception to this rule.
 PureComponent.extend = Component.extend
 
 function PureComponent:shouldUpdate(newProps, newState)
 	-- In a vast majority of cases, if state updated, something has updated.
-	-- We don't bother checking in this case.
+	-- We don"t bother checking in this case.
 	if newState ~= self.state then
 		return true
 	end
@@ -3414,7 +3414,7 @@ return RobloxRenderer
 					<string name="Name">SingleEventManager</string>
 					<string name="ScriptGuid">{ED603D5B-FA5E-48DE-91E8-1DEF4B541D29}</string>
 					<ProtectedString name="Source"><![CDATA[--[[
-	A manager for a single host virtual node's connected events.
+	A manager for a single host virtual node"s connected events.
 ]]
 
 local Logging = require(script.Parent.Logging)
@@ -3422,7 +3422,7 @@ local Logging = require(script.Parent.Logging)
 local CHANGE_PREFIX = "Change."
 
 local EventStatus = {
-	-- No events are processed at all; they're silently discarded
+	-- No events are processed at all; they"re silently discarded
 	Disabled = "Disabled",
 
 	-- Events are stored in a queue; listeners are invoked when the manager is resumed
@@ -3483,7 +3483,7 @@ function SingleEventManager:connectPropertyChange(key, listener)
 end
 
 function SingleEventManager:_connect(eventKey, event, listener)
-	-- If the listener doesn't exist we can just disconnect the existing connection
+	-- If the listener doesn"t exist we can just disconnect the existing connection
 	if listener == nil then
 		if self._connections[eventKey] ~= nil then
 			self._connections[eventKey]:Disconnect()
@@ -3515,7 +3515,7 @@ function SingleEventManager:suspend()
 end
 
 function SingleEventManager:resume()
-	-- If we're already resuming events for this instance, trying to resume
+	-- If we"re already resuming events for this instance, trying to resume
 	-- again would cause a disaster.
 	if self._isResuming then
 		return
@@ -3544,7 +3544,7 @@ function SingleEventManager:resume()
 				unpack(eventInvocation, 3, 2 + argumentCount))
 
 			-- If the listener threw an error, we log it as a warning, since
-			-- there's no way to write error text in Roblox Lua without killing
+			-- there"s no way to write error text in Roblox Lua without killing
 			-- our thread!
 			if not success then
 				Logging.warn("%s", result)
@@ -3571,9 +3571,9 @@ return SingleEventManager]]></ProtectedString>
 					<string name="Name">Symbol</string>
 					<string name="ScriptGuid">{CC43D9F8-8840-4291-9672-F6892DE33E24}</string>
 					<ProtectedString name="Source"><![CDATA[--[[
-	A 'Symbol' is an opaque marker type.
+	A "Symbol" is an opaque marker type.
 
-	Symbols have the type 'userdata', but when printed to the console, the name
+	Symbols have the type "userdata", but when printed to the console, the name
 	of the symbol is shown.
 ]]
 
@@ -3757,7 +3757,7 @@ return assertDeepEqual]]></ProtectedString>
 	Merges values from zero or more tables onto a target table. If a value is
 	set to None, it will instead be removed from the table.
 
-	This function is identical in functionality to JavaScript's Object.assign.
+	This function is identical in functionality to JavaScript"s Object.assign.
 ]]
 local function assign(target, ...)
 	for index = 1, select("#", ...) do
@@ -3795,7 +3795,7 @@ local Children = require(script.Parent.PropMarkers.Children)
 local Component = require(script.Parent.Component)
 
 --[[
-	Construct the value that is assigned to Roact's context storage.
+	Construct the value that is assigned to Roact"s context storage.
 ]]
 local function createContextEntry(currentValue)
 	return {
@@ -3824,10 +3824,10 @@ local function createProvider(context)
 	end
 
 	function Provider:didUpdate(prevProps)
-		-- If the provided value changed, after we've updated every reachable
+		-- If the provided value changed, after we"ve updated every reachable
 		-- component, fire a signal to update the rest.
 		--
-		-- This signal will notify all context consumers. It's expected that
+		-- This signal will notify all context consumers. It"s expected that
 		-- they will compare the last context value they updated with and only
 		-- trigger an update on themselves if this value is different.
 		--
@@ -3865,7 +3865,7 @@ local function createConsumer(context)
 	function Consumer:render()
 		-- Render using the latest available for this context item.
 		--
-		-- We don't store this value in state in order to have more fine-grained
+		-- We don"t store this value in state in order to have more fine-grained
 		-- control over our update behavior.
 		local value
 		if self.contextEntry ~= nil then
@@ -4015,7 +4015,7 @@ local function createElement(component, props, children)
 	}
 
 	if config.elementTracing then
-		-- We trim out the leading newline since there's no way to specify the
+		-- We trim out the leading newline since there"s no way to specify the
 		-- trace level without also specifying a message.
 		element.source = debug.traceback("", 2):sub(2)
 	end
@@ -4071,11 +4071,11 @@ local InternalData = Symbol.named("InternalData")
 	The reconciler is the mechanism in Roact that constructs the virtual tree
 	that later gets turned into concrete objects by the renderer.
 
-	Roact's reconciler is constructed with the renderer as an argument, which
+	Roact"s reconciler is constructed with the renderer as an argument, which
 	enables switching to different renderers for different platforms or
 	scenarios.
 
-	When testing the reconciler itself, it's common to use `NoopRenderer` with
+	When testing the reconciler itself, it"s common to use `NoopRenderer` with
 	spies replacing some methods. The default (and only) reconciler interface
 	exposed by Roact right now uses `RobloxRenderer`.
 ]]
@@ -4462,7 +4462,7 @@ local function createReconciler(renderer)
 	--[[
 		Unmounts the virtual tree, freeing all of its resources.
 
-		No further operations should be done on the tree after it's been
+		No further operations should be done on the tree after it"s been
 		unmounted, as indicated by its the `mounted` field.
 	]]
 	local function unmountVirtualTree(tree)
@@ -4581,7 +4581,7 @@ return createReconcilerCompat]]></ProtectedString>
 					<string name="Name">createRef</string>
 					<string name="ScriptGuid">{2CFDAB3E-83B3-4CC0-B89F-8A67EA04A20E}</string>
 					<ProtectedString name="Source"><![CDATA[--[[
-	A ref is nothing more than a binding with a special field 'current'
+	A ref is nothing more than a binding with a special field "current"
 	that maps to the getValue method of the binding
 ]]
 local Binding = require(script.Parent.Binding)
@@ -4604,7 +4604,7 @@ local function createRef()
 		end,
 		__newindex = function(self, key, value)
 			if key == "current" then
-				error("Cannot assign to the 'current' property of refs", 2)
+				error("Cannot assign to the "current" property of refs", 2)
 			end
 
 			binding[key] = value
@@ -4812,7 +4812,7 @@ return createSpy]]></ProtectedString>
 	Attempts to get the default value of a given property on a Roblox instance.
 
 	This is used by the reconciler in cases where a prop was previously set on a
-	primitive component, but is no longer present in a component's new props.
+	primitive component, but is no longer present in a component"s new props.
 
 	Eventually, Roblox might provide a nicer API to query the default property
 	of an object without constructing an instance of it.
@@ -4829,8 +4829,8 @@ local function getDefaultInstanceProperty(className, propertyName)
 	if classCache then
 		local propValue = classCache[propertyName]
 
-		-- We have to use a marker here, because Lua doesn't distinguish
-		-- between 'nil' and 'not in a table'
+		-- We have to use a marker here, because Lua doesn"t distinguish
+		-- between "nil" and "not in a table"
 		if propValue == Nil then
 			return true, nil
 		end
@@ -4890,10 +4890,10 @@ return internalAssert]]></ProtectedString>
 					<string name="Name">invalidSetStateMessages</string>
 					<string name="ScriptGuid">{1CFB4AB9-BC3D-46FD-9775-05EBBFD758C0}</string>
 					<ProtectedString name="Source"><![CDATA[--[[
-	These messages are used by Component to help users diagnose when they're
+	These messages are used by Component to help users diagnose when they"re
 	calling setState in inappropriate places.
 
-	The indentation may seem odd, but it's necessary to avoid introducing extra
+	The indentation may seem odd, but it"s necessary to avoid introducing extra
 	whitespace into the error messages themselves.
 ]]
 local ComponentLifecyclePhase = require(script.Parent.ComponentLifecyclePhase)
@@ -4925,7 +4925,7 @@ render must be a pure function that only depends on props and state.
 Check the definition of render in the component %q.]]
 
 invalidSetStateMessages["default"] = [[
-setState can not be used in the current situation, because Roact doesn't know
+setState can not be used in the current situation, because Roact doesn"t know
 which part of the lifecycle this component is in.
 
 This is a bug in Roact.

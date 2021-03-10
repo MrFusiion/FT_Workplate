@@ -1,5 +1,5 @@
 --@initApi
---@Class: 'WaterWheel'
+--@Class: "WaterWheel"
 local TS = game:GetService("TweenService")
 
 local super = script.Parent.Parent.Parent
@@ -10,40 +10,40 @@ local producer = submodule.get("producer")
 
 local waterWheel = {}
 waterWheel.__index = waterWheel
-waterWheel.Name = 'WaterWheel'
+waterWheel.Name = "WaterWheel"
 
 local generators = {}
 
 --[[@Function: {
-    'class' : 'WaterWheel',
-    'name' : 'new',
-    'args' : { 'parent' : 'Instance', 'cf' : 'CFrame' },
-    'return' : 'WaterWheel',
-    'info' : "Creates a new WaterWheel."
+    "class" : "WaterWheel",
+    "name" : "new",
+    "args" : { "parent" : "Instance", "cf" : "CFrame" },
+    "return" : "WaterWheel",
+    "info" : "Creates a new WaterWheel."
 }
 @Properties: {
-    'class' : 'WaterWheel',
-    'props' : [{
-        'name' : 'Speed',
-        'type' : 'number'
+    "class" : "WaterWheel",
+    "props" : [{
+        "name" : "Speed",
+        "type" : "number"
     }, {
-        'name' : 'Model',
-        'type' : 'Model'
+        "name" : "Model",
+        "type" : "Model"
     }, {
-        'name' : 'Model',
-        'type' : 'Model'
+        "name" : "Model",
+        "type" : "Model"
     }, {
-        'name' : 'Wheel',
-        'type' : 'Model'
+        "name" : "Wheel",
+        "type" : "Model"
     }, {
-        'name' : 'Fluid',
-        'type' : 'Fluid'
+        "name" : "Fluid",
+        "type" : "Fluid"
     }, {
-        'name' : 'Producer',
-        'type' : 'Producer'
+        "name" : "Producer",
+        "type" : "Producer"
     }, {
-        'name' : 'Running',
-        'type' : 'boolean'
+        "name" : "Running",
+        "type" : "boolean"
     }]
 }]]
 waterWheel.MODEL = getModel("tier1\\machines\\generators\\WaterWheel")
@@ -91,10 +91,10 @@ function waterWheel.new(parent, cf)
 end
 
 --[[@Function: {
-    'class' : 'WaterWheel',
-    'name' : 'run',
-    'args' : { 'self' : 'WaterWheel' },
-    'info' : "Starts the WaterWheel turn animation."
+    "class" : "WaterWheel",
+    "name" : "run",
+    "args" : { "self" : "WaterWheel" },
+    "info" : "Starts the WaterWheel turn animation."
 }]]
 function waterWheel.run(self)
     if self.Running then return end
@@ -109,16 +109,16 @@ function waterWheel.run(self)
             tween.Completed:Wait()
         end
         if tween then
-            tween:Stop()
+            tween:Cancel()
         end
     end)
 end
 
 --[[@Function: {
-    'class' : 'WaterWheel',
-    'name' : 'stop',
-    'args' : { 'self' : 'WaterWheel' },
-    'info' : "Stops the WaterWheel turn animation."
+    "class" : "WaterWheel",
+    "name" : "stop",
+    "args" : { "self" : "WaterWheel" },
+    "info" : "Stops the WaterWheel turn animation."
 }]]
 function waterWheel.stop(self)
     self.Running = false

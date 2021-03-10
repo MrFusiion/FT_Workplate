@@ -1,6 +1,6 @@
 local core = require(script.Parent)
 
-local DFLT_BG_IMAGE = 'rbxassetid://6093172294'
+local DFLT_BG_IMAGE = "rbxassetid://6093172294"
 
 local element = core.roact.PureComponent:extend("__" .. script.Name .. "__")
 

@@ -1,33 +1,33 @@
 --@initApi
---@Class: 'Class'
+--@Class: "Class"
 local class = {}
 class.__index = class
 
 --[[@Function: {
-    'class' : 'Class',
-    'name' : 'new',
-    'args' : { 'className' : 'string', 'baseClass' : 'table/nil' },
-    'return' : 'Class',
-    'info' : 'Creates a new Class object.'
+    "class" : "Class",
+    "name" : "new",
+    "args" : { "className" : "string", "baseClass" : "table/nil" },
+    "return" : "Class",
+    "info" : "Creates a new Class object."
 }
 @Properties: {
-    'class' : 'Class',
-    'props' : [{
-        'name' : '__index',
-        'type' : 'table',
-        'info' : '[Private]'
+    "class" : "Class",
+    "props" : [{
+        "name" : "__index",
+        "type" : "table",
+        "info" : "[Private]"
     }, {
-        'name' : '__IsClass',
-        'type' : 'boolean',
-        'info' : '[Private]'
+        "name" : "__IsClass",
+        "type" : "boolean",
+        "info" : "[Private]"
     }, {
-        'name' : '__Static',
-        'type' : 'boolean',
-        'info' : '[Private]'
+        "name" : "__Static",
+        "type" : "boolean",
+        "info" : "[Private]"
     }, {
-        'name' : '__ClassName',
-        'type' : 'string',
-        'info' : '[Private]'
+        "name" : "__ClassName",
+        "type" : "string",
+        "info" : "[Private]"
     }]
 }]]
 function class.new(className, baseClass)
@@ -51,11 +51,11 @@ function class.new(className, baseClass)
 end
 
 --[[@Function: {
-    'class' : 'Class',
-    'name' : 'newInstance',
-    'args' : { 'self' : 'Class'},
-    'return' : 'table',
-    'info' : 'Returns a new instance of this class object.'
+    "class" : "Class",
+    "name" : "newInstance",
+    "args" : { "self" : "Class"},
+    "return" : "table",
+    "info" : "Returns a new instance of this class object."
 }]]
 function class.newInstance(self)
     assert(typeof(self)=="table" and self.__IsClass, " member function got called with . istead of :!")
@@ -67,11 +67,11 @@ function class.newInstance(self)
 end
 
 --[[@Function: {
-    'class' : 'Class',
-    'name' : 'isInstaceOfMe',
-    'args' : { 'self' : 'Class', 'instance' : 'table'},
-    'return' : 'boolean',
-    'info' : 'Checks if object is and istance of this class object.'
+    "class" : "Class",
+    "name" : "isInstaceOfMe",
+    "args" : { "self" : "Class", "instance" : "table"},
+    "return" : "boolean",
+    "info" : "Checks if object is and istance of this class object."
 }]]
 function class.isInstaceOfMe(self, instance)
     assert(typeof(self)=="table" and self.__IsClass, " member function got called with . istead of :!")
@@ -85,10 +85,10 @@ function class.isInstaceOfMe(self, instance)
 end
 
 --[[@Function: {
-    'class' : 'Class',
-    'name' : 'memberFunctionAssert',
-    'args' : { 'self' : 'Class', 'instance' : 'table'},
-    'info' : 'Asserts when instance is not a member of this class.'
+    "class" : "Class",
+    "name" : "memberFunctionAssert",
+    "args" : { "self" : "Class", "instance" : "table"},
+    "info" : "Asserts when instance is not a member of this class."
 }]]
 function class.memberFunctionAssert(self, instance)
     assert(instance~=nil and self:isInstaceOfMe(instance), " member function got called with . istead of :!")

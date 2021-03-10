@@ -1,6 +1,6 @@
 local MAIN_FOLDER = game:GetService("ReplicatedStorage"):WaitForChild("Models")
 
-local shared = require(game:GetService("ReplicatedStorage"):WaitForChild("modules"))
+local shared = require(game:GetService("ReplicatedStorage"):WaitForChild("Modules"))
 local stringUtils = shared.get("stringUtils")
 local mathUtils = shared.get("mathUtils")
 
@@ -19,7 +19,7 @@ local function createPrimaryPart(model)
     primaryPart.Transparency = 1
     primaryPart.CanCollide = false
     primaryPart.Size = newSize
-    primaryPart.CFrame = cf + (cf.UpVector * (newSize.X - size.X) / 2)
+    primaryPart.CFrame = cf + (cf.UpVector * (newSize.X - size.X) * .5)
     primaryPart.Parent = model
 
     model.PrimaryPart = primaryPart
@@ -27,7 +27,7 @@ end
 
 return function (path)
     local current = MAIN_FOLDER
-    for subPath in stringUtils.splitIter(path, { '\\', '/' }) do
+    for subPath in stringUtils.splitIter(path, { "\\", "/" }) do
         current = current:WaitForChild(subPath)
     end
     if typeof(current) == "Instance" and current.ClassName == "Model" then

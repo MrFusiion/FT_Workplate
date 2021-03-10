@@ -1,32 +1,32 @@
-local server = require(game:GetService('ServerScriptService'):WaitForChild('modules'))
-local datastore = server.get('datastore')
+local server = require(game:GetService("ServerScriptService"):WaitForChild("Modules"))
+local datastore = server.get("datastore")
 
-local shared = require(game:GetService('ReplicatedStorage'):WaitForChild('modules'))
+local shared = require(game:GetService("ReplicatedStorage"):WaitForChild("Modules"))
 
-local printCF = require(game:GetService('ServerStorage'):WaitForChild('printCF'))
+local printCF = require(game:GetService("ServerStorage"):WaitForChild("printCF"))
 
-local function getPlayer(player, nameOrid)
-    if typeof(nameOrid) == 'string' then
-        if nameOrid == 'me' then
+local function getPlayer(player, nameOrid : any)
+    if typeof(nameOrid) == "string" then
+        if nameOrid == "me" then
             return player
         else
-            return game:GetService('Players'):FindFirstChild(nameOrid)
+            return game:GetService("Players"):FindFirstChild(nameOrid)
         end
-    elseif typeof(nameOrid) == 'number' then
-        return game:GetService('Players'):GetPlayerByUserId(nameOrid)
+    elseif typeof(nameOrid) == "number" then
+        return game:GetService("Players"):GetPlayerByUserId(nameOrid)
     end
 end
 
 local commands = {}
 
 commands.set = {
-    prefix = { 'set' },
-    args = { '<number/string>', '<string>', '<variant>' },
-    rank = 'DEV',
+    prefix = { "set" },
+    args = { "<number/string>", "<string>", "<variant>" },
+    rank = "DEV",
     callback = function(player, target, key, value)
         target = getPlayer(player, target)
         if target then
-            local store = datastore.combined.player(target, 'Data')
+            local store = datastore.combined.player(target, "Data")
             if store.Keys[key] then
                 local oldValue = store:get(key)
                 if oldValue == nil or typeof(oldValue) == typeof(value) then
@@ -38,30 +38,30 @@ commands.set = {
 }
 
 commands.get = {
-    prefix = { 'get' },
-    args = { '<number/string>', '<string>' },
-    rank = 'DEV',
+    prefix = { "get" },
+    args = { "<number/string>", "<string>" },
+    rank = "DEV",
     callback = function(player, target, key)
         target = getPlayer(player, target)
         if target then
-            local store = datastore.combined.player(target, 'Data')
+            local store = datastore.combined.player(target, "Data")
             print(store:get(key))
         end
     end
 }
 
 commands.set_rank = {
-    prefix = { 'setRank' },
-    args = { '<number/string>', '<string>' },
-    rank = 'DEV',
+    prefix = { "setRank" },
+    args = { "<number/string>", "<string>" },
+    rank = "DEV",
     callback = function(player, target, newRank)
         pcall(function()
             target = getPlayer(player, target)
             if target then
-                local store = datastore.combined.player(target, 'Data', 'Rank')
-                for _, rank in ipairs{ 'dev', 'admin', 'user' } do
+                local store = datastore.combined.player(target, "Data", "Rank")
+                for _, rank in ipairs{ "dev", "admin", "user" } do
                     if newRank:lower() == rank then
-                        store:set('Rank', rank:upper())
+                        store:set("Rank", rank:upper())
                     end
                 end
             end
@@ -70,15 +70,15 @@ commands.set_rank = {
 }
 
 commands.kill = {
-    prefix = { 'kill' },
-    args = { '<number/string>' },
-    rank = 'ADMIN',
+    prefix = { "kill" },
+    args = { "<number/string>" },
+    rank = "ADMIN",
     callback = function(player, target)
         target = getPlayer(player, target)
         if target then
             local char = target.Character
             if char then
-                local head = char:FindFirstChild('Head')
+                local head = char:FindFirstChild("Head")
                 if head then
                     head:Destroy()
                 end
@@ -88,11 +88,11 @@ commands.kill = {
 }
 
 commands.fly = {
-    prefix = { 'fly' },
+    prefix = { "fly" },
     args = {},
-    rank = 'ADMIN',
+    rank = "ADMIN",
     callback = function(player)
-        local flyScript = player.PlayerGui:FindFirstChild('flight')
+        local flyScript = player.PlayerGui:FindFirstChild("flight")
         if flyScript then
             local cleanup = script.fly.cleanup:Clone()
             cleanup.Parent = player.PlayerGui
@@ -105,17 +105,17 @@ commands.fly = {
 }
 
 commands.tp_to = {
-    prefix = { 'tpto' },
-    args = { '<number/string>', '<number/string>' },
-    rank = 'ADMIN',
+    prefix = { "tpto" },
+    args = { "<number/string>", "<number/string>" },
+    rank = "ADMIN",
     callback = function(_, playerFrom, playerTo)
         playerFrom = getPlayer(playerFrom)
         playerTo = getPlayer(playerTo)
         if playerFrom ~= playerTo then
             local charFrom = playerFrom.Character or playerFrom.CharacterAdded:Wait()
-            local hrtFrom = charFrom:FindFirstChild('HumanoidRootPart')
+            local hrtFrom = charFrom:FindFirstChild("HumanoidRootPart")
             local charTo = playerTo.Character or playerTo.CharacterAdded:Wait()
-            local hrtTo = charTo:FindFirstChild('HumanoidRootPart')
+            local hrtTo = charTo:FindFirstChild("HumanoidRootPart")
             if hrtFrom and hrtTo then
                 hrtFrom.CFrame = hrtTo.CFrame
             end
@@ -124,9 +124,9 @@ commands.tp_to = {
 }
 
 commands.kick = {
-    prefix = { 'kick' },
-    args = { '<number/string>', '<string>' },
-    rank = 'ADMIN',
+    prefix = { "kick" },
+    args = { "<number/string>", "<string>" },
+    rank = "ADMIN",
     callback = function(player, target, reason)
         target = getPlayer(player, target)
         if target ~= player then
@@ -136,41 +136,41 @@ commands.kick = {
 }
 
 commands.ban = {
-    prefix = { 'ban' },
-    args = { '<number/string>', '<string>' },
-    rank = 'DEV',
+    prefix = { "ban" },
+    args = { "<number/string>", "<string>" },
+    rank = "DEV",
     callback = function(player, target, reason)
         target = getPlayer(player, target)
         if target  ~= player then
-            local store = datastore.combined.player(player, 'Data', 'Banned')
+            local store = datastore.combined.player(player, "Data", "Banned")
             store:update(function(data)
                 data.Banned = true
-                data.Info = reason or 'No reason specified!'
+                data.Info = reason or "No reason specified!"
             end)
         end
     end
 }
 
 commands.unban = {
-    prefix = { 'unban' },
-    args = { '<number/string>', '<string>' },
-    rank = 'DEV',
+    prefix = { "unban" },
+    args = { "<number/string>", "<string>" },
+    rank = "DEV",
     callback = function(player, target)
         target = getPlayer(player, target)
         if target  ~= player then
-            local store = datastore.global('Banned', player.UserId)
+            local store = datastore.global("Banned", player.UserId)
             store:update(function(data)
                 data.Banned = false
-                data.Info = ''
+                data.Info = ""
             end)
         end
     end
 }
 
 commands.printCF = {
-    prefix = { 'printCF' },
-    args = { '<number>', '<number>', '<number>' },
-    rank = 'USER',
+    prefix = { "printCF" },
+    args = { "<number>", "<number>", "<number>" },
+    rank = "USER",
     callback = function(_, x, y, z)
         printCF(CFrame.Angles(math.rad(x), math.rad(y), math.rad(z)))
     end

@@ -4,11 +4,12 @@
         "**/.vscode": true
     },
     "workbench.tree.indent": 20,
-    "workbench.colorTheme": "Atom One Dark",
 
     "workbench.iconTheme": "vscode-icons",
+    "task.autoDetect": "on",
 
     "vsicons.associations.files": [
+    
         {
             "icon": "lua_server",
             "extensions": ["server.lua"],
@@ -80,6 +81,7 @@
             "format": "png"
         }
     ],
+
     "vsicons.associations.folders": [
         {
             "icon": "game",
@@ -127,6 +129,88 @@
             "format": "png"
         }
     ],
+
+    "editor.tokenColorCustomizations": {
+        "textMateRules": [
+            {
+                "scope": [
+                    "keyword.control",
+                    "variable.language.self.lua",
+                    "keyword.local.lua"
+                ],
+                "settings": {
+                    "foreground": "#F86D7C"
+                }
+            },
+            {
+                "scope": [
+                    "constant.numeric",
+                    "constant.language.nil.lua",
+                    "constant.language.boolean.true.lua",
+                    "constant.language.boolean.false.lua"
+                ],
+                "settings": {
+                    "foreground": "#FFC600"
+                }
+            },
+            {
+                "scope": [
+                    "entity.name.function.lua"
+                ],
+                "settings": {
+                    "foreground": "#FDFBAC"
+                }
+            },
+            {
+                "scope": [
+                    "constant.language",
+                    "support.function.lua",
+                    "entity.name.type.class",
+                    "entity.name.type",
+                    "support.function.library.lua",
+                    "support.type.lua"
+                ],
+                "settings": {
+                    "foreground": "#76D6F7"
+                }
+            },
+            {
+                "scope": "variable.property.lua",
+                "settings": {
+                    "foreground": "#58A1F1"
+                }
+            },
+            {
+                "scope": [
+                    "comment.line.double-dash.lua",
+                    "comment.block.lua"
+                ],
+                "settings": {
+                    "foreground": "#666666"
+                }
+            },
+            {
+                "scope": [
+                    "string.quoted.single.lua",
+                    "string.quoted.double.lua"
+                ],
+                "settings": {
+                    "foreground": "#ADF195"
+                }
+            },
+            {
+                "scope": [
+                    "variable",
+                    "entity.other.attribute",
+                    "variable.other.constant.lua"
+                ],
+                "settings": {
+                    "foreground": "#CCCCCC"
+                }
+            },
+        ]
+    },
+
     "vsicons.associations.folderDefault.folder": {
         "icon": "studio",
         "format": "png"
@@ -134,5 +218,5 @@
     "Lua.diagnostics.disable": [
         "unused-function",
         "unused-local"
-    ]
+    ],
 }

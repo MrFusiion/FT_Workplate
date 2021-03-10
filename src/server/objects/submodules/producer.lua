@@ -1,5 +1,5 @@
 --@initApi
---@Class: 'Producer'
+--@Class: "Producer"
 local producer = {}
 producer.__index = producer
 
@@ -8,29 +8,29 @@ producer.__tostring = function(self)
 end
 
 --[[@Function: {
-    'class' : 'Producer',
-    'name' : 'new',
-    'args' : { 'produceAmount' : 'number', 'maxBuffer' : 'number', 'speed' : 'number' },
-    'return' : 'Producer',
-    'info' : "Creates a new Producer."
+    "class" : "Producer",
+    "name" : "new",
+    "args" : { "produceAmount" : "number", "maxBuffer" : "number", "speed" : "number" },
+    "return" : "Producer",
+    "info" : "Creates a new Producer."
 }
 @Properties: {
-    'class' : 'Producer',
-    'props' : [{
-        'name' : 'ProduceAmount',
-        'type' : 'number'
+    "class" : "Producer",
+    "props" : [{
+        "name" : "ProduceAmount",
+        "type" : "number"
     }, {
-        'name' : 'Buffer',
-        'type' : 'number'
+        "name" : "Buffer",
+        "type" : "number"
     }, {
-        'name' : 'MaxBuffer',
-        'type' : 'number'
+        "name" : "MaxBuffer",
+        "type" : "number"
     }, {
-        'name' : 'Speed',
-        'type' : 'number'
+        "name" : "Speed",
+        "type" : "number"
     }, {
-        'name' : 'Running',
-        'type' : 'boolean'
+        "name" : "Running",
+        "type" : "boolean"
     }]
 }]]
 function producer.new(produceAmount, maxBuffer, speed)
@@ -43,31 +43,31 @@ function producer.new(produceAmount, maxBuffer, speed)
 end
 
 --[[@Function: {
-    'class' : 'Producer',
-    'name' : 'generate',
-    'args' : { 'self' : 'Producer' },
-    'info' : "Adds the produceAmount to the buffer."
+    "class" : "Producer",
+    "name" : "generate",
+    "args" : { "self" : "Producer" },
+    "info" : "Adds the produceAmount to the buffer."
 }]]
 function producer.generate(self)
     self.Buffer = math.min(self.MaxBuffer, self.Buffer + self.ProduceAmount)
 end
 
 --[[@Function: {
-    'class' : 'Producer',
-    'name' : 'setProduceAmount',
-    'args' : { 'self' : 'Producer', 'amount' : 'number' },
-    'info' : "Sets the produceAmount to amount."
+    "class" : "Producer",
+    "name" : "setProduceAmount",
+    "args" : { "self" : "Producer", "amount" : "number" },
+    "info" : "Sets the produceAmount to amount."
 }]]
 function producer.setProduceAmount(self, amount)
     self.ProduceAmount = math.max(0, amount)
 end
 
 --[[@Function: {
-    'class' : 'Producer',
-    'name' : 'take',
-    'args' : { 'self' : 'Producer', 'amount' : 'number' },
-    'return' : 'boolean',
-    'info' : "Takes the amount of the buffer."
+    "class" : "Producer",
+    "name" : "take",
+    "args" : { "self" : "Producer", "amount" : "number" },
+    "return" : "boolean",
+    "info" : "Takes the amount of the buffer."
 }]]
 function producer.take(self, amount)
     if self.Buffer >= amount then
@@ -78,32 +78,32 @@ function producer.take(self, amount)
 end
 
 --[[@Function: {
-    'class' : 'Producer',
-    'name' : 'get',
-    'args' : { 'self' : 'Producer' },
-    'return' : 'number',
-    'info' : "Returns the buffer amount."
+    "class" : "Producer",
+    "name" : "get",
+    "args" : { "self" : "Producer" },
+    "return" : "number",
+    "info" : "Returns the buffer amount."
 }]]
 function producer.get(self)
     return self.Buffer
 end
 
 --[[@Function: {
-    'class' : 'Producer',
-    'name' : 'getFullness',
-    'args' : { 'self' : 'Producer' },
-    'return' : 'number',
-    'info' : "Returns a value between 0 and 1 that describes the current used maxBuffer."
+    "class" : "Producer",
+    "name" : "getFullness",
+    "args" : { "self" : "Producer" },
+    "return" : "number",
+    "info" : "Returns a value between 0 and 1 that describes the current used maxBuffer."
 }]]
 function producer.getFullness(self)
     return self.Buffer / self.MaxBuffer
 end
 
 --[[@Function: {
-    'class' : 'Producer',
-    'name' : 'startLoop',
-    'args' : { 'self' : 'Producer' },
-    'info' : "Starts the generate loop."
+    "class" : "Producer",
+    "name" : "startLoop",
+    "args" : { "self" : "Producer" },
+    "info" : "Starts the generate loop."
 }]]
 function producer.startLoop(self)
     if self.Running then return end
@@ -117,10 +117,10 @@ function producer.startLoop(self)
 end
 
 --[[@Function: {
-    'class' : 'Producer',
-    'name' : 'stopLoop',
-    'args' : { 'self' : 'Producer' },
-    'info' : "Stops the generate loop."
+    "class" : "Producer",
+    "name" : "stopLoop",
+    "args" : { "self" : "Producer" },
+    "info" : "Stops the generate loop."
 }]]
 function producer.stopLoop(self)
     self.Running = false

@@ -1,5 +1,5 @@
 --@initApi
---@Class: 'Settings'
+--@Class: "Settings"
 local modules = require(script.Parent)
 local class = modules.get("class")
 
@@ -8,18 +8,18 @@ settings.__index = settings
 settings.__Static = true
 
 --[[@Function: {
-    'class' : 'Settings',
-    'name' : 'new',
-    'args' : { 'folder' : '(Instance)Folder/Configuration' },
-    'return' : 'Settings',
-    'info' : 'Creates a new Settings object.'
+    "class" : "Settings",
+    "name" : "new",
+    "args" : { "folder" : "(Instance)Folder/Configuration" },
+    "return" : "Settings",
+    "info" : "Creates a new Settings object."
 }
 @Properties: {
-    'class' : 'Settings',
-    'props' : [{
-        'name' : '__Folder',
-        'type' : '(Instance)Folder/Configuration',
-        'info' : '[Private]'
+    "class" : "Settings",
+    "props" : [{
+        "name" : "__Folder",
+        "type" : "(Instance)Folder/Configuration",
+        "info" : "[Private]"
     }]
 }]]
 function settings.new(folder)
@@ -31,11 +31,11 @@ function settings.new(folder)
 end
 
 --[[@Function: {
-    'class' : 'Settings',
-    'name' : 'get',
-    'args' : { 'self' : 'Settings', 'name' : 'string' },
-    'return' : 'any',
-    'info' : 'Gets the value if a setting in the folder.'
+    "class" : "Settings",
+    "name" : "get",
+    "args" : { "self" : "Settings", "name" : "string" },
+    "return" : "any",
+    "info" : "Gets the value if a setting in the folder."
 }]]
 function settings.get(self, name)
     settings:memberFunctionAssert(self)
@@ -53,10 +53,10 @@ function settings.get(self, name)
 end
 
 --[[@Function: {
-    'class' : 'Settings',
-    'name' : 'ifEnabled',
-    'args' : { 'self' : 'Settings', 'name' : 'string', 'cb' : 'function' },
-    'info' : 'Calls the callback method if setting in the folder is enabled.'
+    "class" : "Settings",
+    "name" : "ifEnabled",
+    "args" : { "self" : "Settings", "name" : "string", "cb" : "function" },
+    "info" : "Calls the callback method if setting in the folder is enabled."
 }]]
 function settings.ifEnabled(self, name, cb)
     settings:memberFunctionAssert(self)
@@ -69,10 +69,10 @@ function settings.ifEnabled(self, name, cb)
 end
 
 --[[@Function: {
-    'class' : 'Settings',
-    'name' : 'ifEnabledPrintf',
-    'args' : { 'self' : 'Settings', 'name' : 'string', 'msg' : 'string', '...' : 'any' },
-    'info' : 'Prints the message if setting in the folder is enabled.'
+    "class" : "Settings",
+    "name" : "ifEnabledPrintf",
+    "args" : { "self" : "Settings", "name" : "string", "msg" : "string", "..." : "any" },
+    "info" : "Prints the message if setting in the folder is enabled."
 }]]
 function settings.ifEnabledPrintf(self, name, msg, ...)
     settings:memberFunctionAssert(self)
@@ -86,10 +86,10 @@ function settings.ifEnabledPrintf(self, name, msg, ...)
 end
 
 --[[@Function: {
-    'class' : 'Settings',
-    'name' : 'updateConnect',
-    'args' : { 'self' : 'Settings', 'name' : 'string', 'callback' : 'function',},
-    'info' : 'Connects a function to the value's update event.' 
+    "class" : "Settings",
+    "name" : "updateConnect",
+    "args" : { "self" : "Settings", "name" : "string", "callback" : "function",},
+    "info" : "Connects a function to the value"s update event." 
 }]]
 function settings.updateConnect(self, name, callback)
     settings:memberFunctionAssert(self)
@@ -98,7 +98,7 @@ function settings.updateConnect(self, name, callback)
 
     local setting = self.__Folder:FindFirstChild(name)
     if setting then
-        setting:GetPropertyChangedSignal('Value'):Connect(callback)
+        setting:GetPropertyChangedSignal("Value"):Connect(callback)
     end
 end
 

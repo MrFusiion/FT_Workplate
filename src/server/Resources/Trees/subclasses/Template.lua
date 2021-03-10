@@ -2,7 +2,7 @@ local treeClass = require(script.Parent.Parent.TreeClass)
 
 local treeType = setmetatable({}, treeClass)
 treeType.__index = treeType
-treeType.Name = ''
+treeType.Name = ""
 --===============================================================================================================--
 --===============================================/     Stats     /===============================================--
 
@@ -15,21 +15,21 @@ treeType.Hardness = 0
 --===============================================================================================================--
 --===============================================/   Apearence   /===============================================--
 
-treeType.WoodMaterial = 'Wood'
-treeType.WoodColor = BrickColor.new('')
+treeType.WoodMaterial = "Wood"
+treeType.WoodColor = BrickColor.new("")
 
-treeType.PlankMaterial = 'WoodPlanks'
-treeType.PlankColor = BrickColor.new('')
+treeType.PlankMaterial = "WoodPlanks"
+treeType.PlankColor = BrickColor.new("")
 
-treeType.BarkMaterial = 'Concrete'
-treeType.BarkColor = BrickColor.new('')
+treeType.BarkMaterial = "Concrete"
+treeType.BarkColor = BrickColor.new("")
 
 treeType.BarkThickness = .02
 
 treeType.LeafClass = nil
 
 treeType.LeafColors={
-	{material='Grass', color=BrickColor.new('') },
+	{material="Grass", color=BrickColor.new("") },
 }
 
 treeType.NumLeafParts = { min=1, max=1 }
@@ -41,7 +41,6 @@ treeType.LeafAngle = {
 
 treeType.LeafSizeFactor = {
 	X = { min=3, max=3.5 }, --Leaf size as a factor of the thickness of its branch
-	Y = { min=.75, max=1 },
 	Y = { min=.75, max=1 },
 	Z = { min=3, max=3.5 }
 }
@@ -59,7 +58,7 @@ treeType.GrowInterval = { min=0, max=0 }--Seconds between :Grow() is called
 
 treeType.MaxGrowCalls = { min=0, max=0 }--Max distance from bottom of trunk to tip of farthest extremety
 
-treeType.NewBranchCutoff = 0 --Don't create a new section if we are within this many grow calls of maximum TODO rename
+treeType.NewBranchCutoff = 0 --Don"t create a new section if we are within this many grow calls of maximum TODO rename
 treeType.LifetimePerVolume = 0 --Tree will die after this much time after it stops growing
 treeType.LeafDropTime = 0 --Tree will drop leaves at this time before death
 

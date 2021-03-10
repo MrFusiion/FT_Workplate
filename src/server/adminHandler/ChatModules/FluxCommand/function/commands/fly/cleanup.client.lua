@@ -1,9 +1,9 @@
 local Player = game.Players.LocalPlayer
 local Character = Player.Character or Player.CharacterAdded:Wait()
 local HumaoidRP = Character:WaitForChild("HumanoidRootPart")
-local CAS = game:GetService('ContextActionService')
+local CAS = game:GetService("ContextActionService")
 
-for _, actionName in ipairs{ 'FlyForward', 'FlyBack', 'FlyRight', 'FlyLeft' } do
+for _, actionName in ipairs{ "FlyForward", "FlyBack", "FlyRight", "FlyLeft" } do
     CAS:UnbindAction(actionName)
 end
 

@@ -4,7 +4,7 @@
 	Configuration can only occur once, and should only be done by an application
 	using Roact, not a library.
 
-	Any keys that aren't recognized will cause errors. Configuration is only
+	Any keys that aren"t recognized will cause errors. Configuration is only
 	intended for configuring Roact itself, not extensions or libraries.
 
 	Configuration is expected to be set immediately after loading Roact. Setting
@@ -16,7 +16,7 @@
 local defaultConfig = {
 	-- Enables asserts for internal Roact APIs. Useful for debugging Roact itself.
 	["internalTypeChecks"] = false,
-	-- Enables stricter type asserts for Roact's public API.
+	-- Enables stricter type asserts for Roact"s public API.
 	["typeChecks"] = false,
 	-- Enables storage of `debug.traceback()` values on elements for debugging.
 	["elementTracing"] = false,
@@ -48,7 +48,7 @@ function Config.new()
 		end
 	})
 
-	-- We manually bind these methods here so that the Config's methods can be
+	-- We manually bind these methods here so that the Config"s methods can be
 	-- used without passing in self, since they eventually get exposed on the
 	-- root Roact object.
 	self.set = function(...)
@@ -70,7 +70,7 @@ end
 
 function Config:set(configValues)
 	-- Validate values without changing any configuration.
-	-- We only want to apply this configuration if it's valid!
+	-- We only want to apply this configuration if it"s valid!
 	for key, value in pairs(configValues) do
 		if defaultConfig[key] == nil then
 			local message = (

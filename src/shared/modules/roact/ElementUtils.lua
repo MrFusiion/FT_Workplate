@@ -8,7 +8,7 @@ end
 local ElementUtils = {}
 
 --[[
-	A signal value indicating that a child should use its parent's key, because
+	A signal value indicating that a child should use its parent"s key, because
 	it has no key of its own.
 
 	This occurs when you return only one element from a function component or
@@ -68,7 +68,7 @@ function ElementUtils.iterateElements(elementOrElements)
 end
 
 --[[
-	Gets the child corresponding to a given key, respecting Roact's rules for
+	Gets the child corresponding to a given key, respecting Roact"s rules for
 	children. Specifically:
 	* If `elements` is nil or a boolean, this will return `nil`, regardless of
 		the key given.

@@ -12,7 +12,7 @@ tag.__chatService = nil
 ]]
 function tag.new(name, color, props)
     if not tag.__chatService then
-        tag.__chatService = require(game:GetService('ServerScriptService'):WaitForChild("ChatServiceRunner"):WaitForChild("ChatService"))
+        tag.__chatService = require(game:GetService("ServerScriptService"):WaitForChild("ChatServiceRunner"):WaitForChild("ChatService"))
     end
 
     local newTag = setmetatable({}, tag)
@@ -31,17 +31,17 @@ function tag.apply(self, player)
         until speaker
 
         speaker:SetExtraData("Tags", {{TagText = self.Name,TagColor = self.Color}} )
-        if typeof(self.Props['NameColor']) == 'Color3' then
-            speaker:SetExtraData("NameColor", self.Props['NameColor'])
+        if typeof(self.Props["NameColor"]) == "Color3" then
+            speaker:SetExtraData("NameColor", self.Props["NameColor"])
         end
-        if typeof(self.Props['ChatColor']) == 'Color3' then
-            speaker:SetExtraData("ChatColor", self.Props['ChatColor'])
+        if typeof(self.Props["ChatColor"]) == "Color3" then
+            speaker:SetExtraData("ChatColor", self.Props["ChatColor"])
         end
-        if typeof(self.Props['Font']) == 'EnumItem' then
-            speaker:SetExtraData("Font", self.Props['Font'])
+        if typeof(self.Props["Font"]) == "EnumItem" then
+            speaker:SetExtraData("Font", self.Props["Font"])
         end
-        if typeof(self.Props['TextSize']) == 'number' then
-            speaker:SetExtraData("TextSize", self.Props['TextSize'])
+        if typeof(self.Props["TextSize"]) == "number" then
+            speaker:SetExtraData("TextSize", self.Props["TextSize"])
         end
     end)
 end

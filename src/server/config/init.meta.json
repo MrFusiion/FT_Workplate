@@ -1,3 +1,6 @@
 {
-    "className" : "Configuration"
+    "className" : "Configuration",
+    "properties" : {
+        "Name" : "Config"
+    }
 }

@@ -1,27 +1,27 @@
-local propertyRemote = game:GetService('ReplicatedStorage')
-    :WaitForChild('remote')
-    :WaitForChild('property')
+local propertyRemote = game:GetService("ReplicatedStorage")
+    :WaitForChild("remote")
+    :WaitForChild("property")
 
-local re_ClaimProperty =    propertyRemote:WaitForChild('ClaimProperty')
-local rf_GetPropertyOwner = propertyRemote:WaitForChild('GetPropertyOwner')
+local re_ClaimProperty =    propertyRemote:WaitForChild("ClaimProperty")
+local rf_GetPropertyOwner = propertyRemote:WaitForChild("GetPropertyOwner")
 
-local client = require(game:GetService('StarterPlayer'):WaitForChild('StarterPlayerScripts'):WaitForChild('modules'))
-local playerUtils = client.get('playerUtils')
+local client = require(game:GetService("StarterPlayer"):WaitForChild("StarterPlayerScripts"):WaitForChild("Modules"))
+local playerUtils = client.get("playerUtils")
 
-local propertyFrame =   playerUtils.getPlayerGui():WaitForChild('Hud'):WaitForChild('Property')
-local modeV =           propertyFrame:WaitForChild('Mode')
+local propertyFrame =   playerUtils.getPlayerGui():WaitForChild("Hud"):WaitForChild("Property")
+local modeV =           propertyFrame:WaitForChild("Mode")
 
-local proximityPrompts = playerUtils:getPlayerGui():WaitForChild('ProximityPrompts')
-local prompt = proximityPrompts:WaitForChild('Interact')
+local proximityPrompts = playerUtils:getPlayerGui():WaitForChild("ProximityPrompts")
+local prompt = proximityPrompts:WaitForChild("Interact")
 
-local cycleProperty = require(script.Parent:WaitForChild('cycleProperty'))
+local cycleProperty = require(script.Parent:WaitForChild("cycleProperty"))
 local claimProperty = {}
 
 function claimProperty.start(properties)
     prompt.Enabled = false
     claimProperty.Running = true
     propertyFrame.Visible = true
-    modeV.Value = 'Claim'
+    modeV.Value = "Claim"
 
     claimProperty.diedConnection = playerUtils.onDead(function()
         claimProperty.stop()

@@ -13,11 +13,11 @@ local InternalData = Symbol.named("InternalData")
 	The reconciler is the mechanism in Roact that constructs the virtual tree
 	that later gets turned into concrete objects by the renderer.
 
-	Roact's reconciler is constructed with the renderer as an argument, which
+	Roact"s reconciler is constructed with the renderer as an argument, which
 	enables switching to different renderers for different platforms or
 	scenarios.
 
-	When testing the reconciler itself, it's common to use `NoopRenderer` with
+	When testing the reconciler itself, it"s common to use `NoopRenderer` with
 	spies replacing some methods. The default (and only) reconciler interface
 	exposed by Roact right now uses `RobloxRenderer`.
 ]]
@@ -404,7 +404,7 @@ local function createReconciler(renderer)
 	--[[
 		Unmounts the virtual tree, freeing all of its resources.
 
-		No further operations should be done on the tree after it's been
+		No further operations should be done on the tree after it"s been
 		unmounted, as indicated by its the `mounted` field.
 	]]
 	local function unmountVirtualTree(tree)

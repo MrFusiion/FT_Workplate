@@ -2,7 +2,7 @@ local treeClass = require(script.Parent.Parent.TreeClass)
 
 local treeType = setmetatable({}, treeClass)
 treeType.__index = treeType
-treeType.Name = 'Ice'
+treeType.Name = "Ice"
 --===============================================================================================================--
 --===============================================/     Stats     /===============================================--
 
@@ -15,20 +15,20 @@ treeType.Hardness = 7
 --===============================================================================================================--
 --===============================================/   Apearence   /===============================================--
 
-treeType.WoodMaterial = 'Foil'
-treeType.WoodColor = BrickColor.new('Light blue')
-treeType.PlankMaterial = 'WoodPlanks'
-treeType.PlankColor = BrickColor.new('Light blue')
-treeType.BarkMaterial = 'Ice'
-treeType.BarkColor = BrickColor.new('Fog')
+treeType.WoodMaterial = "Foil"
+treeType.WoodColor = BrickColor.new("Light blue")
+treeType.PlankMaterial = "WoodPlanks"
+treeType.PlankColor = BrickColor.new("Light blue")
+treeType.BarkMaterial = "Ice"
+treeType.BarkColor = BrickColor.new("Fog")
 
 treeType.BarkThickness = .02
 
 treeType.LeafClass = nil
 
 treeType.LeafColors={
-	{ transparency = { min=.5, max=.8 }, material='Glass', color=BrickColor.new("Pastel light blue") },
-	{ transparency = { min=.2, max=.3 }, material='Ice', color=BrickColor.new("Baby blue") }
+	{ transparency = { min=.5, max=.8 }, material="Glass", color=BrickColor.new("Pastel light blue") },
+	{ transparency = { min=.2, max=.3 }, material="Ice", color=BrickColor.new("Baby blue") }
 }
 
 treeType.NumLeafParts = { min=1, max=1 }
@@ -57,7 +57,7 @@ treeType.GrowInterval = { min=10, max=15 }--Seconds between :Grow() is called
 
 treeType.MaxGrowCalls = { min=40, max=70 }--Max distance from bottom of trunk to tip of farthest extremety
 
-treeType.NewBranchCutoff = 10 --Don't create a new section if we are within this many grow calls of maximum TODO rename
+treeType.NewBranchCutoff = 10 --Don"t create a new section if we are within this many grow calls of maximum TODO rename
 treeType.LifetimePerVolume = 45 --Tree will die after this much time after it stops growing
 treeType.LeafDropTime = 80 --Tree will drop leaves at this time before death
 

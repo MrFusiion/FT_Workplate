@@ -1,6 +1,5 @@
-local shared = require(game:GetService('ReplicatedStorage'):WaitForChild('modules'))
-local random = shared.get('random').new(nil, false)
-
+local shared = require(game:GetService("ReplicatedStorage"):WaitForChild("Modules"))
+local random = shared.get("random")
 local leaves = {}
 leaves.__index = leaves
 
@@ -13,8 +12,8 @@ function randomRangeInteger(value : table) : int
 end
 
 function leaves:init(tree)
-    self.Main = Instance.new('Part')
-    self.Main.Name = 'LeafPart'
+    self.Main = Instance.new("Part")
+    self.Main.Name = "LeafPart"
     self.Main.Anchored = true
     self.Main.CanCollide = false
 

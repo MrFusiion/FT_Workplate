@@ -1,10 +1,10 @@
-local TS = game:GetService('TweenService')
+local TS = game:GetService("TweenService")
 local PPS = game:GetService("ProximityPromptService")
 
 local core = require(script.Parent.Parent)
-local platform = core.client.get('platform')
+local platform = core.client.get("platform")
 
-local element = core.roact.Component:extend('Interact')
+local element = core.roact.Component:extend("Interact")
 
 function element:init()
     self:setState({
@@ -20,31 +20,31 @@ function element:render()
     self.TweensRelease = {}
     self.TweensFadeIn = {}
     self.TweensFadeOut = {}
-    return core.roact.createElement('BillboardGui', {
+    return core.roact.createElement("BillboardGui", {
         Adornee = self.state.prompt.Parent,
         AlwaysOnTop = true,
         Active = true,
         Size = UDim2.fromOffset(core.scale:getOffset(100), core.scale:getOffset(100))
     }, {
-        ['InputFrame'] = core.roact.createElement('Frame', {
+        ["InputFrame"] = core.roact.createElement("Frame", {
             BackgroundTransparency = 1,
             Size = UDim2.fromScale(1, 1),
             SizeConstraint = Enum.SizeConstraint.RelativeYY
         }, {
-            ['ResizeFrame'] = core.roact.createElement('Frame', {
+            ["ResizeFrame"] = core.roact.createElement("Frame", {
                 AnchorPoint = Vector2.new(.5, .5),
                 BackgroundTransparency = 1,
                 Position = UDim2.fromScale(.5, .5),
                 Size = UDim2.fromScale(1, 1)
             }, {
-                ['Scale'] = core.roact.createElement('UIScale', {
+                ["Scale"] = core.roact.createElement("UIScale", {
                     [core.roact.Ref] = function(rbx)
                         if not rbx then return end
                         table.insert(self.TweensPress, TS:Create(rbx, self.TweenInfoFast, { Scale = 1.3 }))
                         table.insert(self.TweensRelease, TS:Create(rbx, self.TweenInfoFast, { Scale = 1 }))
                     end
                 }),
-                ['CONSOLE'] = core.roact.createElement('ImageLabel', {
+                ["CONSOLE"] = core.roact.createElement("ImageLabel", {
                     AnchorPoint = Vector2.new(.5, .5),
                     BackgroundTransparency = 1,
                     Position = UDim2.fromScale(.5, .5),
@@ -58,13 +58,13 @@ function element:render()
                         table.insert(self.TweensFadeIn, TS:Create(rbx, self.TweenInfoQuick, { ImageTransparency = 0 }))
                     end
                 }),
-                ['TOUCH'] = core.roact.createElement('ImageLabel', {
+                ["TOUCH"] = core.roact.createElement("ImageLabel", {
                     AnchorPoint = Vector2.new(.5, .5),
                     BackgroundTransparency = 1,
                     Position = UDim2.fromScale(.5, .5),
                     Size = UDim2.fromScale(1, 1),
                     Visible = self.state.inputType == Enum.ProximityPromptInputType.Touch,
-                    Image = 'rbxassetid://4952527150',
+                    Image = "rbxassetid://4952527150",
                     ImageTransparency = 1,
                     [core.roact.Ref] = function(rbx)
                         if not rbx then return end
@@ -72,14 +72,14 @@ function element:render()
                         table.insert(self.TweensFadeIn, TS:Create(rbx, self.TweenInfoQuick, { ImageTransparency = 0 }))
                     end
                 }, {
-                    ['Icon'] = core.roact.createElement('ImageLabel', {
+                    ["Icon"] = core.roact.createElement("ImageLabel", {
                         AnchorPoint = Vector2.new(.5, .5),
                         BackgroundTransparency = 1,
                         Position = UDim2.fromScale(.5, .5),
                         Size = UDim2.fromScale(.5, .5),
                         ZIndex = 2,
                         ImageTransparency = 1,
-                        Image = 'rbxasset://textures/ui/Controls/TouchTapIcon.png',
+                        Image = "rbxasset://textures/ui/Controls/TouchTapIcon.png",
                         [core.roact.Ref] = function(rbx)
                             if not rbx then return end
                             table.insert(self.TweensFadeOut, TS:Create(rbx, self.TweenInfoQuick, { ImageTransparency = 1 }))
@@ -87,21 +87,21 @@ function element:render()
                         end
                     })
                 }),
-                ['PC'] = core.roact.createElement('ImageLabel', {
+                ["PC"] = core.roact.createElement("ImageLabel", {
                     AnchorPoint = Vector2.new(.5, .5),
                     BackgroundTransparency = 1,
                     Position = UDim2.fromScale(.5, .5),
                     Size = UDim2.fromScale(1, 1),
                     Visible = self.state.inputType == Enum.ProximityPromptInputType.Keyboard,
                     ImageTransparency = 1,
-                    Image = 'rbxassetid://4952527150',
+                    Image = "rbxassetid://4952527150",
                     [core.roact.Ref] = function(rbx)
                         if not rbx then return end
                         table.insert(self.TweensFadeOut, TS:Create(rbx, self.TweenInfoQuick, { ImageTransparency = 1 }))
                         table.insert(self.TweensFadeIn, TS:Create(rbx, self.TweenInfoQuick, { ImageTransparency = 0 }))
                     end
                 }, {
-                    ['Key'] = core.roact.createElement('TextLabel', {
+                    ["Key"] = core.roact.createElement("TextLabel", {
                         AnchorPoint = Vector2.new(.5, .5),
                         BackgroundTransparency = 1,
                         Position = UDim2.fromScale(.5, .5),
@@ -109,7 +109,7 @@ function element:render()
                         ZIndex = 2,
                         Font = Enum.Font.GothamSemibold,
                         Text = platform.KeyCodeToText(self.state.prompt.KeyboardKeyCode),
-                        TextSize = string.len(platform.KeyCodeToText(self.state.prompt.KeyboardKeyCode) or '') > 2 and 20 or 30,
+                        TextSize = string.len(platform.KeyCodeToText(self.state.prompt.KeyboardKeyCode) or "") > 2 and 20 or 30,
                         TextTransparency = 1,
                         TextColor3 = Color3.new(.8, .8, .8),
                         TextXAlignment = Enum.TextXAlignment.Center,
@@ -121,11 +121,11 @@ function element:render()
                     })
                 })
             }),
-            ['Button'] = core.roact.createElement('TextButton', {
+            ["Button"] = core.roact.createElement("TextButton", {
                 BackgroundTransparency = 1,
                 Size = UDim2.fromScale(1, 1),
                 ZIndex = 3,
-                Text = '',
+                Text = "",
                 [core.roact.Ref] = function(rbx) self.Button = rbx end
             })
         })

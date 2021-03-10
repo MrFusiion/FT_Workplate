@@ -1,12 +1,12 @@
-local shared = require(game:GetService('ReplicatedStorage'):WaitForChild('modules'))
-local event = shared.get('event')
-local settings = shared.get('settings')
+local shared = require(game:GetService("ReplicatedStorage"):WaitForChild("Modules"))
+local event = shared.get("event")
+local settings = shared.get("settings")
 
-local datastore = require(script.Parent:WaitForChild('datastore'))
+local datastore = require(script.Parent:WaitForChild("datastore"))
 
 local combined = {}
 combined.__meta = {}
-combined.__meta.__type = 'Combined'
+combined.__meta.__type = "Combined"
 combined.__meta.__index = combined.__meta
 
 local combined_cache = {}
@@ -36,12 +36,12 @@ function combined.new(name, scope, mainKey, ...)
 end
 
 function combined.player(player, mainKey, ...)
-    local slot = player:WaitForChild('Slot').Value
-    return combined.new('Slot_'..slot, 'User_'..player.UserId, mainKey, ...)
+    local slot = player:WaitForChild("Slot").Value
+    return combined.new("Slot_"..slot, "User_"..player.UserId, mainKey, ...)
 end
 
 function combined.global(name, mainKey, ...)
-    return combined.new(name, 'global', mainKey, ...)
+    return combined.new(name, "global", mainKey, ...)
 end
 
 function combined.__meta.addKey(self, key)

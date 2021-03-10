@@ -2,7 +2,7 @@ local treeClass = require(script.Parent.Parent.TreeClass)
 
 local treeType = setmetatable({}, treeClass)
 treeType.__index = treeType
-treeType.Name = 'Oak'
+treeType.Name = "Oak"
 --===============================================================================================================--
 --===============================================/     Stats     /===============================================--
 
@@ -15,20 +15,20 @@ treeType.Hardness = 5.2
 --===============================================================================================================--
 --===============================================/   Apearence   /===============================================--
 
-treeType.WoodMaterial = 'Wood'
-treeType.WoodColor = BrickColor.new('Cork')
-treeType.PlankMaterial = 'WoodPlanks'
-treeType.PlankColor = BrickColor.new('Cork')
-treeType.BarkMaterial = 'Concrete'
-treeType.BarkColor = BrickColor.new('Pine Cone')
+treeType.WoodMaterial = "Wood"
+treeType.WoodColor = BrickColor.new("Cork")
+treeType.PlankMaterial = "WoodPlanks"
+treeType.PlankColor = BrickColor.new("Cork")
+treeType.BarkMaterial = "Concrete"
+treeType.BarkColor = BrickColor.new("Pine Cone")
 
 treeType.BarkThickness = 0.095
 
 treeType.LeafClass = nil
 
 treeType.LeafColors={
-	{ material='Grass', color=BrickColor.new("Bright green")	},
-	{ material='Grass', color=BrickColor.new("Dark green")	}
+	{ material="Grass", color=BrickColor.new("Bright green")	},
+	{ material="Grass", color=BrickColor.new("Dark green")	}
 }
 
 treeType.NumLeafParts = { min=1, max=1 }
@@ -57,7 +57,7 @@ treeType.GrowInterval = { min=8, max=15 }--Seconds between :Grow() is called
 
 treeType.MaxGrowCalls = { min=65, max=90 }--Max distance from bottom of trunk to tip of farthest extremety
 
-treeType.NewBranchCutoff = 10 --Don't create a new section if we are within this many grow calls of maximum TODO rename
+treeType.NewBranchCutoff = 10 --Don"t create a new section if we are within this many grow calls of maximum TODO rename
 treeType.LifetimePerVolume = 25 --Tree will die after this much time after it stops growing
 treeType.LeafDropTime = 130 --Tree will drop leaves at this time before death
 

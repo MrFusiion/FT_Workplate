@@ -1,19 +1,19 @@
 --@initApi
---@Class: 'cameraUtils'
+--@Class: "cameraUtils"
 local cameraUtils = {}
 
-local TS = game:GetService('TweenService')
+local TS = game:GetService("TweenService")
 
-local player = game:GetService('Players').LocalPlayer
+local player = game:GetService("Players").LocalPlayer
 
 --===========/cache/===========--
 local old_camera_type = nil
 
 --[[@Function: {
-    'class' : 'cameraUtils',
-    'name' : 'scriptable',
-    'args' : { 'boolean' : 'boolean' },
-    'info' : 'Sets the camera scriptable or not.'
+    "class" : "cameraUtils",
+    "name" : "scriptable",
+    "args" : { "boolean" : "boolean" },
+    "info" : "Sets the camera scriptable or not."
 }]]
 function cameraUtils.scriptable(boolean)
     assert(typeof(boolean)=="boolean", " `boolean` must be type of boolean!")
@@ -28,11 +28,11 @@ function cameraUtils.scriptable(boolean)
 end
 
 --[[@Function: {
-    'class' : 'cameraUtils',
-    'name' : 'tween',
-    'args' : { 'cf' : 'CFrame', 'tweeninfo' : 'TweenInfo' },
-    'return' : 'Tween',
-    'info' : 'Creates a tween.'
+    "class" : "cameraUtils",
+    "name" : "tween",
+    "args" : { "cf" : "CFrame", "tweeninfo" : "TweenInfo" },
+    "return" : "Tween",
+    "info" : "Creates a tween."
 }]]
 function cameraUtils.tween(cf, tweeninfo)
     assert(typeof(cf)=="CFrame", " `cf` must be type of CFrame!")
@@ -43,11 +43,11 @@ function cameraUtils.tween(cf, tweeninfo)
 end
 
 --[[@Function: {
-    'class' : 'cameraUtils',
-    'name' : 'get',
-    'args' : { 'propName' : 'string' },
-    'return' : 'any',
-    'info' : 'Gets a property from camera.'
+    "class" : "cameraUtils",
+    "name" : "get",
+    "args" : { "propName" : "string" },
+    "return" : "any",
+    "info" : "Gets a property from camera."
 }]]
 function cameraUtils.get(propName)
     assert(typeof(propName)=="string", " `propName` must be type of string!")

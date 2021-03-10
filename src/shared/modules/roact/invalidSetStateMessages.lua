@@ -1,8 +1,8 @@
 --[[
-	These messages are used by Component to help users diagnose when they're
+	These messages are used by Component to help users diagnose when they"re
 	calling setState in inappropriate places.
 
-	The indentation may seem odd, but it's necessary to avoid introducing extra
+	The indentation may seem odd, but it"s necessary to avoid introducing extra
 	whitespace into the error messages themselves.
 ]]
 local ComponentLifecyclePhase = require(script.Parent.ComponentLifecyclePhase)
@@ -34,7 +34,7 @@ render must be a pure function that only depends on props and state.
 Check the definition of render in the component %q.]]
 
 invalidSetStateMessages["default"] = [[
-setState can not be used in the current situation, because Roact doesn't know
+setState can not be used in the current situation, because Roact doesn"t know
 which part of the lifecycle this component is in.
 
 This is a bug in Roact.

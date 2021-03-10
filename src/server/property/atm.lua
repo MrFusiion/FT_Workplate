@@ -1,20 +1,20 @@
-local shared = require(game:GetService('ReplicatedStorage'):WaitForChild('modules'))
-local interaction = shared.get('interaction')
+local shared = require(game:GetService("ReplicatedStorage"):WaitForChild("Modules"))
+local interaction = shared.get("interaction")
 
 local properties = require(script.Parent.properties)
 
-local remoteProperty = game:GetService('ReplicatedStorage')
-    :WaitForChild('remote')
-    :WaitForChild('property')
-local re_BuyProperty = remoteProperty:WaitForChild('BuyProperty')
-local re_ExpandProperty = remoteProperty:WaitForChild('ExpandProperty')
+local remoteProperty = game:GetService("ReplicatedStorage")
+    :WaitForChild("remote")
+    :WaitForChild("property")
+local re_BuyProperty = remoteProperty:WaitForChild("BuyProperty")
+local re_ExpandProperty = remoteProperty:WaitForChild("ExpandProperty")
 
 local atm = {}
 atm.__index = atm
 
 function atm.new(model, light)
     local newAtm = setmetatable({}, atm)
-    newAtm.Light = { Part = light, Src = light:FindFirstChildWhichIsA('PointLight') }
+    newAtm.Light = { Part = light, Src = light:FindFirstChildWhichIsA("PointLight") }
 
     newAtm.Prompt = interaction.prompt.new()
     newAtm.Prompt.Triggered:Connect(function(player)
@@ -34,7 +34,7 @@ function atm.new(model, light)
 end
 
 function atm.enableLight(self, boolean)
-    self.Light.Part.Material = boolean and 'Neon' or 'SmoothPlastic'
+    self.Light.Part.Material = boolean and "Neon" or "SmoothPlastic"
     if self.Light.Src then
         self.Light.Src.Enabled = boolean
     end

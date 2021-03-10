@@ -1,21 +1,21 @@
-local propertyRemote = game:GetService('ReplicatedStorage')
-    :WaitForChild('remote')
-    :WaitForChild('property')
+local propertyRemote = game:GetService("ReplicatedStorage")
+    :WaitForChild("remote")
+    :WaitForChild("property")
 
-local rf_GetPropertyOwner = propertyRemote:WaitForChild('GetPropertyOwner')
+local rf_GetPropertyOwner = propertyRemote:WaitForChild("GetPropertyOwner")
 
-local client = require(game:GetService('StarterPlayer'):WaitForChild('StarterPlayerScripts'):WaitForChild('modules'))
-local cameraUtils = client.get('cameraUtils')
-local playerUtils = client.get('playerUtils')
-local input =       client.get('input')
-local platform =    client.get('platform')
+local client = require(game:GetService("StarterPlayer"):WaitForChild("StarterPlayerScripts"):WaitForChild("Modules"))
+local cameraUtils = client.get("cameraUtils")
+local playerUtils = client.get("playerUtils")
+local input =       client.get("input")
+local platform =    client.get("platform")
 
-local propertyFrame =   playerUtils.getPlayerGui():WaitForChild('Hud'):WaitForChild('Property')
-local leftButton =      propertyFrame:WaitForChild('Left').Value
-local confirmButton =   propertyFrame:WaitForChild('Confirm').Value
-local rightButton =     propertyFrame:WaitForChild('Right').Value
---local modeV =           propertyFrame:WaitForChild('Mode').Value
---local priceV =          propertyFrame:WaitForChild('Price').Value
+local propertyFrame =   playerUtils.getPlayerGui():WaitForChild("Hud"):WaitForChild("Property")
+local leftButton =      propertyFrame:WaitForChild("Left").Value
+local confirmButton =   propertyFrame:WaitForChild("Confirm").Value
+local rightButton =     propertyFrame:WaitForChild("Right").Value
+--local modeV =           propertyFrame:WaitForChild("Mode").Value
+--local priceV =          propertyFrame:WaitForChild("Price").Value
 
 local cycleProperty = {}
 cycleProperty.Connections = {}
@@ -60,15 +60,15 @@ function cycleProperty.start(properties, claimCallback)
     table.insert(cycleProperty.Connections, confirmButton.Activated:Connect(claim))
     table.insert(cycleProperty.Connections, rightButton.Activated:Connect(cycleRight))
 
-    input.bindPriority('cycleLeft', input.beginWrapper(function()
+    input.bindPriority("cycleLeft", input.beginWrapper(function()
         leftButton.Activate:Fire()
         cycleLeft()
     end), false, 2001, Enum.KeyCode.Left, Enum.KeyCode.A, Enum.KeyCode.DPadLeft)
-    input.bindPriority('claim', input.beginWrapper(function()
+    input.bindPriority("claim", input.beginWrapper(function()
         confirmButton.Activate:Fire()
         claim()
     end), false, 2001, Enum.KeyCode.Return, Enum.KeyCode.KeypadEnter, Enum.KeyCode.ButtonA)
-    input.bindPriority('cycleRight', input.beginWrapper(function()
+    input.bindPriority("cycleRight", input.beginWrapper(function()
         rightButton.Activate:Fire()
         cycleRight()
     end), false, 2001, Enum.KeyCode.Right, Enum.KeyCode.D, Enum.KeyCode.DPadRight)
@@ -77,7 +77,7 @@ end
 function cycleProperty.stop()
     playerUtils.lock(false)
     cameraUtils.scriptable(false)
-    input.safeUnbind('cycleLeft', 'cycleRight', 'claim')
+    input.safeUnbind("cycleLeft", "cycleRight", "claim")
     for _, conn in ipairs (cycleProperty.Connections) do
         conn:Disconnect()
     end

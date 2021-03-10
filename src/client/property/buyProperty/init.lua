@@ -1,24 +1,24 @@
-local propertyRemote = game:GetService('ReplicatedStorage')
-    :WaitForChild('remote')
-    :WaitForChild('property')
+local propertyRemote = game:GetService("ReplicatedStorage")
+    :WaitForChild("remote")
+    :WaitForChild("property")
 
-local re_BuyProperty = propertyRemote:WaitForChild('BuyProperty')
-local rf_GetPropertyOwner = propertyRemote:WaitForChild('GetPropertyOwner')
-local rf_GetPlatePrice = propertyRemote:WaitForChild('GetPlatePrice')
+local re_BuyProperty = propertyRemote:WaitForChild("BuyProperty")
+local rf_GetPropertyOwner = propertyRemote:WaitForChild("GetPropertyOwner")
+local rf_GetPlatePrice = propertyRemote:WaitForChild("GetPlatePrice")
 
-local client = require(game:GetService('StarterPlayer'):WaitForChild('StarterPlayerScripts'):WaitForChild('modules'))
-local playerUtils = client.get('playerUtils')
-local input = client.get('input')
+local client = require(game:GetService("StarterPlayer"):WaitForChild("StarterPlayerScripts"):WaitForChild("Modules"))
+local playerUtils = client.get("playerUtils")
+local input = client.get("input")
 
-local propertyFrame =   playerUtils.getPlayerGui():WaitForChild('Hud'):WaitForChild('Property')
-local exitButton =      propertyFrame:WaitForChild('Exit').Value
-local modeV =           propertyFrame:WaitForChild('Mode')
-local priceV =          propertyFrame:WaitForChild('Price')
+local propertyFrame =   playerUtils.getPlayerGui():WaitForChild("Hud"):WaitForChild("Property")
+local exitButton =      propertyFrame:WaitForChild("Exit").Value
+local modeV =           propertyFrame:WaitForChild("Mode")
+local priceV =          propertyFrame:WaitForChild("Price")
 
-local proximityPrompts = playerUtils:getPlayerGui():WaitForChild('ProximityPrompts')
-local prompt = proximityPrompts:WaitForChild('Interact')
+local proximityPrompts = playerUtils:getPlayerGui():WaitForChild("ProximityPrompts")
+local prompt = proximityPrompts:WaitForChild("Interact")
 
-local cycleProperty = require(script.Parent:WaitForChild('cycleProperty'))
+local cycleProperty = require(script.Parent:WaitForChild("cycleProperty"))
 local buyProperty = {}
 buyProperty.Connections = {}
 
@@ -31,7 +31,7 @@ function buyProperty.start(properties)
         buyProperty.stop()
     end))
 
-    input.bindPriority('PropertyExit', input.beginWrapper(function()
+    input.bindPriority("PropertyExit", input.beginWrapper(function()
         exitButton.Activate:Fire()
         wait(.1)
         buyProperty.stop()
@@ -40,11 +40,11 @@ function buyProperty.start(properties)
     buyProperty.Running = true
     propertyFrame.Visible = true
     priceV.Value = rf_GetPlatePrice:InvokeServer()
-    modeV.Value = 'Buy'
+    modeV.Value = "Buy"
     prompt.Enabled = false
 
     local function claim(property)
-        local cash = game:GetService('Players').LocalPlayer.leaderstats.Cash.Value
+        local cash = game:GetService("Players").LocalPlayer.leaderstats.Cash.Value
         local cost = rf_GetPlatePrice:InvokeServer()
         local owner = rf_GetPropertyOwner:InvokeServer(property.Model)
         if owner == 0 and cost <= cash then

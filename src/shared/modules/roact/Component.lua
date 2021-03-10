@@ -22,7 +22,7 @@ The component %q is missing the `render` method.
 
 local tooManyUpdatesMessage = [[
 The component %q has reached the setState update recursion limit.
-When using `setState` in `didUpdate`, make sure that it won't repeat infinitely!]]
+When using `setState` in `didUpdate`, make sure that it won"t repeat infinitely!]]
 
 local componentClassMetatable = {}
 
@@ -101,7 +101,7 @@ function Component:setState(mapState)
 
 	--[[
 		When preparing to update, rendering, or unmounting, it is not safe
-		to call `setState` as it will interfere with in-flight updates. It's
+		to call `setState` as it will interfere with in-flight updates. It"s
 		also disallowed during unmounting
 	]]
 	if lifecyclePhase == ComponentLifecyclePhase.ShouldUpdate or
@@ -149,8 +149,8 @@ function Component:setState(mapState)
 		lifecyclePhase == ComponentLifecyclePhase.ReconcileChildren
 	then
 		--[[
-			During certain phases of the component lifecycle, it's acceptable to
-			allow `setState` but defer the update until we're done with ones in flight.
+			During certain phases of the component lifecycle, it"s acceptable to
+			allow `setState` but defer the update until we"re done with ones in flight.
 			We do this by collapsing it into any pending updates we have.
 		]]
 		local derivedState = self:__getDerivedState(self.props, newState)
@@ -171,7 +171,7 @@ end
 
 --[[
 	Returns the stack trace of where the element was created that this component
-	instance's properties are based on.
+	instance"s properties are based on.
 
 	Intended to be used primarily by diagnostic tools.
 ]]
@@ -213,7 +213,7 @@ function Component:__getContext(key)
 end
 
 --[[
-	Adds a new context entry to this component's context table (which will be
+	Adds a new context entry to this component"s context table (which will be
 	passed down to child components).
 ]]
 function Component:__addContext(key, value)
@@ -222,8 +222,8 @@ function Component:__addContext(key, value)
 	end
 	local virtualNode = self[InternalData].virtualNode
 
-	-- Make sure we store a reference to the component's original, unmodified
-	-- context the virtual node. In the reconciler, we'll restore the original
+	-- Make sure we store a reference to the component"s original, unmodified
+	-- context the virtual node. In the reconciler, we"ll restore the original
 	-- context if we need to replace the node (this happens when a node gets
 	-- re-rendered as a different component)
 	if virtualNode.originalContext == nil then
@@ -238,7 +238,7 @@ end
 
 --[[
 	Performs property validation if the static method validateProps is declared.
-	validateProps should follow assert's expected arguments:
+	validateProps should follow assert"s expected arguments:
 	(false, message: string) | true. The function may return a message in the
 	true case; it will be ignored. If this fails, the function will throw the
 	error.
@@ -324,7 +324,7 @@ function Component:__mount(reconciler, virtualNode)
 		assign(instance.state, instance:__getDerivedState(instance.props, instance.state))
 	end
 
-	-- It's possible for init() to redefine _context!
+	-- It"s possible for init() to redefine _context!
 	virtualNode.legacyContext = instance._context
 
 	internalData.lifecyclePhase = ComponentLifecyclePhase.Render
@@ -339,7 +339,7 @@ function Component:__mount(reconciler, virtualNode)
 	end
 
 	if internalData.pendingState ~= nil then
-		-- __update will handle pendingState, so we don't pass any new element or state
+		-- __update will handle pendingState, so we don"t pass any new element or state
 		instance:__update(nil, nil)
 	end
 

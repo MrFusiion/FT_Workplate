@@ -1,5 +1,5 @@
 --@initApi
---@Class: 'Solid'
+--@Class: "Solid"
 local solid = {}
 
 solid.__index = function(self, key)
@@ -25,17 +25,17 @@ end
 
 --[[
 @Function: {
-    'class' : 'Solid',
-    'name' : 'new',
-    'args' : { 'parent' : 'BasePart' },
-    'return' : 'Solid',
-    'info' : "Creates a new Solid."
+    "class" : "Solid",
+    "name" : "new",
+    "args" : { "parent" : "BasePart" },
+    "return" : "Solid",
+    "info" : "Creates a new Solid."
 }
 @Properties: {
-    'class' : 'Solid',
-    'props' : [{
-        'name' : 'parent',
-        'type' : 'BasePart'
+    "class" : "Solid",
+    "props" : [{
+        "name" : "parent",
+        "type" : "BasePart"
     }]
 }]]
 function solid.new(parent)

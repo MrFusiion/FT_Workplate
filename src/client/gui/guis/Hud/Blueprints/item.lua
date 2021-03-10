@@ -1,5 +1,5 @@
 local core = require(script.Parent.Parent.Parent)
-local bpButton = require(script.Parent:WaitForChild('bpButton'))
+local bpButton = require(script.Parent:WaitForChild("bpButton"))
 
 local item = {}
 item.__index = {}
