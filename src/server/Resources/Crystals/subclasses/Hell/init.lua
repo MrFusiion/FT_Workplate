@@ -2,14 +2,14 @@ local crystalClass = require(script.Parent.Parent.CrystalClass)
 
 local crystalType = setmetatable({}, crystalClass)
 crystalType.__index = crystalType
-crystalType.Name = "Either"
+crystalType.Name = "Hell"
 
 --===============================================================================================================--
 --===============================================/     Stats     /===============================================--
 
 crystalType.RawPrice = 0
 crystalType.ProcessedPrice = 0
-crystalType.Hardness = 0
+crystalType.Hardness = 1
 
 --===============================================/     Stats     /===============================================--
 --===============================================================================================================--

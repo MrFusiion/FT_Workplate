@@ -1,8 +1,5 @@
 local RS = game:GetService("RunService")
 
-local remoteVacuum = game:GetService("ReplicatedStorage"):WaitForChild("remote"):WaitForChild("vacuum")
-local re_LockTarget = remoteVacuum:WaitForChild("LockTarget")
-
 local client = require(game:GetService("StarterPlayer"):WaitForChild("StarterPlayerScripts"):WaitForChild("Modules"))
 local toolAnimation = client.get("toolAnimation")
 local playerUtils = client.get("playerUtils")
@@ -28,7 +25,6 @@ function vacuum.new(tool, barrelEnd)
 
     tool.Equipped:Connect(function(mouse)
         vacuum.Hold:play()
-        mouse.Icon = "rbxasset://textures/GunCursor.png"
     end)
 
     tool.Unequipped:Connect(function()
@@ -38,7 +34,14 @@ function vacuum.new(tool, barrelEnd)
     end)
 
     tool.Activated:Connect(function()
-        vacuum:lock(newVacuum:raycast())
+        newVacuum:lock(newVacuum:raycast())
+    end)
+
+    local conn
+    conn = playerUtils:getHumanoid().Died:Connect(function()
+        print("Unlock")
+        newVacuum:unlock()
+        conn:Disconnect()
     end)
 
     return newVacuum
@@ -58,6 +61,7 @@ function vacuum:raycast()
 end
 
 function vacuum:lock(instance)
+    local mouse = playerUtils:getMouse()
     if instance and instance:GetAttribute("Resource") then
         local model = instance:FindFirstAncestorWhichIsA("Model")
         while not model:FindFirstChild("LockEvent") do
@@ -72,7 +76,6 @@ function vacuum:lock(instance)
             self.unlock = function()
                 unlockEvent:FireServer()
             end
-
             lockEvent:FireServer()
         end
     end

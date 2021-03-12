@@ -3,11 +3,12 @@ local equiments = {}
 
 game:GetService("Players").PlayerAdded:Connect(function(player)
     while not equipment do wait() end
-    equiments[player.UserId] = equipment.new(player)
-    equiments[player.UserId]:clearBackAccesories()
-    equiments[player.UserId]:setVacuum()
-    equiments[player.UserId]:setBackpack()
-    equiments[player.UserId]:createTube()
+    local newEquipment = equipment.new(player)
+    newEquipment:clearBackAccesories()
+    newEquipment:setVacuum()
+    newEquipment:setBackpack()
+    newEquipment:createTube()
+    equiments[player.UserId] = newEquipment
 end)
 
 game:GetService("Players").PlayerRemoving:Connect(function(player)
@@ -15,7 +16,27 @@ game:GetService("Players").PlayerRemoving:Connect(function(player)
 end)
 
 script.GetVacuumStats.OnInvoke = function(player)
-    return equiments[player.UserId]:getVacuumStats()
+    if equiments[player.UserId] then
+        return equiments[player.UserId]:getVacuumStats()
+    end
 end
+
+script.AddResource.Event:Connect(function(player, name, value)
+    local playerEquipment = equiments[player.UserId]
+    if playerEquipment then
+        playerEquipment.Content:addResource(name, value)
+        playerEquipment.Content:render()
+    end
+end)
+
+script.SetVacuum.Event:Connect(function(player, vacuumName)
+    equiments[player.UserId]:setVacuum(vacuumName)
+    equiments[player.UserId]:createTube()
+end)
+
+script.SetBackpack.Event:Connect(function(player, backpackName)
+    equiments[player.UserId]:setBackpack(backpackName)
+    equiments[player.UserId]:createTube()
+end)
 
 equipment = require(script:WaitForChild("equipment"))

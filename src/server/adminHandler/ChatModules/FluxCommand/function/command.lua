@@ -35,9 +35,11 @@ function command.getArgValue(str, arg)
         string = function(value)
             if value then
                 local len = #value
-                if (value:sub(1, 1) == "\"" or value:sub(1, 1) == "\"") and
-                        (value:sub(len, len) == "\"" or value:sub(len, len) == "\"") then
+                if (value:sub(1, 1) == "\"" or value:sub(1, 1) == "'") and
+                        (value:sub(len, len) == "\"" or value:sub(len, len) == "'") then
                     return value:sub(2, len-1)
+                else
+                    print("unvalid string!", value)
                 end
             end
         end,

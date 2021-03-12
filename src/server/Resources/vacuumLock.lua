@@ -1,9 +1,10 @@
 local PS = game:GetService("PhysicsService")
 
 local remoteVacuum = game:GetService("ReplicatedStorage"):WaitForChild("remote"):WaitForChild("vacuum")
-local re_TargetDetails = remoteVacuum:WaitForChild("re_TargetDetails")
+local re_TargetDetails = remoteVacuum:WaitForChild("TargetDetails")
 
 local bf_GetVacuumStats = game.ServerScriptService.EquipmentHandler.GetVacuumStats
+local be_AddResource = game.ServerScriptService.EquipmentHandler.AddResource
 
 local vacuumLock = {}
 vacuumLock.__index = vacuumLock
@@ -42,21 +43,7 @@ function vacuumLock.new(resource)
         newVacuumLock.Part.Position = resource.OriginCFrame.Position + Vector3.new(0, 3, 0) * .5
         local tool = player.Character and player.Character:FindFirstChildWhichIsA("Tool")
         if tool then
-            local stats = bf_GetVacuumStats:Invoke(player)
-            newVacuumLock:lock(tool)
-            spawn(function()
-                local maxHealt = resource.Hardness * resource:getVolume()
-                local health = maxHealt
-                while newVacuumLock.Locked do
-                    re_TargetDetails:FireClient(player, resource.Name, getColor(resource), health, maxHealt)
-                    wait(stats.speed)
-                    health -= stats.damage
-
-                    if health <= maxHealt then
-                        print(string.format("%s Harvested %s with %s", player.Name, resource.Name, tool.Name))
-                    end
-                end
-            end)
+            newVacuumLock:lock(player, tool)
         end
     end)
 
@@ -65,40 +52,74 @@ function vacuumLock.new(resource)
     unlockEvent.Parent = newVacuumLock.Model
 
     unlockEvent.OnServerEvent:Connect(function(player)
-        newVacuumLock:unlock()
+        newVacuumLock:unlock(player)
     end)
+
+	game.Close:Connect(function()
+		newVacuumLock:unlock()
+	end)
 
     return newVacuumLock
 end
 
-function vacuumLock:lock(tool)
+function vacuumLock:lock(player, tool)
     if not self.CurrentLock then
         local handle = tool:FindFirstChild("Handle")--to be sure no error's happen, find the handle the safe way
         local beam = handle and handle:FindFirstChildWhichIsA("Beam")
 
         if beam then
+            spawn(function()
+                local maxHealt = self.Resource.Hardness * self.Resource:getVolume()
+                local health = maxHealt
+                while self.Locked do
+                    local stats = bf_GetVacuumStats:Invoke(player)
+                    if stats then
+                        re_TargetDetails:FireClient(player, self.Resource.OriginCFrame.Position, self.Resource.Name,
+                        self.Resource.TextColor, math.max(0, health), maxHealt)
+                        wait(stats.speed)
+                        health -= stats.damage
+        
+                        if health <= 0 then
+                            --print(string.format("%s Harvested %s with %s", player.Name, resource.Name, tool.Name))
+                            be_AddResource:Fire(player, self.Resource.Name, 5)
+                            self.Resource:kill()
+                            self:unlock(player)
+                        end
+                    end
+                end
+            end)
+
+            local conn = beam:GetPropertyChangedSignal("Attachment1"):Connect(function()
+                print("Disconnect", self.Resource.Name)
+                self:unlock(player)
+            end)
+
             self.Locked = true
             beam.Attachment1 = self.Lock
-            self.CurrentLock = { tool = tool }
+            self.CurrentLock = { tool = tool, connections = { conn } }
         end
     end
 end
 
-function vacuumLock:unlock()
+function vacuumLock:unlock(player)
     if self.CurrentLock then
         local handle = self.CurrentLock.tool:FindFirstChild("Handle")--to be sure no error's happen, find the handle the safe way
         local beam = handle and handle:FindFirstChildWhichIsA("Beam")
 
+        re_TargetDetails:FireClient(player)
+
+        for _, conn in ipairs(self.CurrentLock.connections) do
+            conn:Disconnect()
+        end
+        self.Locked = false
+        self.CurrentLock = nil
+
         if beam then
-            self.Locked = false
-            beam.Attachment1 = nil
-            self.CurrentLock = nil
+            if beam.Attachment1 == self.Lock then
+                beam.Attachment1 = nil
+            end
         end
     end
-end
-
-function vacuumLock:update()
-    
 end
 
 return vacuumLock

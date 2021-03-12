@@ -9,7 +9,7 @@ oreType.Name = "Iron"
 
 oreType.RawPrice = 0
 oreType.ProcessedPrice = 0
-oreType.Hardness = 0
+oreType.Hardness = .2
 
 --===============================================/     Stats     /===============================================--
 --===============================================================================================================--
@@ -19,6 +19,8 @@ oreType.OreColor = BrickColor.new("Pastel brown")
 oreType.OreMaterial = "Metal"
 
 oreType.Effects = nil
+
+oreType.TextColor = oreType.OreColor.Color
 
 --===============================================================================================================--
 --===============================================/ Grow Behavior /===============================================--

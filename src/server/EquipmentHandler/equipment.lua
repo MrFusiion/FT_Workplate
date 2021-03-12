@@ -1,3 +1,5 @@
+local content = require(game.ServerScriptService.Objects.modules.content)
+
 local server = require(game.ServerScriptService.Modules)
 local datastore = server.get("datastore")
 
@@ -15,6 +17,7 @@ function equipment.new(player)
     newEquipment.Humanoid = newEquipment.Character:WaitForChild("Humanoid")
     newEquipment.Vacuum = nil
     newEquipment.Backpack = nil
+    newEquipment.Content = nil
 
     newEquipment.Player.CharacterAdded:Connect(function(char)
         newEquipment.Character = char
@@ -37,12 +40,12 @@ function equipment:setVacuum(name)
     if name then
         local vacuum = vacuumFolder:FindFirstChild(name)
         if vacuum then
-            if self.Vacuum then
-                self.Vacuum:Destroy()
-            end
+            if self.Vacuum then self.Vacuum:Destroy() end
             local clone = vacuum:Clone()
             clone:SetAttribute("Vacuum", true)
             self.Vacuum = clone
+        else
+            warn(("Vacuum with the name %s doesn't exist!"):format(name))
         end
         self.Vacuum.Parent = self.Player.Backpack
     end
@@ -52,7 +55,8 @@ function equipment:getVacuumStats()
     if self.Vacuum then
         return {
             damage = self.Vacuum:GetAttribute("Damage"),
-            speed = self.Vacuum:GetAttribute("Speed")
+            speed = self.Vacuum:GetAttribute("Speed"),
+            range = self.Vacuum:GetAttribute("Range")
         }
     end
 end
@@ -66,12 +70,19 @@ function equipment:setBackpack(name)
     if name then
         local bacpack = backpackFolder:FindFirstChild(name)
         if bacpack then
-            if self.Backpack then
-                self.Backpack:Destroy()
-            end
+            local oldContentData
+            if self.Backpack then self.Backpack:Destroy() end
+            if self.Content then oldContentData = self.Content:export() self.Content:destroy() end
             local clone = bacpack:Clone()
             clone:SetAttribute("Backpack", true)
             self.Backpack = clone
+            self.Content = content.new(self.Backpack:WaitForChild("Content"), self.Backpack:GetAttribute("MaxVolume") or 0)
+            if oldContentData then
+                self.Content:import(oldContentData)
+                self.Content:render()
+            end
+        else
+            warn(("Backpack with the name %s doesn't exist!"):format(name))
         end
         self.Humanoid:AddAccessory(self.Backpack)
     end

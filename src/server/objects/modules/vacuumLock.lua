@@ -1,0 +1,2 @@
+local vacuumLock = {}
+return vacuumLock

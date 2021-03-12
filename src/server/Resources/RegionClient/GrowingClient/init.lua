@@ -35,6 +35,9 @@ function growingClient.new(maxResources, resourceTypes, parts, topSpawnRate, cus
 	newGrowingClient.ThisTick = nil
 	newGrowingClient.LastTick = nil
 
+    newGrowingClient.FloorSymbol = ("REGIONPART_%s"):format(tostring(newGrowingClient):gsub("table: ", ""))
+    print(newGrowingClient.FloorSymbol)
+
     newGrowingClient.customSpawnRateFunc = customSpawnRateFunc
 
     newGrowingClient.Parts = parts
@@ -57,6 +60,8 @@ function growingClient.new(maxResources, resourceTypes, parts, topSpawnRate, cus
 							math.min(newGrowingClient.RegionBounds.min.Y, point.Y),
 						    math.min(newGrowingClient.RegionBounds.min.Z, point.Z)
                         )
+
+                        part:SetAttribute(newGrowingClient.FloorSymbol, true)
 					end
 				end
 			end
@@ -137,18 +142,19 @@ function growingClient:findPlantSpot(resource)
         )
 
         local rayParams = RaycastParams.new()
-        rayParams.FilterDescendantsInstances = self.Parts
-        rayParams.FilterType = Enum.RaycastFilterType.Whitelist
+        rayParams.FilterDescendantsInstances = ignoreStuff
+        rayParams.FilterType = Enum.RaycastFilterType.Blacklist
 
 		local result = workspace:Raycast(randPoint, Vector3.new(0, self.RegionBounds.min.Y - self.RegionBounds.max.Y - RAY_HEIGHT, 0), rayParams)
 
-		if result then
-            local part = result.Instance
+		if result and result.Instance:GetAttribute(self.FloorSymbol) then
             local point = CFrame.new(result.Position)
 
             if self:canPlaceHere(point) then
                 return point
             end
+        elseif result and (result.Instance.Transparency == 1 or not result.Instance.Anchored) then
+            table.insert(ignoreStuff, result.Instance)
 		end
 	end
 end
@@ -169,7 +175,7 @@ function growingClient:plantNewResource()
             newResource:place(spot)
             local index = self.Resources:add(newResource)
 
-            --++++++[DEBUG]++++++--
+            --[[++++++[DEBUG]++++++--
 
             local debugPart = Instance.new("Part")
             debugPart.Name = "Debug"
@@ -183,7 +189,7 @@ function growingClient:plantNewResource()
             gui.Name = "Gui"
             gui.Parent = debugPart
 
-            --++++++[DEBUG]++++++--
+            --++++++[DEBUG]++++++--]]
         end
     end
 end

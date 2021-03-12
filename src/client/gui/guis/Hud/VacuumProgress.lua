@@ -17,12 +17,13 @@ function element:render()
         BackgroundTransparency = 1,
         Position = UDim2.fromScale(.5, .8),
         Size = UDim2.fromOffset(core.scale:getOffset(400), core.scale:getOffset(100)),
-        Visible = false
+        Visible = self.state.visible
     }, {
         ["Progress"] = core.roact.createElement(core.elements.ProgressBar, {
             AnchorPoint = Vector2.new(.5, 1),
             Position = UDim2.fromScale(.5, 1),
             Size = UDim2.new(1, 0, 0, core.scale:getOffset(40)),
+            TextSize = core.scale:getTextSize(35),
             Value = self.state.value
         }),
         ["ResourceName"] = core.roact.createElement("TextLabel", {
@@ -31,6 +32,8 @@ function element:render()
             Position = UDim2.fromScale(.5, 0),
             Size = UDim2.new(1, 0, 0, core.scale:getOffset(50)),
             Font = Enum.Font.SourceSansSemibold,
+            Text = self.state.name,
+            TextColor3 = self.state.color,
             TextSize = core.scale:getTextSize(50),
             TextStrokeTransparency = 0,
             TextStrokeColor3 = Color3.new(.28, .28, .28)
@@ -42,8 +45,8 @@ function element:didMount()
     local remoteVacuum = game:GetService("ReplicatedStorage"):WaitForChild("remote"):WaitForChild("vacuum")
     local re_TargetDetails = remoteVacuum:WaitForChild("TargetDetails")
 
-    re_TargetDetails.OnClientEvent:Connect(function(name, color, health, maxHealth)
-        if not name then
+    re_TargetDetails.OnClientEvent:Connect(function(pos, name, color, health, maxHealth)
+        if not pos then
             self:setState({
                 visible = false
             })

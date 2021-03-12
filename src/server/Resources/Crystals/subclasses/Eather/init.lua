@@ -2,14 +2,14 @@ local crystalClass = require(script.Parent.Parent.CrystalClass)
 
 local crystalType = setmetatable({}, crystalClass)
 crystalType.__index = crystalType
-crystalType.Name = "Either"
+crystalType.Name = "Eather"
 
 --===============================================================================================================--
 --===============================================/     Stats     /===============================================--
 
 crystalType.RawPrice = 0
 crystalType.ProcessedPrice = 0
-crystalType.Hardness = 0
+crystalType.Hardness = 1
 
 --===============================================/     Stats     /===============================================--
 --===============================================================================================================--
@@ -29,6 +29,8 @@ crystalType.InnerTransparency = 0
 crystalType.Light = { Color=Color3.fromRGB(170, 0, 255), Brightness=14, Range=8 }
 
 crystalType.Effects = require(script.effects)
+
+crystalType.TextColor = crystalType.InnerColor.Color
 
 --===============================================================================================================--
 --===============================================/ Grow Behavior /===============================================--

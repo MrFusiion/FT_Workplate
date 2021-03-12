@@ -245,6 +245,11 @@ end
 
 function crystalClass:kill()
 	spawn(function()
+		self.FinishedGrowing = true
+		self.TimeUntilDeath = 0
+		self.FinalVolume = self:getVolume()
+		self.Stage = "Broken Up"
+		
 		self.InnerPart:Destroy()
 		for _, effect in ipairs(self.ShellPart:GetChildren()) do
 			effect:Destroy()

@@ -155,7 +155,7 @@ commands.unban = {
     prefix = { "unban" },
     args = { "<number/string>", "<string>" },
     rank = "DEV",
-    callback = function(player, target)
+    callback = function(player, target, reason)
         target = getPlayer(player, target)
         if target  ~= player then
             local store = datastore.global("Banned", player.UserId)
@@ -163,6 +163,34 @@ commands.unban = {
                 data.Banned = false
                 data.Info = ""
             end)
+        end
+    end
+}
+
+local be_SetVacuum = game.ServerScriptService.EquipmentHandler.SetVacuum
+commands.give_vacuum = {
+    prefix = { "gfvacuum" },
+    args = { "<number/string>", "<string>" },
+    rank = "DEV",
+    callback = function(player, target, vacuumName)
+        target = getPlayer(player, target)
+        if target then
+            print("gfvacuum", target.Name, vacuumName)
+            be_SetVacuum:Fire(target, vacuumName)
+        end
+    end
+}
+
+local be_SetBackpack = game.ServerScriptService.EquipmentHandler.SetBackpack
+commands.give_backpack = {
+    prefix = { "gfbackpack" },
+    args = { "<number/string>", "<string>" },
+    rank = "DEV",
+    callback = function(player, target, backpackName)
+        target = getPlayer(player, target)
+        if target then
+            print("gfbackpack", target.Name, backpackName)
+            be_SetBackpack:Fire(target, backpackName)
         end
     end
 }

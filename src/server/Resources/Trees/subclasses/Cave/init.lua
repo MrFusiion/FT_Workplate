@@ -2,14 +2,14 @@ local treeClass = require(script.Parent.Parent.TreeClass)
 
 local treeType = setmetatable({}, treeClass)
 treeType.__index = treeType
-treeType.Name = "CaveTree"
+treeType.Name = "Cave"
 --===============================================================================================================--
 --===============================================/     Stats     /===============================================--
 
 treeType.PlankPrice = 0
 treeType.WoodPrice = 0
 treeType.BarkPrice = 0
-treeType.Hardness = 0
+treeType.Hardness = 1
 
 --===============================================/     Stats     /===============================================--
 --===============================================================================================================--
@@ -48,6 +48,8 @@ treeType.LeafSizeFactor = {
 treeType.BranchClasses = {
     { class=script.mushroom, skipTrunkYield=false }
 }
+
+treeType.TextColor = treeType.BarkColor.Color
 
 --===============================================/   Apearence   /===============================================--
 --===============================================================================================================--

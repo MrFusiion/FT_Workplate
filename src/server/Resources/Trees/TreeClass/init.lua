@@ -481,6 +481,11 @@ function treeClass:kill()
 			self:dropLeaves()
 		end
 
+		self.FinishedGrowing = true
+		self.TimeUntilDeath = 0
+		self.FinalVolume = self:getVolume()
+		self.Stage = "Broken Up"
+
 		for _, branch in pairs(self.Branches) do
 			if branch then
 				branch.branch:kill()

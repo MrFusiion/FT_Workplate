@@ -230,6 +230,11 @@ end
 
 function oreClass:kill()
 	spawn(function()
+		self.FinishedGrowing = true
+		self.TimeUntilDeath = 0
+		self.FinalVolume = self:getVolume()
+		self.Stage = "Broken Up"
+		
 		for _, section in pairs(self.Sections) do
 			for _, effect in pairs(section.Part:GetChildren()) do
 				effect:Destroy()

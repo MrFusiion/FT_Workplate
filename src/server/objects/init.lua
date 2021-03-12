@@ -4,7 +4,12 @@ local function getObjects(parent)
         if child:IsA("Folder") then
             t[child.Name] = getObjects(child)
         elseif child:IsA("ModuleScript") then
-            t[child.Name] = require(child)
+            local suc, err = pcall(function()
+                t[child.Name] = require(child)
+            end)
+            if not suc then
+                warn(("Module %s experienced an error while loading: %s"):format(child.Name, err))
+            end
         end
     end
     return t
