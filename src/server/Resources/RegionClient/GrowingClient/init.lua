@@ -189,7 +189,7 @@ function growingClient:plantNewResource()
             gui.Name = "Gui"
             gui.Parent = debugPart
 
-            --++++++[DEBUG]++++++--]]
+            --++++++[DEBUG]++++++]]--
         end
     end
 end
@@ -214,7 +214,7 @@ function growingClient:updateResources()
             removeResource = id
         end
 
-        --++++++[DEBUG]++++++--
+        --[[++++++[DEBUG]++++++--
 
         local debug = resource.Model:FindFirstChild("Debug")
         local gui = debug and debug:FindFirstChild("Gui") or nil
@@ -229,33 +229,27 @@ function growingClient:updateResources()
             local timeUntilValue = resource.TimeUntilDeath or 0
             local growcallsValue = resource.GrowCalls or 0
 
-            if stageValue == "Growing" then
-                stage.Text = ("<font color=\"rgb(255,219,61)\">%s</font>"):format(stageValue)
-            elseif stageValue == "Grown" then
-                stage.Text = ("<font color=\"rgb(61,255,80)\">%s</font>"):format(stageValue)
-            elseif stageValue == "Leaves Fallen" then
-                stage.Text = ("<font color=\"rgb(255,190,61)\">%s</font>"):format(stageValue)
-            elseif stageValue == "Dead" or stageValue == "Broken Up" then
-                stage.Text = ("<font color=\"rgb(255,61,61)\">%s</font>"):format(stageValue)
+            local color = stageValue == "Growing" and Color3.fromRGB(255,219,61) or
+                stageValue == "Grown" and Color3.fromRGB(61,255,80) or
+                stageValue == "Leaves Fallen" and Color3.fromRGB(255,190,61) or
+                (stageValue == "Dead" or stageValue == "Broken Up") and Color3.fromRGB(255,61,61) or nil
+            if color then
+                stage.Text = ("<font color=\"rgb(%d,%d,%d)\">%s</font>"):format(color.R, color.G, color.B, stageValue)
             else
                 stage.Text = stageValue
             end
 
-            if timeUntilValue >= 0 then
-                timeUntil.Text = ("<font color=\"rgb(61,255,80)\">%.2f</font>"):format(timeUntilValue)
-            else
-                timeUntil.Text = ("<font color=\"rgb(255,61,61)\">%.2f</font>"):format(timeUntilValue)
-            end
+            timeUntil.Text = ("<font color=\"rgb(%d,%d,%d)\">%.2f</font>"):format(
+                timeUntilValue >= 0 and table.unpack{61,255,80,timeUntilValue} or table.unpack{255,61,61,timeUntilValue})
 
-            if resource.GrowCalls > resource.MaxGrowCalls then
-                growCalls.Text = ("<font color=\"rgb(61,168,255)\">%d</font>/%d"):format(resource.GrowCalls, resource.MaxGrowCalls)
-            else
-                growCalls.Text = ("<font color=\"rgb(61,255,80)\">%d</font>/%d"):format(resource.GrowCalls, resource.MaxGrowCalls)
-            end
+            growCalls.Text = ("<font color=\"rgb(%d,%d,%d)\">%d</font>/%d"):format(
+                resource.GrowCalls > resource.MaxGrowCalls and 
+                table.unpack{61,168,255,resource.GrowCalls, resource.MaxGrowCalls} or 
+                table.unpack{61,255,80,resource.GrowCalls, resource.MaxGrowCalls})
         end
 
-        --++++++[DEBUG]++++++--
-	end
+        --++++++[DEBUG]++++++]]--
+    end
 
     if removeResource ~= nil then
         self.Resources:removeAt(removeResource)

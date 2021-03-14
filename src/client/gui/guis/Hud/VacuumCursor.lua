@@ -25,8 +25,7 @@ function element:render()
     self.Gradients = {}
     UIS.MouseIconEnabled = not self.state.visible
 
-    local handle = self.Tool and self.Tool:FindFirstChild("Handle")
-    local beam = handle and handle:FindFirstChild("Beam")
+    local beam = self.Tool and self.Tool:FindFirstChild("Beam")
 
     return core.roact.createElement("Frame", {
         BackgroundTransparency = 1,
@@ -101,7 +100,7 @@ function element:didMount()
             end
             self.Icon.Position = UDim2.fromOffset(mouse.X, mouse.Y + GS:GetGuiInset().Y)
             if self.state.locked and self.Tool then
-                local attachment = self.Tool.Handle.Beam.Attachment1
+                local attachment = self.Tool.Beam.Attachment1
                 if attachment then
                     local vector = attachment and camera:WorldToScreenPoint(attachment.WorldPosition)
                     self.Lock.Position = UDim2.fromOffset(vector.X, vector.Y + GS:GetGuiInset().Y)

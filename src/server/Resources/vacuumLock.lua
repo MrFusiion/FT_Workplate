@@ -64,8 +64,8 @@ end
 
 function vacuumLock:lock(player, tool)
     if not self.CurrentLock then
-        local handle = tool:FindFirstChild("Handle")--to be sure no error's happen, find the handle the safe way
-        local beam = handle and handle:FindFirstChildWhichIsA("Beam")
+        --local handle = tool:FindFirstChild("Handle")--to be sure no error's happen, find the handle the safe way
+        local beam = tool:FindFirstChildWhichIsA("Beam")
 
         if beam then
             spawn(function()
@@ -103,8 +103,8 @@ end
 
 function vacuumLock:unlock(player)
     if self.CurrentLock then
-        local handle = self.CurrentLock.tool:FindFirstChild("Handle")--to be sure no error's happen, find the handle the safe way
-        local beam = handle and handle:FindFirstChildWhichIsA("Beam")
+        --local handle = self.CurrentLock.tool:FindFirstChild("Handle")--to be sure no error's happen, find the handle the safe way
+        local beam = self.CurrentLock.tool:FindFirstChildWhichIsA("Beam")
 
         re_TargetDetails:FireClient(player)
 

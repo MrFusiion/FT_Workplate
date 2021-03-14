@@ -9,6 +9,47 @@ local backpackFolder = game:GetService("ReplicatedStorage"):WaitForChild("Backpa
 local equipment = {}
 equipment.__index = equipment
 
+local function createWeld(part0, part1)
+    local weld = Instance.new("Weld")
+    weld.Part0 = part0
+    weld.Part1 = part1
+    weld.C0 = part0.CFrame:Inverse()
+    weld.C1 = part1.CFrame:Inverse()
+    return weld
+end
+
+local function weldVacuum(vacuum)
+    local handle = vacuum:FindFirstChild("Handle")
+    local model = vacuum:FindFirstChild("Model")
+    if handle and model then
+        for _, descendant in ipairs(model:GetDescendants()) do
+            if descendant:IsA("BasePart") then
+                createWeld(descendant, handle).Parent = descendant
+            end
+        end
+    else
+        warn(("Vacuum %s has no %s!"):format(vacuum.Name, not handle and "Handle" or "Model"))
+    end
+    return vacuum
+end
+
+local function weldBackpack(backpack)
+    local handle = backpack:FindFirstChild("Handle")
+    local model = backpack:FindFirstChild("Model")
+    local contentPart = backpack:FindFirstChild("Content")
+    if handle and model and contentPart then
+        for _, descendant in ipairs(model:GetDescendants()) do
+            if descendant:IsA("BasePart") then
+                createWeld(descendant, handle).Parent = descendant
+            end
+        end
+        createWeld(contentPart, handle).Parent = contentPart
+    else
+        warn(("Backpack %s has no %s!"):format(backpack.Name, not handle and "Handle" or (not model and "Model" or "Content(Part)")))
+    end
+    return backpack
+end
+
 function equipment.new(player)
     local newEquipment = setmetatable({}, equipment)
     newEquipment.Store = datastore.combined.player(player, "Data", "Vacuum", "Backpack")
@@ -32,22 +73,27 @@ function equipment.new(player)
 end
 
 function equipment:setVacuum(name)
-    if name then
-        self.Store:set("Vacuum", name)
-    else
-        name = self.Store:get("Vacuum", "StarterVacuum")
+    if name then self.Store:set("Vacuum", name)
+    else name = self.Store:get("Vacuum", "StarterVacuum")
     end
     if name then
         local vacuum = vacuumFolder:FindFirstChild(name)
         if vacuum then
             if self.Vacuum then self.Vacuum:Destroy() end
-            local clone = vacuum:Clone()
-            clone:SetAttribute("Vacuum", true)
-            self.Vacuum = clone
+
+            self.Vacuum = weldVacuum(vacuum:Clone())
+            self.Vacuum:SetAttribute("Vacuum", true)
+
+            if self.Vacuum:FindFirstChild("Test") then
+                self.Vacuum.Test:Destroy()
+            end
+
+            self.Vacuum.Parent = self.Player.Backpack
         else
             warn(("Vacuum with the name %s doesn't exist!"):format(name))
         end
-        self.Vacuum.Parent = self.Player.Backpack
+    else
+        warn("No Vacuum name found!")
     end
 end
 
@@ -62,10 +108,8 @@ function equipment:getVacuumStats()
 end
 
 function equipment:setBackpack(name)
-    if name then
-        self.Store:set("Backpack", name)
-    else
-        name = self.Store:get("Backpack", "StarterBackpack")
+    if name then self.Store:set("Backpack", name)
+    else name = self.Store:get("Backpack", "StarterBackpack")
     end
     if name then
         local bacpack = backpackFolder:FindFirstChild(name)
@@ -73,18 +117,22 @@ function equipment:setBackpack(name)
             local oldContentData
             if self.Backpack then self.Backpack:Destroy() end
             if self.Content then oldContentData = self.Content:export() self.Content:destroy() end
-            local clone = bacpack:Clone()
-            clone:SetAttribute("Backpack", true)
-            self.Backpack = clone
+
+            self.Backpack = weldBackpack(bacpack:Clone())
+            self.Backpack:SetAttribute("Backpack", true)
+
             self.Content = content.new(self.Backpack:WaitForChild("Content"), self.Backpack:GetAttribute("MaxVolume") or 0)
             if oldContentData then
                 self.Content:import(oldContentData)
                 self.Content:render()
             end
+
+            self.Humanoid:AddAccessory(self.Backpack)
         else
             warn(("Backpack with the name %s doesn't exist!"):format(name))
         end
-        self.Humanoid:AddAccessory(self.Backpack)
+    else
+        warn("No Vacuum name found!")
     end
 end
 
@@ -98,7 +146,7 @@ function equipment:createTube()
     tube.Visible = true
     tube.Thickness = .3
     tube.Color = BrickColor.new("Really black")
-    tube.Attachment0 = self.Backpack.Handle.Glass.TubeAttachment
+    tube.Attachment0 = self.Backpack.Handle.TubeAttachment
     tube.Attachment1 = self.Vacuum.Handle.TubeAttachment
     tube.Parent = self.Vacuum
 end

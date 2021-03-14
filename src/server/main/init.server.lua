@@ -1,3 +1,4 @@
+--[[
 local server = require(script.Parent:WaitForChild("Modules"))
 local blueprint = server.get("blueprint")
 
@@ -59,3 +60,4 @@ spawn(function()
     bp:Place()
     bp:Destroy()
 end)
+]]

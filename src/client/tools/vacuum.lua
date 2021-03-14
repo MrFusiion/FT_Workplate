@@ -21,7 +21,7 @@ function vacuum.new(tool, barrelEnd)
     local newVacuum = setmetatable({}, vacuum)
 
     newVacuum.Tool = tool
-    newVacuum.Beam = tool.Handle:FindFirstChildWhichIsA("Beam")
+    newVacuum.Beam = tool:FindFirstChildWhichIsA("Beam")
 
     tool.Equipped:Connect(function(mouse)
         vacuum.Hold:play()
@@ -39,7 +39,6 @@ function vacuum.new(tool, barrelEnd)
 
     local conn
     conn = playerUtils:getHumanoid().Died:Connect(function()
-        print("Unlock")
         newVacuum:unlock()
         conn:Disconnect()
     end)

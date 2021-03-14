@@ -26,6 +26,8 @@ function region.new(name, parts, color)
     for _, part in pairs(typeof(parts)=="table" and parts or {parts}) do
         table.insert(newRegion.Connections, part.Touched:Connect(TiggerSignalWrapper(EnterSignal)))
         table.insert(newRegion.Connections, part.TouchEnded:Connect(TiggerSignalWrapper(LeaveSignal)))
+
+        part:SetAttribute("RegionPart", true)
         
         part.Anchored = true
         part.Transparency = 1

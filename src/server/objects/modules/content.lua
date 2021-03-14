@@ -71,6 +71,8 @@ function content:newSection(name, value)
         section.Value = value or 0
 
         section.Part = Instance.new("Part")
+        section.Part.Massless = true
+        section.Part.CanCollide = false
 
         if typeof(data.material) == "function" then
             data.material(section.Part)
@@ -83,8 +85,6 @@ function content:newSection(name, value)
         else
             section.Part.BrickColor = data.color
         end
-
-        section.Part.CanCollide = false
 
         self.Volume += value
 
