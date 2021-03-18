@@ -1,20 +1,20 @@
 local server = require(game:GetService("ServerScriptService"):WaitForChild("Modules"))
 local datastore = server.get("datastore")
 
+local ranks = require(script.Parent.Parent.ranks)
+
 local admin = {}
 
 admin.set_rank = {
     prefix = { "setRank" },
     args = { "<player>", "<string>" },
     rank = "DEV",
-    callback = function(player, target, newRank)
+    callback = function(player, target, rankName)
         pcall(function()
-            if target then
-                local store = datastore.combined.player(target, "Data", "Rank")
-                for _, rank in ipairs{ "dev", "admin", "user" } do
-                    if newRank:lower() == rank then
-                        store:set("Rank", rank:upper())
-                    end
+            local store = datastore.combined.player(target, "Data", "Rank")
+            for rank in pairs(ranks) do
+                if rankName:upper() == rank then
+                    store:set("Rank", rank)
                 end
             end
         end)
@@ -37,9 +37,9 @@ admin.ban = {
     args = { "<player>", "<string>" },
     rank = "DEV",
     callback = function(player, target, reason)
-        if target  ~= player then
-            local store = datastore.combined.player(player, "Data", "Banned")
-            store:update(function(data)
+        if target ~= player then
+            local bannedStore = datastore.global("Banned", player.UserId)
+            bannedStore:update(function(data)
                 data.Banned = true
                 data.Info = reason or "No reason specified!"
             end)

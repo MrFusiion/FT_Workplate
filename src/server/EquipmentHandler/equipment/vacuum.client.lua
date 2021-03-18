@@ -1,0 +1,1 @@
+local vacuum = require(game:GetService("StarterPlayer").StarterPlayerScripts.Tools.vacuum).new(script.Parent)

@@ -2,6 +2,7 @@ local tag = {}
 tag.__index = tag
 tag.__chatService = nil
 
+local tags = {}
 --[[
     props: [
         NameColor : Color3
@@ -10,19 +11,20 @@ tag.__chatService = nil
         TextSize : number
     ]
 ]]
-function tag.new(name, color, props)
+function tag.new(name, color, priority, props)
     if not tag.__chatService then
-        tag.__chatService = require(game:GetService("ServerScriptService"):WaitForChild("ChatServiceRunner"):WaitForChild("ChatService"))
+        tag.__chatService = require(game.ServerScriptService:WaitForChild("ChatServiceRunner"):WaitForChild("ChatService"))
     end
 
     local newTag = setmetatable({}, tag)
     newTag.Name = name
     newTag.Color = color
+    newTag.Priority = priority
     newTag.Props = props or {}
     return newTag
 end
 
-function tag.apply(self, player)
+function tag:apply(player)
     spawn(function()
         local speaker
         repeat
@@ -46,8 +48,12 @@ function tag.apply(self, player)
     end)
 end
 
-function tag.condition()
+function tag:condition()
     return true
+end
+
+function tag:shouldUpdate()
+    return false
 end
 
 return tag

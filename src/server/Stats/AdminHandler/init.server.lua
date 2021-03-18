@@ -1,6 +1,12 @@
 local server = require(game:GetService("ServerScriptService"):WaitForChild("Modules"))
 local datastore = server.get("datastore")
 
+local MAX_TAGS = 3
+local DEVS = {
+    -1, --Player1
+    1084911946 --S3nt1ne3l
+}
+
 local tags
 game:GetService("Players").PlayerAdded:Connect(function(player)
     local store = datastore.combined.player(player, "Data", "Rank")
@@ -11,13 +17,33 @@ game:GetService("Players").PlayerAdded:Connect(function(player)
         player:Kick("Banned: " .. bannedData.Info)
     end
 
-    if player.UserId == 1084911946 or player.UserId == -1 then store:set("Rank", "DEV") end
-    local rank = store:get("Rank")
+    --Check if player is a DEV from local table if so set his rank to DEV
+    for _, id in ipairs(DEVS) do
+        if player.UserId == id then
+            store:set("Rank", "DEV")
+        end
+    end
+
+    --Get all Tags
+    local playerTags = {}
     repeat wait() until tags
     for _, tag in pairs(tags) do
-        if tag.condition(player, rank) then
-            tag:apply(player)
+        if tag:condition(player) then
+            table.insert(tags, tag)
+            if #playerTags == MAX_TAGS then
+                break
+            end
         end
+    end
+
+    --Sort Tags by priority
+    table.sort(playerTags, function(a, b)
+        return a.Priority < b.Priority
+    end)
+
+    --Apply all Tags
+    for _, tag in ipairs(playerTags) do
+        tag:apply(player)
     end
 end)
 
@@ -42,4 +68,4 @@ for _, module in ipairs(folder:GetChildren()) do
     end
 end
 
-tags = require(script:WaitForChild("Tags"))
+tags = require(script.Tag.Tags)

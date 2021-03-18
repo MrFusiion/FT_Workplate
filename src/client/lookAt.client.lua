@@ -19,19 +19,21 @@ end
 
 local character = player.Character or player.CharacterAdded:Wait()
 local head = character:WaitForChild("Head")
+local hrt = character:WaitForChild("HumanoidRootPart")
 local thisLookAt = lookAt.new(character, math.rad(160), math.rad(120), math.rad(80), math.rad(105))
 thisLookAt:initFire()
 
 game:GetService("Players").LocalPlayer.CharacterAdded:Connect(function(char)
 	character = char
-    head = character:WaitForChild("Head")
-    thisLookAt = lookAt.new(character, math.rad(160), math.rad(120), math.rad(80), math.rad(105))
+    head = char:WaitForChild("Head")
+    hrt = char:WaitForChild("HumanoidRootPart")
+    thisLookAt = lookAt.new(char, math.rad(160), math.rad(120), math.rad(80), math.rad(105))
     thisLookAt:initFire()
 end)
 
 game:GetService("RunService").RenderStepped:Connect(function(dt)
-	thisLookAt:calcGoal(getDestination())
-	thisLookAt:update(dt)
+    thisLookAt:calcGoal(getDestination())
+    thisLookAt:update(dt)
 end)
 
 re_TargetDetails.OnClientEvent:Connect(function(pos)

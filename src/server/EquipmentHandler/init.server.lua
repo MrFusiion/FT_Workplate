@@ -1,3 +1,5 @@
+local CS = game:GetService("CollectionService")
+
 local equipment
 local equiments = {}
 
@@ -9,6 +11,13 @@ game:GetService("Players").PlayerAdded:Connect(function(player)
     newEquipment:setBackpack()
     newEquipment:createTube()
     equiments[player.UserId] = newEquipment
+
+    local char = player.Character or player.CharacterAdded:Wait()
+    CS:AddTag(char, "Player")
+    
+    player.CharacterAdded:Connect(function(char)
+        CS:AddTag(char, "Player")
+    end)
 end)
 
 game:GetService("Players").PlayerRemoving:Connect(function(player)

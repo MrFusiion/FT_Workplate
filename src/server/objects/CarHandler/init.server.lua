@@ -70,7 +70,7 @@ script.SpawnCar.Event:Connect(function(player, name, cf)
 
         local pos = getSpot(carModel, cf)
         if pos then
-            local playerCar = car.new(carModel:Clone())
+            local playerCar = car.new(player, carModel:Clone())
             playerCar.Model:SetPrimaryPartCFrame(CFrame.new(pos))
             playerCar.Model.Parent = workspace
             cars[player.UserId] = playerCar
@@ -82,3 +82,7 @@ script.SpawnCar.Event:Connect(function(player, name, cf)
         warn(("Car %s doesn't exist"):format(name))
     end
 end)
+
+script.GetPlayerCar.OnInvoke = function(player)
+    return cars[player.UserId].Model
+end

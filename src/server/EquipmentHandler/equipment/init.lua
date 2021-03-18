@@ -4,7 +4,10 @@ local server = require(game.ServerScriptService.Modules)
 local datastore = server.get("datastore")
 
 local vacuumFolder = game:GetService("ReplicatedStorage"):WaitForChild("Vacuums")
+local vacuumClient = script.vacuum
+
 local backpackFolder = game:GetService("ReplicatedStorage"):WaitForChild("Backpacks")
+local backpackClient = script.backpack
 
 local equipment = {}
 equipment.__index = equipment
@@ -84,6 +87,9 @@ function equipment:setVacuum(name)
             self.Vacuum = weldVacuum(vacuum:Clone())
             self.Vacuum:SetAttribute("Vacuum", true)
 
+            local client = vacuumClient:Clone()
+            client.Parent = self.Vacuum
+
             if self.Vacuum:FindFirstChild("Test") then
                 self.Vacuum.Test:Destroy()
             end
@@ -120,6 +126,9 @@ function equipment:setBackpack(name)
 
             self.Backpack = weldBackpack(bacpack:Clone())
             self.Backpack:SetAttribute("Backpack", true)
+
+            local client = backpackClient:Clone()
+            client.Parent = self.Backpack
 
             self.Content = content.new(self.Backpack:WaitForChild("Content"), self.Backpack:GetAttribute("MaxVolume") or 0)
             if oldContentData then

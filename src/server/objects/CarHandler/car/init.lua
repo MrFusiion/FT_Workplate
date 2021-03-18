@@ -1,3 +1,5 @@
+local CS = game:GetService("CollectionService")
+
 local content = require(game.ServerScriptService.Objects.modules.content)
 local door = require(script.door)
 local wheel = require(script.wheel)
@@ -55,10 +57,25 @@ end
 --===============================================================================================================--
 --===============================================/      Car      /===============================================--
 
-function car.new(model, brickColor)
+function car.new(player, model)
     local newCar = setmetatable({}, car)
 
-    model.PrimaryPart = model.Body.PrimaryPart
+    local cf, size = model:GetBoundingBox()
+    newCar.Mass = Instance.new("Part")
+    newCar.Mass.Name = "Mass"
+    newCar.Mass.Size = size
+    newCar.Mass.CFrame = cf
+    newCar.Mass.Transparency = 1
+    newCar.Mass.CanCollide = false
+    newCar.Mass.Material = "Plastic"
+    newCar.Mass.Parent = model
+
+    createWeld(newCar.Mass, model.Body.PrimaryPart).Parent = newCar.Mass
+    newCar.Mass:SetAttribute("CarOwner", player.UserId)
+
+    model.PrimaryPart = newCar.Mass
+
+    CS:AddTag(model, "Car")
 
     newCar.Stats = {
         Acceleration = model:GetAttribute("Acceleration") or 50,
@@ -72,19 +89,16 @@ function car.new(model, brickColor)
     newCar.Model = weldParent(model, true)
     newCar.Body = model.Body
     newCar.Doors = {}
-
-    local cf, size = model:GetBoundingBox()
-    newCar.Mass = Instance.new("Part")
-    newCar.Mass.Name = "Mass"
-    newCar.Mass.Size = size
-    newCar.Mass.CFrame = cf
-    newCar.Mass.Transparency = 1
-    newCar.Mass.CanCollide = false
-    newCar.Mass.Material = "Plastic"
-    newCar.Mass.Parent = model
-    createWeld(newCar.Mass, model.PrimaryPart).Parent = newCar.Mass
+    newCar.Locked = false
 
     newCar.Content = content.new(model.Content, newCar.Stats.MaxVolume)
+
+    local lockEvent = Instance.new("BindableEvent")
+    lockEvent.Event:Connect(function(boolean)
+        newCar.Locked = boolean
+    end)
+    lockEvent.Name = "Lock"
+    lockEvent.Parent = model
 
     newCar.Steer = {}
     newCar.Motor = {}
@@ -118,37 +132,28 @@ function car.new(model, brickColor)
         table.insert(newCar.Doors, door.new(weldParent(child, true), model.Body.PrimaryPart, seats))
     end
 
-
     --==============================[Setup Events]==============================--
     local driverSeat = model:FindFirstChildWhichIsA("VehicleSeat")
     if driverSeat then
         driverSeat:GetPropertyChangedSignal("ThrottleFloat"):Connect(function()
-            newCar:throttle(driverSeat.ThrottleFloat)
+            if not newCar.Locked then
+                for _, motor in pairs(newCar.Motor) do
+                    motor:throttle(driverSeat.ThrottleFloat, newCar.Stats.MaxSpeed)
+                end
+            end
         end)
         driverSeat:GetPropertyChangedSignal("Steer"):Connect(function()
-            newCar:steer(driverSeat.Steer)
+            if not newCar.Locked then
+                for _, steer in pairs(newCar.Steer) do
+                    steer:steer(driverSeat.Steer, newCar.Stats.MaxAngle)
+                end
+            end
         end)
     else
         warn(("No VehicleSeat found in car %s!"):format(model.Name))
     end
 
-    if brickColor then
-        newCar:color(brickColor)
-    end
-
     return newCar
-end
-
-function car:steer(value)
-    for _, steer in pairs(self.Steer) do
-        steer:steer(value, self.Stats.MaxAngle)
-    end
-end
-
-function car:throttle(value)
-    for _, motor in pairs(self.Motor) do
-        motor:throttle(value, self.Stats.MaxSpeed)
-    end
 end
 
 function car:color(brickColor)

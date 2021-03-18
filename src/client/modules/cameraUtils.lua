@@ -11,6 +11,16 @@ local old_camera_type = nil
 
 --[[@Function: {
     "class" : "cameraUtils",
+    "name" : "getCamera",
+    "args" : {},
+    "info" : "Returns the currentCamera."
+}]]
+function cameraUtils.getCamera()
+    return workspace.CurrentCamera
+end
+
+--[[@Function: {
+    "class" : "cameraUtils",
     "name" : "scriptable",
     "args" : { "boolean" : "boolean" },
     "info" : "Sets the camera scriptable or not."

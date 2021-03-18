@@ -5,7 +5,7 @@ local shared = require(game:GetService("ReplicatedStorage"):WaitForChild("Module
 local stringUtils = shared.get("stringUtils")
 
 local COMMAND_PREFIX = "/"
-local RANK_TREE = { ["DEV"] = 1, ["ADMIN"] = 2, ["USER"] = 3 }
+local ranks = require(script.Parent.ranks)
 
 local commands = require(script.Parent.commands)
 local command = {}
@@ -26,7 +26,7 @@ end
 function command.canPlayerUseCommand(player, cmd)
     local store = datastore.combined.player(player, "Data", "Rank")
     local rank = store:get("Rank")
-    return RANK_TREE[rank] <= RANK_TREE[cmd.rank]
+    return ranks[rank] <= ranks[cmd.rank]
 end
 
 function command.getArgValue(player, str, arg)

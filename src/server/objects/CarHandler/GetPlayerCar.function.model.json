@@ -1,0 +1,6 @@
+{
+    "ClassName" : "BindableFunction",
+    "Properties" : {
+        "Name" : "GetPlayerCar"
+    }
+}

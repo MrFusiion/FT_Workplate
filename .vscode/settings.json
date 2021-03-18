@@ -5,11 +5,10 @@
     },
     "workbench.tree.indent": 20,
 
-    "workbench.iconTheme": "vscode-icons",
     "task.autoDetect": "on",
-
-    "vsicons.associations.files": [
+    "workbench.iconTheme": "vscode-icons",
     
+    "vsicons.associations.files": [
         {
             "icon": "lua_server",
             "extensions": ["server.lua"],

@@ -24,6 +24,9 @@
       "$className": "ServerStorage",
       "CammandLinePlus" : {
         "$path": "src/serverStorage/CommandLinePlus"
+      },
+      "FluxSuperTool" : {
+        "$path": "src/serverStorage/FluxSuperTool"
       }
     },
 

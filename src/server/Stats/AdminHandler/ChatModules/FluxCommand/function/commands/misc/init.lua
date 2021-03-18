@@ -34,6 +34,32 @@ misc.tp_to = {
     end
 }
 
+misc.set_speed = { 
+    prefix = { "speed" },
+    args = { "<player>", "<number>" },
+    rank = "ADMIN",
+    callback = function(_, target, speed)
+        local char = target.Character or target.CharacterAdded:Wait()
+        local hmd = char:FindFirstChild("Humanoid")
+        if hmd then
+            hmd.WalkSpeed = speed
+        end
+    end
+}
+
+misc.set_jump_power = {
+    prefix = { "jump power" },
+    args = { "<player>", "<number>" },
+    rank = "ADMIN",
+    callback = function(_, target, power)
+        local char = target.Character or target.CharacterAdded:Wait()
+        local hmd = char:FindFirstChild("Humanoid")
+        if hmd then
+            hmd.JumpPower = power
+        end
+    end
+}
+
 misc.fly = {
     prefix = { "fly" },
     args = {},
