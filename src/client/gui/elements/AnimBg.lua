@@ -12,7 +12,7 @@ end
 function element:render()
     return core.roact.createElement(core.theme:getConsumer(), {
         render = function(theme)
-            local props = core.deepCopyTable(self.props)
+            local props = core.shallowCopyTable(self.props)
 
             --transfer custom props
             self.Time = props.Time

@@ -48,7 +48,7 @@ misc.set_speed = {
 }
 
 misc.set_jump_power = {
-    prefix = { "jump power" },
+    prefix = { "jumppower" },
     args = { "<player>", "<number>" },
     rank = "ADMIN",
     callback = function(_, target, power)

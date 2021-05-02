@@ -1,6 +1,8 @@
 local core = require(script.Parent.Parent)
 local platform = core.client.get("platform")
 
+local backpackUtils = core.client.get("backpackUtils")
+
 local element = core.roact.Component:extend("Property")
 
 function element:init()
@@ -14,18 +16,12 @@ function element:render()
     return core.roact.createElement(core.elements.global:getConsumer(), {
         render = function(global)
             return core.roact.createElement("Frame", {
-                AnchorPoint = Vector2.new(.5, .5),
-                BackgroundTransparency = 1,
-                Position = UDim2.new(.5, 0, .5, 0),
-                Size = UDim2.new(0, core.scale:getOffset(1000), 0, core.scale:getOffset(800)),
-                Visible = false,
-                [core.roact.Ref] = function(rbx) self.Frame = rbx end
-            }, {
-                ["Buttons"] = core.roact.createElement("Frame", {
                     AnchorPoint = Vector2.new(.5, 1),
                     BackgroundTransparency = 1,
-                    Position = UDim2.new(.5, 0, 1, 0),
-                    Size = UDim2.new(0, core.scale:getOffset(400), 0, core.scale:getOffset(140))
+                    --Position = UDim2.new(.5, 0, 1, 0),
+                    Position = core.scale.udim2.new(.5, 0, 1, -100),
+                    Size = UDim2.new(0, core.scale:getOffset(400), 0, core.scale:getOffset(140)),
+                    Visible = false
                 }, {
                     ["Left"] = core.roact.createElement(core.elements.TextButton, {
                         Size = UDim2.fromOffset(core.scale:getOffset(60), core.scale:getOffset(80)),
@@ -120,17 +116,16 @@ function element:render()
                             ZIndex = 4,
                             Image = platform.getConsoleImage(Enum.KeyCode.DPadRight),
                         })
+                    }),
+                    ["Mode"] = core.roact.createElement("StringValue", {
+                        Value = self.state.mode,
+                        [core.roact.Ref] = function(rbx) self.ModeV = rbx end
+                    }),
+                    ["Price"] = core.roact.createElement("NumberValue", {
+                        Value = self.state.price,
+                        [core.roact.Ref] = function(rbx) self.PriceV = rbx end
                     })
-                }),
-                ["Mode"] = core.roact.createElement("StringValue", {
-                    Value = self.state.mode,
-                    [core.roact.Ref] = function(rbx) self.ModeV = rbx end
-                }),
-                ["Price"] = core.roact.createElement("NumberValue", {
-                    Value = self.state.price,
-                    [core.roact.Ref] = function(rbx) self.PriceV = rbx end
                 })
-            })
         end
     })
 end
@@ -146,13 +141,6 @@ function element:didMount()
             price = self.PriceV.Value
         })
     end)
-
-    for _, button in ipairs{ self.LeftButton, self.ConfirmButton, self.ExitButton, self.RightButton } do
-       local objV = Instance.new("ObjectValue")
-       objV.Name = button.Name
-       objV.Value = button
-       objV.Parent = self.Frame
-    end
 end
 
 return element

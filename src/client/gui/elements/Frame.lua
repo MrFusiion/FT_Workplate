@@ -9,7 +9,7 @@ end
 function element:render()
     return core.roact.createElement(core.elements.global:getConsumer(), {
         render = function(global)
-            local props = core.deepCopyTable(self.props)
+            local props = core.shallowCopyTable(self.props)
             --////[props]////--
             --default values check
             props.ZIndex = props.ZIndex or 1

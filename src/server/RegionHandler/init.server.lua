@@ -43,13 +43,12 @@ if RegionFolder then
             regions[regionModel.Name] = reg
             reg.OnEnter:Connect(function(player)
                 if player then
-                    print("enter", stringUtils.sepUppercase(reg.Name), player.Name)
                     player.Region.Value = stringUtils.sepUppercase(reg.Name)
                 end
             end)
             reg.OnLeave:Connect(function(player)
                 if player then
-                    print("leave", stringUtils.sepUppercase(reg.Name), player.Name)
+                    --DO something ¯\_(ツ)_/¯
                 end
             end)
         end

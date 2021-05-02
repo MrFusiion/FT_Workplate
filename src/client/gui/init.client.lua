@@ -27,7 +27,7 @@ function getTrees()
             end
             local suc, err = pcall(function()
                 trees[gui.Name] = core.roact.createElement("ScreenGui", require(gui), {
-                    ["gloabl"] = core.roact.createElement(core.elements.global, {}, childs)
+                    ["global"] = core.roact.createElement(core.elements.global, {}, childs)
                 })
             end)
             if not suc then
@@ -53,6 +53,9 @@ function mount()
 end
 
 --/////[init]/////--
+if not player.Character then player.CharacterAdded:Wait() end--this is for mobile to make sure that the GUI is applied to the correct orientation.
+    --so simplified, this is to make sure the gui loads when the player is loaded and not while the player is loading.
+
 for _, element in ipairs(script:WaitForChild("elements"):GetChildren()) do
     core.elements.add(element.Name, element)
 end

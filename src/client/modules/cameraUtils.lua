@@ -64,4 +64,25 @@ function cameraUtils.get(propName)
     return workspace.CurrentCamera[propName]
 end
 
+--[[@Function: {
+    "class" : "cameraUtils",
+    "name" : "set",
+    "args" : { "propName" : "string", "value" : "any" },
+    "return" : "void",
+    "info" : "Sets a property from camera."
+}]]
+function cameraUtils.set(propName, value)
+    assert(typeof(propName)=="string", " `propName` must be type of string!")
+    workspace.CurrentCamera[propName] = value
+end
+
+function cameraUtils.setZoomDistance(min, max)
+    player.CameraMinZoomDistance = min or player.CameraMinZoomDistance
+    player.CameraMaxZoomDistance = max or player.CameraMaxZoomDistance
+end
+
+function cameraUtils.getZoomDistance()
+    return player.CameraMinZoomDistance, player.CameraMaxZoomDistance
+end
+
 return cameraUtils

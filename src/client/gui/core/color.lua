@@ -14,9 +14,12 @@ function color.tint(clr, factor)
     assert(typeof(clr)=="Color3", " `clr` must be a Color3!")
     assert(typeof(factor)=="number", " `factor` must be a number!")
     return Color3.new(
-        clr.R + (1 - clr.R) * factor,
-        clr.G + (1 - clr.G) * factor,
-        clr.B + (1 - clr.B) * factor
+        --clr.R + (255 - clr.R) * factor,
+        --clr.G + (255 - clr.G) * factor,
+        --clr.B + (255 - clr.B) * factor
+        clr.R * (1 + factor),
+        clr.G * (1 + factor),
+        clr.B * (1 + factor)
     )
 end
 

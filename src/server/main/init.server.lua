@@ -1,26 +1,30 @@
---[[
 local server = require(script.Parent:WaitForChild("Modules"))
 local blueprint = server.get("blueprint")
 
-local objects = require(script.Parent:WaitForChild("Objects"))
+local machines = require(script.Parent.Objects.machines)
 
-local gen_01 = objects.machines.generators.bioGenerator.new(workspace, CFrame.new())
-local gen_02 = objects.machines.generators.bioGenerator.new(workspace, CFrame.new(8, 0, 0))
+local refPart = workspace:WaitForChild("BlueprintTest")
+local function getCFrame(cf)
+    return refPart.CFrame * cf
+end
 
-local tank_01 = objects.machines.tanks.tank.new(workspace, CFrame.new(16, 0, 0), "solid")
+local gen_01 = machines.generators.bioGenerator.new(workspace, getCFrame(CFrame.new()))
+local gen_02 = machines.generators.bioGenerator.new(workspace, getCFrame(CFrame.new(8, 0, 0)))
+
+local tank_01 = machines.tanks.tank.new(workspace, getCFrame(CFrame.new(16, 0, 0)), "solid")
 
 tank_01.Content.BrickColor = BrickColor.new(Color3.fromRGB(255, 0, 255))
 
-local tank_02 = objects.machines.tanks.tank.new(workspace, CFrame.new(22, 0, 0), "fluid", "water")
-local tank_03 = objects.machines.tanks.tank.new(workspace, CFrame.new(28, 0, 0), "fluid", "lava")
-local tank_04 = objects.machines.tanks.tank.new(workspace, CFrame.new(34, 0, 0), "gas")
+local tank_02 = machines.tanks.tank.new(workspace, getCFrame(CFrame.new(22, 0, 0)), "fluid", "water")
+local tank_03 = machines.tanks.tank.new(workspace, getCFrame(CFrame.new(28, 0, 0)), "fluid", "lava")
+local tank_04 = machines.tanks.tank.new(workspace, getCFrame(CFrame.new(34, 0, 0)), "gas")
 
-local waterWheel = objects.machines.generators.waterWheel.new(workspace, CFrame.new(41, 0, 0))
+local waterWheel = machines.generators.waterWheel.new(workspace, getCFrame(CFrame.new(41, 0, 0)))
 
 local function createBlueprint()
-    local bp = blueprint.new(objects.machines.generators.bioGenerator)
+    local bp = blueprint.new(machines.generators.bioGenerator)
 
-    local cf = CFrame.new(-8, 0, 0)
+    local cf = getCFrame(CFrame.new(-8, 0, 0))
     bp:SetPrimaryPartCFrame(cf + cf.UpVector * bp.PrimaryPart.Size.Y / 2)
     bp.Parent = workspace
     return bp
@@ -45,19 +49,11 @@ spawn(function()
 end)
 
 spawn(function()
-    local count = 0
     local bp
     while true do
         bp = createBlueprint()
-        if count >= 2 then
-            break
-        end
         wait(5)
         bp:Destroy()
         wait(2)
-        count += 1
     end
-    bp:Place()
-    bp:Destroy()
 end)
-]]

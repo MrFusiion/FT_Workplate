@@ -76,10 +76,10 @@ function garageDoor.new(model, playerAllowed)
             local players = playerAllowed and CS:GetTagged("Player") or {}
             local cars = CS:GetTagged("Car")
 
-            local player = workspace:FindPartsInRegion3WithWhiteList(newGarageDoor.Region, players, 1)
-            local car = not next(player) and workspace:FindPartsInRegion3WithWhiteList(newGarageDoor.Region, cars, 1)
+            --local player = workspace:FindPartsInRegion3WithWhiteList(newGarageDoor.Region, players, 1)
+            local car = --[[not next(player) and ]]workspace:FindPartsInRegion3WithWhiteList(newGarageDoor.Region, cars, 1)
 
-            if next(player or {}) or next(car or {}) then
+            if --[[next(player or {}) or]] next(car or {}) or newGarageDoor.ShouldOpen then
                 newGarageDoor:open()
             else
                 newGarageDoor:close()
@@ -99,7 +99,7 @@ function garageDoor:carClose()
 end
 
 function garageDoor:open()
-    if not self.Open and self:canOpen() then
+    if not self.Open and self:canOpen()then
         --self.Door.PrimaryPart.Sound:Play()
         self.Door.PrimaryPart.BodyGyro.CFrame = self.OriginCFrame * CFrame.Angles(0, 0, math.rad(-85))
         --self.Door.PrimaryPart.Locked = not self.Door.PrimaryPart.Locked--Physics unsleep

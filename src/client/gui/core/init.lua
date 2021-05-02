@@ -9,24 +9,27 @@ core.client = require(game:GetService("StarterPlayer")
     :WaitForChild("Modules")
 )
 core.roact = core.shared.get("roact")
-core.color = require(script:WaitForChild("color"))
-core.elements = require(script:WaitForChild("elements"))
-core.subfix = require(script:WaitForChild("gui"))
-core.scale = require(script:WaitForChild("scale"))
-core.soundlist = require(script:WaitForChild("soundlist"))
-core.subfix = require(script:WaitForChild("subfix"))
+core.color = require(script.color)
+core.elements = require(script.elements)
+core.subfix = require(script.subfix)
+core.scale = require(script.scale)
+core.soundlist = require(script.soundlist)
+core.subfix = require(script.subfix)
+core.anchor = require(script.anchor)
 
 --usefull functions
-function core.deepCopyTable(original)
+function core.shallowCopyTable(original)
     local copy = {}
     for k, v in pairs(original) do
-        --[[
-        if typeof(v)=="table" then
-            v = core.deepCopyTable(v)
-        end]]
         copy[k] = v
 	end
 	return copy
+end
+
+function core.transfer(t1, t2, key, defaultValue)
+    t2[key] = t1[key] or defaultValue
+    t1[key] = nil
+    return t1, t2
 end
 
 local roact_binding = require(game:GetService("ReplicatedStorage")
@@ -44,6 +47,24 @@ function core.cloneRef(ref, targetRef)
             targetRef(rbx)
         elseif typeof(targetRef) == "table" then
             roact_binding.update(targetRef, rbx)
+        end
+
+        if typeof(ref) == "function" then
+            ref(rbx)
+        elseif typeof(ref) == "table" then
+            roact_binding.update(ref, rbx)
+        end
+    end
+end
+
+--Same function as above but much cleaner to work with :)
+function core.distRef(props, ref)--Distribute Ref
+    local oldRef = props[core.roact.Ref]
+    props[core.roact.Ref] = function(rbx)
+        if typeof(oldRef) == "function" then
+            oldRef(rbx)
+        elseif typeof(oldRef) == "table" then
+            roact_binding.update(oldRef, rbx)
         end
 
         if typeof(ref) == "function" then

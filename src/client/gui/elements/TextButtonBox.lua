@@ -14,7 +14,7 @@ end
 function element:render() 
     return core.roact.createElement(core.theme:getConsumer(), {
         render = function(theme)
-            local props = core.deepCopyTable(self.props)
+            local props = core.shallowCopyTable(self.props)
 
             local ref = props[core.roact.Ref]
             props[core.roact.Ref] = core.cloneRef(ref, self.ButtonRef)

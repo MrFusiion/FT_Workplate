@@ -27,6 +27,7 @@ function atm.new(model, light)
         else
             re_BuyProperty:FireClient(player, properties)
         end
+        print(properties)
     end)
     newAtm.Prompt.Parent = model
 

@@ -25,7 +25,7 @@ function datastore.deepCopy(t)
 end
 
 function datastore.cacheKey(name, key)
-    return name.."\\"..key
+    return ("%s\\%s"):format(name, key)
 end
 
 function datastore.new(name, scope, key)

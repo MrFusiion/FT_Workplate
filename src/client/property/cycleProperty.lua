@@ -11,9 +11,9 @@ local input =       client.get("input")
 local platform =    client.get("platform")
 
 local propertyFrame =   playerUtils.getPlayerGui():WaitForChild("Hud"):WaitForChild("Property")
-local leftButton =      propertyFrame:WaitForChild("Left").Value
-local confirmButton =   propertyFrame:WaitForChild("Confirm").Value
-local rightButton =     propertyFrame:WaitForChild("Right").Value
+local leftButton =      propertyFrame:WaitForChild("Left")
+local confirmButton =   propertyFrame:WaitForChild("Confirm")
+local rightButton =     propertyFrame:WaitForChild("Right")
 --local modeV =           propertyFrame:WaitForChild("Mode").Value
 --local priceV =          propertyFrame:WaitForChild("Price").Value
 

@@ -1,124 +1,35 @@
-local wheel = {}
-wheel.__index = wheel
+local utils = require(script.Parent.utils)
 
-local function vector3Abs(vector)
-    return Vector3.new(
-        math.abs(vector.X),
-        math.abs(vector.Y),
-        math.abs(vector.Z)
-    )
-end
+local iconFolder = game:GetService("ReplicatedStorage"):WaitForChild("WheelIcons")
+function setWheelIcon(wheel, iconName)
 
-local function createNoCollision(part0, part1)
-    local noCollision = Instance.new("NoCollisionConstraint")
-    noCollision.Part0 = part0
-    noCollision.Part1 = part1
-    return noCollision
-end
+    local icon = iconFolder:FindFirstChild(iconName)
+    if icon then
+        icon = icon:Clone()
 
-local function createSteer(part0, part1, stats)
-    part0.Anchored = false
-    part1.Anchored = false
+        local logo = wheel.Logo
+        local ratio = math.max(logo.Size.X, logo.Size.Z) / math.max(icon.Size.X, icon.Size.Z)
 
-    local steer = Instance.new("HingeConstraint")
-    steer.Name = "Steer"
-    steer.ServoMaxTorque = math.huge
-    steer.ActuatorType = Enum.ActuatorType.Servo
+        icon.Anchored = true
+        icon.Size = Vector3.new(
+            icon.Size.X * ratio,
+            logo.Size.Y,
+            icon.Size.Z * ratio
+        )
+        icon.CFrame = logo.CFrame
+        icon.Parent = wheel
 
-    local normal = CFrame.new(part0.Position, part1.Position)
+        icon.BrickColor = logo.BrickColor
+        icon.Material = logo.Material
 
-    local attachment0 = Instance.new("Attachment")
-    attachment0.Position = part0.CFrame.UpVector * vector3Abs(part1.CFrame:VectorToWorldSpace(part1.Size)) * .5
-    attachment0.Axis = -part0.CFrame.UpVector
-    attachment0.SecondaryAxis = normal.LookVector
-    attachment0.Parent = part0
+        utils.weld(icon, wheel.PrimaryPart).Parent = icon
 
-    local attachment1 = Instance.new("Attachment")
-    attachment1.Position = part1.CFrame:PointToObjectSpace(attachment0.WorldPosition)
-    attachment1.Axis = -part1.CFrame.UpVector
-    attachment1.SecondaryAxis = -normal.LookVector
-    attachment1.Parent = part1
+        logo:Destroy()
 
-    steer.Attachment0 = attachment1
-    steer.Attachment1 = attachment0
-
-    steer.LimitsEnabled = true
-    steer.UpperAngle = stats.MaxAngle
-    steer.LowerAngle = -stats.MaxAngle
-    steer.AngularSpeed = stats.TurnSpeed
-    return steer
-end
-
-local function createHinge(part0, part1)
-    part0.Anchored = false
-    part1.Anchored = false
-
-    local hinge = Instance.new("HingeConstraint")
-    hinge.Name = "Hinge"
-    hinge.ActuatorType = Enum.ActuatorType.None
-
-    local part0NormalCF = CFrame.new(part0.Position, part1.Position)
-    local att0WorldPos = (part0NormalCF + part0NormalCF.LookVector * vector3Abs(part0.CFrame:VectorToWorldSpace(part0.Size)) * .5).Position
-
-    local part1NormalCF = CFrame.new(part1.Position, part0.Position)
-    local att1WorldPos = (part1NormalCF + part1NormalCF.LookVector * vector3Abs(part1.CFrame:VectorToWorldSpace(part1.Size)) * .5).Position
-
-    local attachment0 = Instance.new("Attachment")
-    attachment0.Position = part0.CFrame:PointToObjectSpace(att0WorldPos)
-    attachment0.Axis = part0NormalCF.LookVector
-
-    local x0, y0, z0 = (part0.CFrame * CFrame.Angles(0, math.pi, 0)):ToEulerAnglesYXZ()
-    attachment0.Orientation = Vector3.new(math.deg(x0), math.deg(y0), math.deg(z0))
-    attachment0.Parent = part0
-    hinge.Attachment0 = attachment0
-
-    local attachment1 = Instance.new("Attachment")
-    attachment1.Position = part1.CFrame:PointToObjectSpace(att1WorldPos)
-    attachment1.Axis = part1NormalCF.LookVector
-
-    local x1, y1, z1 = (part1.CFrame * CFrame.Angles(0, math.pi, 0)):ToEulerAnglesYXZ()
-    attachment1.Orientation = Vector3.new(math.deg(x1), math.deg(y1), math.deg(z1))
-    attachment1.Parent = part1
-    hinge.Attachment1 = attachment1
-
-    return hinge
-end
-
-local function createMotor(part0, part1, stats)
-    part0.Anchored = false
-    part1.Anchored = false
-
-    local motor = Instance.new("HingeConstraint")
-    motor.Name = "Motor"
-    motor.ActuatorType = Enum.ActuatorType.Motor
-
-    local part0NormalCF = CFrame.new(part0.Position, part1.Position)
-    local att0WorldPos = (part0NormalCF + part0NormalCF.LookVector * vector3Abs(part0.CFrame:VectorToWorldSpace(part0.Size)) * .5).Position
-
-    local part1NormalCF = CFrame.new(part1.Position, part0.Position)
-    local att1WorldPos = (part1NormalCF + part1NormalCF.LookVector * vector3Abs(part1.CFrame:VectorToWorldSpace(part1.Size)) * .5).Position
-
-    local attachment0 = Instance.new("Attachment")
-    attachment0.Position = part0.CFrame:PointToObjectSpace(att0WorldPos)
-    attachment0.Axis = part0NormalCF.LookVector
-
-    local x0, y0, z0 = (part0.CFrame * CFrame.Angles(0, math.pi, 0)):ToEulerAnglesYXZ()
-    attachment0.Orientation = Vector3.new(math.deg(x0), math.deg(y0), math.deg(z0))
-    attachment0.Parent = part0
-    motor.Attachment0 = attachment0
-
-    local attachment1 = Instance.new("Attachment")
-    attachment1.Position = part1.CFrame:PointToObjectSpace(att1WorldPos)
-    attachment1.Axis = part1NormalCF.LookVector
-
-    local x1, y1, z1 = (part1.CFrame * CFrame.Angles(0, math.pi, 0)):ToEulerAnglesYXZ()
-    attachment1.Orientation = Vector3.new(math.deg(x1), math.deg(y1), math.deg(z1))
-    attachment1.Parent = part1
-    motor.Attachment1 = attachment1
-
-    motor.MotorMaxAcceleration = stats.Acceleration
-    motor.MotorMaxTorque = stats.Torque
-    return motor
+        icon.Name = "Logo"
+    else
+        warn(("Icon %s cannot be found!"):format(iconName))
+    end
 end
 
 local steerWheel = {}
@@ -131,19 +42,20 @@ function steerWheel.new(wheelModel, attachPart, rack, carBody, stats)
     local cf, size = wheelModel:GetBoundingBox()
     local region = Region3.new(cf.Position - (size * .5 + SIZE_OFFSET), cf.Position + (size * .5 + SIZE_OFFSET))
 
+    --[[
     local parts = workspace:FindPartsInRegion3WithWhiteList(region, {carBody}, 100)
     for _, part in ipairs(carBody:GetChildren()) do
         if part:IsA("BasePart") then
             createNoCollision(wheelModel.PrimaryPart, part).Parent = wheelModel.PrimaryPart
         end
-    end
+    end]]
 
     newWheel.Model = wheelModel
 
-    newWheel.Steer = createSteer(attachPart, rack, stats)
+    newWheel.Steer = utils.createSteer(attachPart, rack, stats)
     newWheel.Steer.Parent = wheelModel
 
-    newWheel.Hinge = createHinge(wheelModel.Axis, attachPart)
+    newWheel.Hinge = utils.createHinge(wheelModel.Axis, attachPart)
     newWheel.Hinge.Parent = wheelModel
 
     return newWheel
@@ -169,6 +81,18 @@ function steerWheel:material(material)
     end
 end
 
+function steerWheel:setIcon(iconName)
+    setWheelIcon(self.Model, iconName)
+end
+
+function steerWheel:iconColor(brickColor)
+    self.Model.Logo.BrickColor = brickColor
+end
+
+function steerWheel:iconMaterial(material)
+    self.Model.Logo.Material = material
+end
+
 local motorWheel = {}
 motorWheel.__index = motorWheel
 
@@ -177,7 +101,7 @@ function motorWheel.new(wheelModel, attachPart, stats)
 
     newWheel.Model = wheelModel
 
-    newWheel.Motor = createMotor(wheelModel.Axis, attachPart, stats)
+    newWheel.Motor = utils.createMotor(wheelModel.Axis, attachPart, stats)
     newWheel.Motor.Parent = wheelModel
 
     return newWheel
@@ -201,6 +125,18 @@ function motorWheel:material(material)
             descendant.Material = material
         end
     end
+end
+
+function motorWheel:setIcon(iconName)
+    setWheelIcon(self.Model, iconName)
+end
+
+function motorWheel:iconColor(brickColor)
+    self.Model.Logo.BrickColor = brickColor
+end
+
+function motorWheel:iconMaterial(material)
+    self.Model.Logo.Material = material
 end
 
 return {

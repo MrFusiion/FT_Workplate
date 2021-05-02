@@ -11,7 +11,7 @@ local playerUtils = client.get("playerUtils")
 local input = client.get("input")
 
 local propertyFrame =   playerUtils.getPlayerGui():WaitForChild("Hud"):WaitForChild("Property")
-local exitButton =      propertyFrame:WaitForChild("Exit").Value
+local exitButton =      propertyFrame:WaitForChild("Exit")
 local modeV =           propertyFrame:WaitForChild("Mode")
 local priceV =          propertyFrame:WaitForChild("Price")
 
@@ -21,6 +21,9 @@ local prompt = proximityPrompts:WaitForChild("Interact")
 local cycleProperty = require(script.Parent:WaitForChild("cycleProperty"))
 local buyProperty = {}
 buyProperty.Connections = {}
+
+local stopped = Instance.new("BindableEvent")
+buyProperty.Stopped = stopped.Event
 
 function buyProperty.start(properties)
     table.insert(buyProperty.Connections, exitButton.Activated:Connect(function()
@@ -68,6 +71,8 @@ function buyProperty.stop()
         conn:Disconnect()
     end
     buyProperty.Connections = {}
+
+    stopped:Fire()
 end
 
 return buyProperty

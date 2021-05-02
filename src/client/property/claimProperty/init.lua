@@ -17,6 +17,9 @@ local prompt = proximityPrompts:WaitForChild("Interact")
 local cycleProperty = require(script.Parent:WaitForChild("cycleProperty"))
 local claimProperty = {}
 
+local stopped = Instance.new("BindableEvent")
+claimProperty.Stopped = stopped.Event
+
 function claimProperty.start(properties)
     prompt.Enabled = false
     claimProperty.Running = true
@@ -55,6 +58,8 @@ function claimProperty.stop()
     propertyFrame.Visible = false
     claimProperty.Running = false
     prompt.Enabled = true
+
+    stopped:Fire()
 end
 
 return claimProperty

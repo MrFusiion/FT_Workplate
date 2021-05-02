@@ -16,15 +16,18 @@ local proximityPrompts = playerUtils:getPlayerGui():WaitForChild("ProximityPromp
 local prompt = proximityPrompts:WaitForChild("Interact")
 
 local propertyFrame =   playerUtils.getPlayerGui():WaitForChild("Hud"):WaitForChild("Property")
-local exitButton =      propertyFrame:WaitForChild("Exit").Value
-local leftButton =      propertyFrame:WaitForChild("Left").Value
-local confirmButton =   propertyFrame:WaitForChild("Confirm").Value
-local rightButton =     propertyFrame:WaitForChild("Right").Value
+local exitButton =      propertyFrame:WaitForChild("Exit")
+local leftButton =      propertyFrame:WaitForChild("Left")
+local confirmButton =   propertyFrame:WaitForChild("Confirm")
+local rightButton =     propertyFrame:WaitForChild("Right")
 local modeV =           propertyFrame:WaitForChild("Mode")
 local priceV =          propertyFrame:WaitForChild("Price")
 
 local expandProperty = {}
 expandProperty.Connections = {}
+
+local stopped = Instance.new("BindableEvent")
+expandProperty.Stopped = stopped.Event
 
 local FULL_DATA = {}
 for _=1,25 do
@@ -188,6 +191,8 @@ function expandProperty.stop()
     propertyFrame.Visible = false
     expandProperty.Running = false
     prompt.Enabled = true
+
+    stopped:Fire()
 end
 
 return expandProperty

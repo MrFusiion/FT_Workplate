@@ -7,7 +7,6 @@ equipment.give_vacuum = {
     rank = "DEV",
     callback = function(player, target, vacuumName)
         if target then
-            print("gfvacuum", target.Name, vacuumName)
             be_SetVacuum:Fire(target, vacuumName)
         end
     end
@@ -20,15 +19,14 @@ equipment.give_backpack = {
     rank = "DEV",
     callback = function(player, target, backpackName)
         if target then
-            print("gfbackpack", target.Name, backpackName)
             be_SetBackpack:Fire(target, backpackName)
         end
     end
 }
 
 local be_SpawnCar = game.ServerScriptService.Objects.CarHandler.SpawnCar
-equipment.spawn_car = {
-    prefix = { "spawncar" },
+equipment.car = {
+    prefix = { "car" },
     args = { "<player>", "<string>" },
     rank = "DEV",
     callback = function(player, target, carName)

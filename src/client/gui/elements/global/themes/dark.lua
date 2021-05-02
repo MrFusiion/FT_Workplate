@@ -15,6 +15,6 @@ theme.AcceptTextClr = Color3.new(0, .8, 0)
 theme.ExitBgClr = Color3.new(1, .3, .3)
 theme.ExitTextClr =  Color3.new(.8, 0, 0)
 
-theme.Font = Enum.Font.SourceSansSemibold
+theme.Font = Enum.Font.SourceSansBold
 
 return theme

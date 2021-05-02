@@ -20,14 +20,14 @@ end
 local character = player.Character or player.CharacterAdded:Wait()
 local head = character:WaitForChild("Head")
 local hrt = character:WaitForChild("HumanoidRootPart")
-local thisLookAt = lookAt.new(character, math.rad(160), math.rad(120), math.rad(80), math.rad(105))
+local thisLookAt = lookAt.new(character, math.rad(120), math.rad(120), math.rad(80), math.rad(105))
 thisLookAt:initFire()
 
 game:GetService("Players").LocalPlayer.CharacterAdded:Connect(function(char)
 	character = char
     head = char:WaitForChild("Head")
     hrt = char:WaitForChild("HumanoidRootPart")
-    thisLookAt = lookAt.new(char, math.rad(160), math.rad(120), math.rad(80), math.rad(105))
+    thisLookAt = lookAt.new(char, math.rad(120), math.rad(120), math.rad(80), math.rad(105))
     thisLookAt:initFire()
 end)
 

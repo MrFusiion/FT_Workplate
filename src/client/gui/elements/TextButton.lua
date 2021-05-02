@@ -6,18 +6,17 @@ function element:init()
     self.sounds = core.soundlist.new()
     self.sounds:add("click", 452267918)
     self.sounds:add("hover", 421058925)
-    self.AnimFrameRef = function(rbx) self.AnimFrame = rbx end
-    self.ButtonRef = function(rbx) self.Button = rbx end
-    self.InnderRef = function(rbx) self.Inner = rbx end
+    self.IsSelected = false
 end
 
 function element:render()
     return core.roact.createElement(core.elements.global:getConsumer(), {
         render = function(global)
-            local props = core.deepCopyTable(self.props)
+            local props = core.shallowCopyTable(self.props)
+            local imageProps = {}
 
             local ref = props[core.roact.Ref]
-            props[core.roact.Ref] = core.cloneRef(ref, self.ButtonRef)
+            props[core.roact.Ref] = core.cloneRef(ref, function(rbx) self.Button = rbx end)
 
             --transfer custom props
             self.Animate = (props.Animate == nil) or props.Animate
@@ -25,11 +24,26 @@ function element:render()
             self.Sound = (props.Sound == nil) or props.Sound
             props.Sound = nil
 
+            self.SelectedColor = props.SelectColor or global.theme.BlueClr
+            props.SelectColor = nil
+
+            --this is a ref color for the hover and click animation
+            self.BackgroundColor = props.BackgroundColor3 or global.theme.BgClr
+
+            --Textprops
+            local textProps = {}
+            textProps.Font = props.Font or global.theme.Font
+            props.Font = nil
+            textProps.TextColor3 = props.TextColor3 or global.theme.TextClr
+            props.TextColor3 = nil
+            textProps.Text = props.Text or ""
+            props.Text = nil
+            textProps.TextSize = props.TextSize
+            props.TextSize = nil
+
             --apply dflt props
-            props.BackgroundColor3 = props.BackgroundColor3 or global.theme.BgClr
-            props.TextColor3 = props.TextColor3 or global.theme.TextClr
-            props.Font = props.Font or global.theme.Font
-            props.ZIndex = (props.ZIndex or 1) + 1
+            props.BackgroundColor3 = self.BackgroundColor
+            props.ZIndex = (props.ZIndex or 1)
             props.AnimateBgColor = nil
 
             --////[children]////--
@@ -38,20 +52,46 @@ function element:render()
 
             children.Corner = core.roact.createElement(core.elements.UICorner)
 
-            children.Shadow = core.roact.createElement("Frame", {
-                BackgroundColor3 = core.color.shade(props.BackgroundColor3, .5),
-                Position = UDim2.new(0, 0, 0, core.scale:getOffset(5)),
-                Size = UDim2.new(1, 0, 1, 0),
-                ZIndex = props.ZIndex - 1
-            }, {
-                Corner = core.roact.createElement(core.elements.UICorner)
-            })
-
             children.Activate = core.roact.createElement("BindableEvent", {
                 [core.roact.Ref] = function (rbx)
                     if not rbx then return end
                     self.Activate = rbx.Event
                 end
+            })
+
+            children.Shadow = core.roact.createElement("Frame", {
+                BackgroundColor3 = core.color.shade(props.BackgroundColor3, .5),
+                Position = UDim2.new(0, 0, 0, core.scale:getOffset(5)),
+                Size = UDim2.new(1, 0, 1, 0),
+                ZIndex = props.ZIndex + 1,
+                [core.roact.Ref] = function(rbx) self.Shadow = rbx end
+            }, {
+                Corner = core.roact.createElement(core.elements.UICorner)
+            })
+
+            children.Text = core.roact.createElement("TextLabel", {
+                AnchorPoint = Vector2.new(.5, .5),
+                BackgroundTransparency = 1,
+                Position = UDim2.new(.5, 0, .5, 0),
+                Size = UDim2.new(1, 0, 1, 0),
+                ZIndex = props.ZIndex + 4,
+                Font = textProps.Font,
+                Text = textProps.Text,
+                TextColor3 = textProps.TextColor3,
+                TextSize = textProps.TextSize
+            }, {
+                Corner = core.roact.createElement(core.elements.UICorner)
+            })
+
+            children.Inner = core.roact.createElement("Frame", {
+                AnchorPoint = Vector2.new(.5, .5),
+                BackgroundColor3 = props.BackgroundColor3,
+                Position = UDim2.new(.5, 0, .5, 0),
+                Size = core.scale.udim2.new(1, -5, 1, -5),
+                ZIndex = props.ZIndex + 3,
+                [core.roact.Ref] = function(rbx) self.Inner = rbx end
+            }, {
+                Corner = core.roact.createElement(core.elements.UICorner)
             })
 
             children.AnimFrame = core.roact.createElement("Frame", {
@@ -60,17 +100,21 @@ function element:render()
                 BackgroundTransparency = 1,
                 Position = UDim2.new(.5, 0, .5, 0),
                 Size = UDim2.new(1, 0, 1, 0),
-                ZIndex = (props.ZIndex or 1) - 1,
-                [core.roact.Ref] = self.AnimFrameRef
+                ZIndex = props.ZIndex,
+                [core.roact.Ref] = function(rbx) self.AnimFrame = rbx end
             }, {
                 Corner = core.roact.createElement(core.elements.UICorner)
             })
-            return core.roact.createElement(script.Name, props, children)
+
+            props.ZIndex += 2
+            return core.roact.createElement("TextButton", props, children)
         end
     })
 end
 
 function element:didMount()
+    local hover, pressed
+
     if self.Animate then
         local pressAnim = core.TS:Create(self.AnimFrame, TweenInfo.new(.3, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {
             Size = UDim2.new(2, 0, 2, 0),
@@ -78,12 +122,14 @@ function element:didMount()
         })
 
         local function onActivate()
-            --Clean up
-            pressAnim:Cancel()
-            self.AnimFrame.Size = UDim2.new(1, 0, 1, 0)
-            self.AnimFrame.BackgroundTransparency = 0
-        
-            pressAnim:Play()
+            if self.Button.Active then
+                --Clean up
+                pressAnim:Cancel()
+                self.AnimFrame.Size = UDim2.new(1, 0, 1, 0)
+                self.AnimFrame.BackgroundTransparency = 0
+
+                pressAnim:Play()
+            end
         end
 
         self.Button.Activated:Connect(onActivate)
@@ -106,6 +152,63 @@ function element:didMount()
             end
         end)
     end
+
+    if self.props.AutoButtonColor == true or self.props.AutoButtonColor == nil then
+
+        self.Button.MouseEnter:Connect(function()
+            hover = true
+            if not self.IsSelected then
+                self.Button.BackgroundColor3 = core.color.shade(self.BackgroundColor, .25)
+            end
+            self.Inner.BackgroundColor3 = core.color.shade(self.BackgroundColor, .25)
+        end)
+        self.Button.MouseLeave:Connect(function()
+            hover = false
+            if not self.IsSelected then
+                self.Button.BackgroundColor3 = self.BackgroundColor
+            end
+            self.Inner.BackgroundColor3 = self.BackgroundColor
+        end)
+
+        self.Button.MouseButton1Down:Connect(function()
+            pressed = true
+            if not self.IsSelected then
+                self.Button.BackgroundColor3 = core.color.tint(self.BackgroundColor, .25)
+            end
+            self.Inner.BackgroundColor3 = core.color.tint(self.BackgroundColor, .25)
+        end)
+        self.Button.MouseButton1Up:Connect(function()
+            pressed = false
+            if hover then
+                if not self.IsSelected then
+                    self.Button.BackgroundColor3 = core.color.shade(self.BackgroundColor, .25)
+                end
+                self.Inner.BackgroundColor3 = core.color.shade(self.BackgroundColor, .25)
+            else
+                if not self.IsSelected then
+                    self.Button.BackgroundColor3 = self.BackgroundColor
+                end
+                self.Inner.BackgroundColor3 = self.BackgroundColor
+            end
+        end)
+    end
+
+    self.Button:GetPropertyChangedSignal("Selected"):Connect(function()
+        self.IsSelected = self.Button.Selected
+        if self.Button.Selected then
+            self.Button.BackgroundColor3 = self.SelectedColor
+            self.Shadow.BackgroundColor3 = core.color.shade(self.SelectedColor, .5)
+        else
+            if pressed then
+                self.Button.BackgroundColor3 = core.color.tint(self.BackgroundColor, .25)
+            elseif hover then
+                self.Button.BackgroundColor3 = core.color.shade(self.BackgroundColor, .25)
+            else
+                self.Button.BackgroundColor3 = self.BackgroundColor
+            end
+            self.Shadow.BackgroundColor3 = core.color.shade(self.BackgroundColor, .5)
+        end
+    end)
 end
 
 return element

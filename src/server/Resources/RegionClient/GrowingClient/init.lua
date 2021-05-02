@@ -36,7 +36,6 @@ function growingClient.new(maxResources, resourceTypes, parts, topSpawnRate, cus
 	newGrowingClient.LastTick = nil
 
     newGrowingClient.FloorSymbol = ("REGIONPART_%s"):format(tostring(newGrowingClient):gsub("table: ", ""))
-    print(newGrowingClient.FloorSymbol)
 
     newGrowingClient.customSpawnRateFunc = customSpawnRateFunc
 

@@ -35,6 +35,14 @@ local function debug(origin, dir)
 end
 +++++++++[DEBUG]++++++]]
 
+game:GetService("Players").PlayerRemoving:Connect(function(player)
+    local c = cars[player.UserId]
+    if c then
+        c:destroy()
+    end
+    cars[player.UserId] = nil
+end)
+
 local function getSpot(carModel, cframe)
     local ignoreList = {}
     for _, plr in pairs(game.Players:GetPlayers()) do
@@ -62,15 +70,16 @@ end
 
 script.SpawnCar.Event:Connect(function(player, name, cf)
     local carModel = carFolder:FindFirstChild(name)
+    local playerCar = car.new(player, name)
 
-    if carModel then
+    if playerCar then
         if cars[player.UserId] then
             cars[player.UserId]:destroy()
         end
 
-        local pos = getSpot(carModel, cf)
+        local pos = getSpot(playerCar.Model, cf)
         if pos then
-            local playerCar = car.new(player, carModel:Clone())
+            --local carData = 
             playerCar.Model:SetPrimaryPartCFrame(CFrame.new(pos))
             playerCar.Model.Parent = workspace
             cars[player.UserId] = playerCar

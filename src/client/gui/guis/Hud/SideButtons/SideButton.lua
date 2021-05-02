@@ -21,7 +21,7 @@ function element:render()
             }, {
                 ["Button"] = core.roact.createElement(core.elements.TextButton, {
                     BackgroundColor3 = global.theme.BgClr,
-                    AutoButtonColor = false,
+                    --AutoButtonColor = false,
                     Size = UDim2.new(1, 0, 1, 0),
                     ZIndex = 2,
                     Text = "",
@@ -35,7 +35,7 @@ function element:render()
                         Position = UDim2.fromScale(1, .5),
                         Size = UDim2.fromScale(.6, .6),
                         Visible = global.platform == "CONSOLE",
-                        ZIndex = 4,
+                        ZIndex = 6,
                         Image = platform.getConsoleImage(self.props.ConsoleButton),
                     }),
                     ["Icon"] = core.roact.createElement("ImageLabel", {
@@ -43,7 +43,7 @@ function element:render()
                         BackgroundTransparency = 1,
                         Position = UDim2.new(.5, 0, .5, 0),
                         Size = UDim2.new(1, core.scale:getOffset(padding.x), 1, core.scale:getOffset(padding.y)),
-                        ZIndex = 3,
+                        ZIndex = 5,
                         Image = self.props.Icon,
                         ImageColor3 = self.props.Color
                     }),
